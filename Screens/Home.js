@@ -1,10 +1,15 @@
 import React from "react";
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import { useState } from 'react';
+import { useNavigation } from "@react-navigation/native";
 
-//Icons librarie
+//Icons libraries
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 export default Home = () =>{
+    const [price, setPrice] = useState (0);
+    const navigation = useNavigation()
+
     return(
         <View style={styles.container}>
             <View style={styles.balance}>
@@ -15,16 +20,18 @@ export default Home = () =>{
                 </View>
                 <View style={styles.total}>
                     <Text style={styles.totalContent}>
-                        $1000,00
+                        ${price}
                     </Text>
                     <Ionicons name="eye" size={40} color="#000" style={styles.eye}/>
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>
-                        <MaterialCommunityIcons name="cash-plus" size={35} color="white" />
+                    <TouchableOpacity onPress={()=>navigation.navigate("Gain")}>
+                        <MaterialCommunityIcons name="cash-plus" size={40} color="white" />
+                    </TouchableOpacity>
                     </View>
                     <View style={styles.expense}>
-                        <MaterialCommunityIcons name="cash-minus" size={35} color="white" />
+                        <MaterialCommunityIcons name="cash-minus" size={40} color="white" />
                     </View>
                 </View>
             </View>
@@ -41,7 +48,7 @@ const styles = StyleSheet.create ({
     balance:{
         marginTop: 100,
         width:'90%',
-        height:'20%',
+        height:'25%',
         backgroundColor:'#2F2F2F',
         borderRadius: 5,
         alignItems: 'center',
@@ -59,7 +66,7 @@ const styles = StyleSheet.create ({
     totalTxt:{
         color: '#2F2F2F',
         fontWeight: "bold",
-        fontSize: 15,
+        fontSize: 20,
         textTransform: 'uppercase'
     },
     total:{
@@ -71,7 +78,7 @@ const styles = StyleSheet.create ({
         flexDirection:'row',
     },
     totalContent:{
-        fontSize: 35,
+        fontSize: 40,
         color:'#fff',
         fontWeight:'bold',
         paddingRight: 10
