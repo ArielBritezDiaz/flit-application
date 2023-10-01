@@ -1,15 +1,50 @@
 import React from "react";
+
+//Navigators
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 //Icons librarie
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-//Imported screens
+//Bottom screens
 import Home from "./Screens/Home";
 import Settings from "./Screens/Settings";
 import Activity from "./Screens/Activity";
 
+//Stack screens
+import Gain from "./Screens/Gain";
+const Stack = createNativeStackNavigator()
+
+const Stacks = () =>{
+    return(
+        <Stack.Navigator
+        screenOptions={{
+            headerStyle:{
+                backgroundColor:'#2F2F2F',
+            }
+        }}
+        >
+            <Stack.Screen
+                name="HomeScreen"
+                component={Home}
+                options={{
+                    headerShown:false,
+                }}
+            />
+            <Stack.Screen
+                name="Gain"
+                component={Gain}
+                options={{
+                    headerBackTitleVisible:false,
+                    headerTintColor:'#D39F00',
+                    headerTitle: " "
+                }}
+            />
+        </Stack.Navigator>
+    )
+}
 const Tab = createBottomTabNavigator()
 
 const TabNavigation = () =>{
@@ -26,13 +61,8 @@ const TabNavigation = () =>{
         }}
         >
             <Tab.Screen name="Home"
-            component={Home}
+            component={Stacks}
             options={{
-                tabBarBadge: '2',
-                tabBarBadgeStyle:{
-                    backgroundColor: '#FFF',
-                    color: '#D39F00'
-                },
                 tabBarIcon:()=>(
                 <MaterialCommunityIcons name="home" color={'#000'} size={35}/>//Home icon
             )
