@@ -1,17 +1,19 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
 
 //Icons libraries
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { MaterialCommunityIcons } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 export default Home = () =>{
     const [price, setPrice] = useState (0);
     const navigation = useNavigation()
 
     return(
         <View style={styles.container}>
+            <StatusBar barStyle={'light-content'} hidden={false}/>
             <View style={styles.balance}>
                 <View style={styles.balanceTotal}>
                     <Text style={styles.totalTxt}>

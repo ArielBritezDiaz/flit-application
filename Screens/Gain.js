@@ -1,7 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text , ScrollView} from 'react-native';
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView, StatusBar } from 'react-native';
 
 export default Gain = ({navigation}) => {
     //Amount//
@@ -16,8 +15,8 @@ export default Gain = ({navigation}) => {
     }
 
     //Function when the user types amount//
-    const typingAmount = amount => {
-        const value = amount.replace('$', '')
+    const typingAmount = (amount) => {
+        const value = amount.replace('$', amount)
         const formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.')//Thousand point//
         setAmount(formattedValue)
     }
@@ -29,73 +28,78 @@ export default Gain = ({navigation}) => {
             navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
         }
     }, [])
-return(
-    <View style={styles.container}>
-        <View style={styles.containerTxt}>
-            <Text style={styles.txt}>
-                Ingrese el monto
-            </Text>
-        </View>
-        <View style={styles.price}>
-            <Text style={styles.symbol}>
-                $
-            </Text>
-                <TextInput style={styles.amount}
-                onChangeText={typingAmount}
-                keyboardType = "numeric"
-                value={amount}
-                multiline={true}
-                placeholder='0,00'
-                placeholderTextColor={'#D39F00'}
-                cursorColor={'#D39F00'}
+
+    return(
+        <View style={styles.container}>
+            <StatusBar hidden={false} />
+            <View style={styles.containerTxt}>
+                <Text style={styles.txt}>
+                    Ingrese el monto
+                </Text>
+            </View>
+            <View style={styles.price}>
+                <Text style={styles.symbol}>
+                    $
+                </Text>
+                <TextInput
+                    style={styles.amount}
+                    onChangeText={typingAmount}
+                    keyboardType = "numeric"
+                    value={amount}
+                    multiline={true}
+                    placeholder='0,00'
+                    placeholderTextColor={'#D39F00'}
+                    cursorColor={'#D39F00'}
                 >
                 </TextInput>
+            </View>
+            <View style={styles.default}>
+            <ScrollView horizontal={true}>
+                {/* Predefined amounts buttons */}
+                <TouchableOpacity value={selectedAmount}
+                onPress={() => typingAmount('1000')}>
+                    <Text style={styles.option}>
+                        1.000
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity value={selectedAmount}
+                onPress={() => typingAmount('5000')}>
+                    <Text style={styles.option}>
+                        5.000
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity value={selectedAmount}
+                onPress={() => typingAmount('10000')}>
+                    <Text style={styles.option}>
+                        10.000
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity value={selectedAmount}
+                onPress={() => typingAmount('15000')}>
+                    <Text style={styles.option}>
+                        15.000
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity value={selectedAmount}
+                onPress={() => typingAmount('20000')}
+                style>
+                    <Text style={styles.option}>
+                        20.000
+                    </Text>
+                </TouchableOpacity>
+                </ScrollView>
+            </View>
+            <View style={styles.continue}>
+                <TouchableOpacity onPress={()=>navigation.navigate("SelectCategories", {
+                    price: amount
+                })}>
+                    <Text style={styles.continueBtn} name="continue">
+                        Continuar
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
-        <View style={styles.default}>
-        <ScrollView horizontal={true}>
-            {/* Predefined amounts buttons */}
-            <TouchableOpacity value={selectedAmount}
-            onPress={() => handleAmount(1000)}>
-                <Text style={styles.option}>
-                    1.000
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity value={selectedAmount}
-            onPress={() => handleAmount(5000)}>
-                <Text style={styles.option}>
-                    5.000
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity value={selectedAmount}
-            onPress={() => handleAmount(10000)}>
-                <Text style={styles.option}>
-                    10.000
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity value={selectedAmount}
-            onPress={() => handleAmount(15000)}>
-                <Text style={styles.option}>
-                    15.000
-                </Text>
-            </TouchableOpacity>
-            <TouchableOpacity value={selectedAmount}
-            onPress={() => handleAmount(20000)}
-            style>
-                <Text style={styles.option}>
-                    20.000
-                </Text>
-            </TouchableOpacity>
-            </ScrollView>
-        </View>
-        <View style={styles.continue}>
-            <TouchableOpacity>
-                <Text style={styles.continueBtn}>
-                    continuar
-                </Text>
-            </TouchableOpacity>
-        </View>
-    </View>
-);
+    );
 }
 
 const styles = StyleSheet.create ({

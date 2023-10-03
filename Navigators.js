@@ -15,6 +15,7 @@ import Activity from "./Screens/Activity";
 
 //Stack screens
 import Gain from "./Screens/Gain";
+import SelectCategories from "./Screens/SelectCategories";
 const Stack = createNativeStackNavigator()
 
 const Stacks = () =>{
@@ -36,6 +37,15 @@ const Stacks = () =>{
             <Stack.Screen
                 name="Gain"
                 component={Gain}
+                options={{
+                    headerBackTitleVisible:false,
+                    headerTintColor:'#D39F00',
+                    headerTitle: " "
+                }}
+            />
+            <Stack.Screen
+                name="SelectCategories"
+                component={SelectCategories}
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
