@@ -8,7 +8,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default Home = () =>{
-    const [price, setPrice] = useState (0);
+    const [amountValue, setAmountValue] = useState (0);
+
     const navigation = useNavigation()
 
     return(
@@ -22,13 +23,14 @@ export default Home = () =>{
                 </View>
                 <View style={styles.total}>
                     <Text style={styles.totalContent}>
-                        ${price}
+                        ${amountValue}
                     </Text>
                     <Ionicons name="eye" size={40} color="#000" style={styles.eye}/>
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>
-                    <TouchableOpacity onPress={()=>navigation.navigate("Gain")}>
+                    <TouchableOpacity onPress={()=>navigation.navigate("Gain")}
+                    >
                         <MaterialCommunityIcons name="cash-plus" size={40} color="white" />
                     </TouchableOpacity>
                     </View>
@@ -91,9 +93,9 @@ const styles = StyleSheet.create ({
         justifyContent: 'center'
     },
     gain:{
-        paddingHorizontal:10,
+        paddingHorizontal:20,
     },
     expense:{
-        paddingHorizontal:10
+        paddingHorizontal:20
     }
 })

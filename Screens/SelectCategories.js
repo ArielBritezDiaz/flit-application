@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { useEffect } from "react";
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView } from "react-native";
+import { StyleSheet, View, TextInput, TouchableOpacity, Text } from "react-native";
 
 /* Import icons svg */
 import Health from '../resources/icons/health.svg';
@@ -20,9 +20,17 @@ import Create from '../resources/icons/create.svg';
 
 export default SelectCategories = ( { route, navigation } ) => {
     const priceFormatted = route.params.price.replaceAll(".", "")
-    const price = parseInt(priceFormatted)
+    const price = parseFloat(priceFormatted)
 
+    //Value text input//
     const [valueNote, setValueNote] = useState('')
+
+    //Handle image selected//
+    const [imageValue, setImageValue] = useState('')
+
+    const handleImageSelected = (img) =>{
+        setImageValue(img)
+    }
     
     //Hide the bottom tabs navigation//
     useEffect(()=>{
@@ -38,105 +46,116 @@ export default SelectCategories = ( { route, navigation } ) => {
             <View style={styles.miniContainer}>
                 <View style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.health]} >
+                        <TouchableOpacity style={[styles.category, styles.health]} 
+                        onPress={() => handleImageSelected(<Health/>)}>
                             <Health width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Health</Text>
+                        <Text style={styles.textIcon}>Salud</Text>
                     </View>
 
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.home]} >
+                        <TouchableOpacity style={[styles.category, styles.home]} 
+                        onPress={() => handleImageSelected(<Home/>)}>
                             <Home width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Home</Text>
+                        <Text style={styles.textIcon}>Hogar</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.family]} >
+                        <TouchableOpacity style={[styles.category, styles.family]}
+                        onPress={() => handleImageSelected(<Family/>)}>
                             <Family width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Family</Text>
+                        <Text style={styles.textIcon}>Familia</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.education]} >
+                        <TouchableOpacity style={[styles.category, styles.education]} 
+                        onPress={() => handleImageSelected(<Education/>)}>
                             <Education width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Education</Text>
+                        <Text style={styles.textIcon}>Educacion</Text>
                     </View>
                     
                 </View>
                 <View  style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.food]} >
+                        <TouchableOpacity style={[styles.category, styles.food]} 
+                        onPress={() => handleImageSelected(<Food/>)}>
                             <Food width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Food</Text>
+                        <Text style={styles.textIcon}>Comida</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.shopping]} >
+                        <TouchableOpacity style={[styles.category, styles.shopping]} 
+                        onPress={() => handleImageSelected(<Shopping/>)}>
                             <Shopping width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Shopping</Text>
+                        <Text style={styles.textIcon}>Compras</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.transport]} >
+                        <TouchableOpacity style={[styles.category, styles.transport]} 
+                        onPress={() => handleImageSelected(<Transport/>)}>
                             <Transport width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Transport</Text>
+                        <Text style={styles.textIcon}>Transporte</Text>
                     </View>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.gym]} >
+                        <TouchableOpacity style={[styles.category, styles.gym]} 
+                        onPress={() => handleImageSelected(<Gym/>)}>
                             <Gym width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Gym</Text>
+                        <Text style={styles.textIcon}>GYM</Text>
                     </View>
                 </View>
                 <View  style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.gift]} >
+                        <TouchableOpacity style={[styles.category, styles.gift]} 
+                        onPress={() => handleImageSelected(<Gift/>)}>
                             <Gift width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Gift</Text>
+                        <Text style={styles.textIcon}>Regalos</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.leisure]} >
+                        <TouchableOpacity style={[styles.category, styles.leisure]} 
+                        onPress={() => handleImageSelected(<Leisure/>)}>
                             <Leisure width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Laisure</Text>
+                        <Text style={styles.textIcon}>Ocio</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.services]} >
+                        <TouchableOpacity style={[styles.category, styles.services]} 
+                        onPress={() => handleImageSelected(<Services/>)}>
                             <Services width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Services</Text>
+                        <Text style={styles.textIcon}>Servicios</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.travel]} >
+                        <TouchableOpacity style={[styles.category, styles.travel]}
+                        onPress={() => handleImageSelected(<Travel/>)}>
                             <Travel width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Travel</Text>
+                        <Text style={styles.textIcon}>Viajes</Text>
                     </View>
                 </View>
                 <View  style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.create]} >
+                        <TouchableOpacity style={[styles.category, styles.create]}>
                             <Create width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Create</Text>
+                        <Text style={styles.textIcon}>Crear</Text>
                     </View>
                 </View>
-
                 <View style={styles.notes}>
                     <TextInput
                         style={styles.notes}
                         name="notes"
-                        maxLength={50}
+                        maxLength={100}
                         autoCorrect={true}
                         defaultValue=""
                         cursorColor={'#D39F00'}
@@ -144,20 +163,23 @@ export default SelectCategories = ( { route, navigation } ) => {
                         multiline={true}
                         placeholder="Notes"
                         placeholderTextColor={"#8B8F8E"}
+                        onChangeText={txt => setValueNote(txt)}
+                        selectionColor={"#D39F00"}
                     >
                     </TextInput>
                 </View>
-            
                 <View style={styles.continue}>
-                    {/* <TouchableOpacity onPress={()=>navigation.navigate("SelectCategories", {
-                        price: amount
-                    })}> </TouchableOpacity> */}
+                    <TouchableOpacity onPress={()=>navigation.navigate("ConfirmationScreen", {
+                        note: valueNote,
+                        amount: price,
+                        image: imageValue
+                    })}> 
                         <Text style={styles.continueBtn} name="continue">
-                            Continue
+                            Continuar
                         </Text>
+                    </TouchableOpacity>
                 </View>
-
-            {/*
+            {/*             
                 <Text>{ price }</Text>
                 <Text>{ typeof(price) }</Text>
             */}
@@ -176,7 +198,8 @@ const styles = StyleSheet.create ({
         display: "flex",
         alignItems: "start",
         justifyContent: "space-around",
-        flex: 1
+        flex: 1,
+        elevation:30
     },
     section: {
         display: 'flex',
@@ -192,7 +215,7 @@ const styles = StyleSheet.create ({
         width: 70,
         height: 70,
         borderRadius: 50,
-        backfaceVisibility: "visible"
+        backfaceVisibility: "visible",
     },
     health: {
         backgroundColor: "#C10B0B"
@@ -238,16 +261,19 @@ const styles = StyleSheet.create ({
         alignItems: "center"
     },
     textIcon: {
+        marginTop:10,
         color: "#f5f5fa"
     },
     notes: {
         color: "#f5f5fa",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        marginTop:10
     },
     continue:{
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        marginBottom:10
     },
     continueBtn:{
         fontSize:25,
@@ -255,6 +281,7 @@ const styles = StyleSheet.create ({
         backgroundColor:'#d39f00',
         color:'#2f2f2f',
         borderRadius:12,
-        paddingHorizontal: 50,
+        paddingHorizontal: 90,
+        elevation:30,
     }
 })

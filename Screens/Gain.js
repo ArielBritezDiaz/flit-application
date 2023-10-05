@@ -9,16 +9,14 @@ export default Gain = ({navigation}) => {
     //PredefinedAmounts//
     const [selectedAmount, setSelectedAmount] = useState('')
 
-    //Funtcion to handle the predefined amounts//
-    const handleAmount = val =>{
-        setSelectedAmount(val)
-    }
-
     //Function when the user types amount//
     const typingAmount = (amount) => {
         const value = amount.replace('$', amount)
-        const formattedValue = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.')//Thousand point//
-        setAmount(formattedValue)
+        const comaDecimal = value.replace(/[^0-9,]/g, '')//Coma decimal//
+        const decimalCount = comaDecimal.split(',').length - 1//Decimal input counter//
+        if (decimalCount <= 1){
+            setAmount(comaDecimal)
+        }
     }
 
     //Hide the bottom tabs navigation//
@@ -31,12 +29,7 @@ export default Gain = ({navigation}) => {
 
     return(
         <View style={styles.container}>
-            <StatusBar hidden={false} />
-            <View style={styles.containerTxt}>
-                <Text style={styles.txt}>
-                    Ingrese el monto
-                </Text>
-            </View>
+            <StatusBar translucent={true} />
             <View style={styles.price}>
                 <Text style={styles.symbol}>
                     $
@@ -47,7 +40,9 @@ export default Gain = ({navigation}) => {
                     keyboardType = "numeric"
                     value={amount}
                     multiline={true}
+                    numberOfLines={2}
                     placeholder='0,00'
+                    maxLength={12}
                     placeholderTextColor={'#D39F00'}
                     cursorColor={'#D39F00'}
                 >
@@ -111,31 +106,27 @@ const styles = StyleSheet.create ({
     price:{
         justifyContent:'center',
         alignItems:'center',
+        top: 50,
         height:'50%',
         position:'relative',
-        top:50,
-        flexDirection:'row'
+        flexDirection:'row',
+        paddingHorizontal: 20
     },
     amount:{
-        fontSize: 70,
+        fontSize: 80,
         color: '#D39F00',
     },
     symbol:{
-        fontSize: 70,
+        fontSize: 80,
         color: '#D39F00',
-    },
-    containerTxt:{
-        padding: 10
-    },
-    txt:{
-        fontSize: 20,
-        color:'#D39F00',
     },
     default:{
         justifyContent:'center',
         alignItems:'center',
         flexDirection:'row',
-        height:200
+        height:200,
+        position:'relative',
+        top:40
     },
     option:{
         textAlign:'center',
@@ -145,14 +136,16 @@ const styles = StyleSheet.create ({
         borderRadius:12,
         borderColor:'#D39F00',
         paddingHorizontal:20,
-        marginHorizontal:10,
+        marginHorizontal:20,
         color:'#d39f00',
         fontWeight:'bold'
     },
     continue:{
         height:100,
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        position:'relative',
+        top:30
     },
     continueBtn:{
         fontSize:25,

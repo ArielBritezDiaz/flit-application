@@ -16,6 +16,7 @@ import Activity from "./Screens/Activity";
 //Stack screens
 import Gain from "./Screens/Gain";
 import SelectCategories from "./Screens/SelectCategories";
+import ConfirmationScreen from "./Screens/ConfirmationScreen";
 const Stack = createNativeStackNavigator()
 
 const Stacks = () =>{
@@ -40,7 +41,7 @@ const Stacks = () =>{
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
-                    headerTitle: " "
+                    headerTitle: "Ingrese el monto"
                 }}
             />
             <Stack.Screen
@@ -49,7 +50,16 @@ const Stacks = () =>{
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
-                    headerTitle: " "
+                    headerTitle: "Seleccione una categoria"
+                }}
+            />
+            <Stack.Screen
+                name="ConfirmationScreen"
+                component={ConfirmationScreen}
+                options={{
+                    headerBackTitleVisible:false,
+                    headerTintColor:'#D39F00',
+                    headerTitle: "Confirme su seleccion"
                 }}
             />
         </Stack.Navigator>
