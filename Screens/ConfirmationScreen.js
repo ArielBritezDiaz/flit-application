@@ -3,12 +3,13 @@ import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-nativ
 
 export default ConfirmationScreen = ( { route, navigation } ) =>{
     const valueNote = route.params.note;
-    const price = route.params.amount;
     const imageValue = route.params.image;
+    const amount = route.params.amo;
+
     return(
         <View style={styles.container}>
             <Text style={styles.price}>
-                ${price}
+                ${amount}
             </Text>
             <Text style={styles.note}>
                 {valueNote}

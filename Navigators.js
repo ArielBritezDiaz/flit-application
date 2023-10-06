@@ -17,6 +17,7 @@ import Activity from "./Screens/Activity";
 import Gain from "./Screens/Gain";
 import SelectCategories from "./Screens/SelectCategories";
 import ConfirmationScreen from "./Screens/ConfirmationScreen";
+import CreateCategory from "./Screens/CreateCategory";
 const Stack = createNativeStackNavigator()
 
 const Stacks = () =>{
@@ -60,6 +61,15 @@ const Stacks = () =>{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
                     headerTitle: "Confirme su seleccion"
+                }}
+            />
+            <Stack.Screen
+                name="CreateCategory"
+                component={CreateCategory}
+                options={{
+                    headerBackTitleVisible:false,
+                    headerTintColor:'#D39F00',
+                    headerTitle: "Cree su categoria"
                 }}
             />
         </Stack.Navigator>

@@ -19,9 +19,8 @@ import Travel from '../resources/icons/travel.svg';
 import Create from '../resources/icons/create.svg';
 
 export default SelectCategories = ( { route, navigation } ) => {
-    const priceFormatted = route.params.price.replaceAll(".", "")
-    const price = parseFloat(priceFormatted)
-
+    const newValue = route.params.price;
+    const amount = route.params.amo;
     //Value text input//
     const [valueNote, setValueNote] = useState('')
 
@@ -31,14 +30,8 @@ export default SelectCategories = ( { route, navigation } ) => {
     const handleImageSelected = (img) =>{
         setImageValue(img)
     }
+
     
-    //Hide the bottom tabs navigation//
-    useEffect(()=>{
-        navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
-        return ()=>{
-            navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
-        }
-    }, [])
     
     return(
         <View style={styles.container}>
@@ -145,7 +138,8 @@ export default SelectCategories = ( { route, navigation } ) => {
                 </View>
                 <View  style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.create]}>
+                        <TouchableOpacity style={[styles.category, styles.create]}
+                        onPress={() => navigation.navigate("CreateCategory")}>
                             <Create width={50} height={50} />
                         </TouchableOpacity>
                         <Text style={styles.textIcon}>Crear</Text>
@@ -171,18 +165,15 @@ export default SelectCategories = ( { route, navigation } ) => {
                 <View style={styles.continue}>
                     <TouchableOpacity onPress={()=>navigation.navigate("ConfirmationScreen", {
                         note: valueNote,
-                        amount: price,
-                        image: imageValue
+                        price: newValue,
+                        image: imageValue,
+                        amo: amount
                     })}> 
                         <Text style={styles.continueBtn} name="continue">
                             Continuar
                         </Text>
                     </TouchableOpacity>
                 </View>
-            {/*             
-                <Text>{ price }</Text>
-                <Text>{ typeof(price) }</Text>
-            */}
             </View>
         </View>
     )

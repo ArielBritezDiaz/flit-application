@@ -11,6 +11,11 @@ export default Home = () =>{
     const [amountValue, setAmountValue] = useState (0);
 
     const navigation = useNavigation()
+    
+    //Update balance//
+    const updatePrice = pr =>{
+        setAmountValue(pr)
+    }
 
     return(
         <View style={styles.container}>
@@ -29,7 +34,7 @@ export default Home = () =>{
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>
-                    <TouchableOpacity onPress={()=>navigation.navigate("Gain")}
+                    <TouchableOpacity onPress={()=>navigation.navigate("Gain", {amountValue, updatePrice})}
                     >
                         <MaterialCommunityIcons name="cash-plus" size={40} color="white" />
                     </TouchableOpacity>

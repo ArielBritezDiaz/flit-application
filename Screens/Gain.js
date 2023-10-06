@@ -2,12 +2,24 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView, StatusBar } from 'react-native';
 
-export default Gain = ({navigation}) => {
+export default Gain = ({route, navigation}) => {
     //Amount//
     const [amount, setAmount] = useState ('')
 
+    //Initial price//
+    const initialPrice = route.params.amountValue;
+    const updatePrice = route.params.updatePrice;
+
     //PredefinedAmounts//
     const [selectedAmount, setSelectedAmount] = useState('')
+
+    //Gain counter//
+    const handleGainCounter = () =>{
+        const newValue = parseInt(initialPrice) + parseInt(amount)
+        parseFloat(newValue)
+        updatePrice(newValue)
+        navigation.navigate('SelectCategories', {price : newValue, amo : amount})
+    }
 
     //Function when the user types amount//
     const typingAmount = (amount) => {
@@ -85,9 +97,7 @@ export default Gain = ({navigation}) => {
                 </ScrollView>
             </View>
             <View style={styles.continue}>
-                <TouchableOpacity onPress={()=>navigation.navigate("SelectCategories", {
-                    price: amount
-                })}>
+                <TouchableOpacity onPress={handleGainCounter}>
                     <Text style={styles.continueBtn} name="continue">
                         Continuar
                     </Text>
