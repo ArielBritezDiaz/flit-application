@@ -31,8 +31,6 @@ export default SelectCategories = ( { route, navigation } ) => {
         setImageValue(img)
     }
 
-    
-    
     return(
         <View style={styles.container}>
             <StatusBar hidden={false} />

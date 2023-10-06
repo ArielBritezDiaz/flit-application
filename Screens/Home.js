@@ -5,13 +5,14 @@ import { useNavigation } from "@react-navigation/native";
 
 //Icons libraries
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default Home = () =>{
     const [amountValue, setAmountValue] = useState (0);
 
     const navigation = useNavigation()
-    
+
     //Update balance//
     const updatePrice = pr =>{
         setAmountValue(pr)
@@ -30,7 +31,11 @@ export default Home = () =>{
                     <Text style={styles.totalContent}>
                         ${amountValue}
                     </Text>
-                    <Ionicons name="eye" size={40} color="#000" style={styles.eye}/>
+                    <TouchableOpacity>
+                        <Ionicons name="eye" size={40} color="#000" style={styles.eye}/>
+                    </TouchableOpacity>
+                    {/* <Entypo name="eye-with-line" size={40} color="black" />
+                    <Entypo name="dots-three-horizontal" size={24} color="black" /> */}
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>
