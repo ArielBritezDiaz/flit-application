@@ -2,17 +2,21 @@ import { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-export default CreateCategory = ({route, navigation}) => {
+//Default image icon//
+import Default from '../resources/icons/defaultSelectImage.svg';
+
+export default CreateCategory = ({navigation}) => {
     //Category name//
     const [name, setName] = useState('')
 
     //Category image//
-    const [img, setImg] = useState('')
+    const [img, setImg] = useState(null)
 
     //Request permission to the gallery//
     const galleryPermission = async() =>{
         let permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
 
+    //If the request is denied//
     if(permission.granted == false){
     alert('La aplicacion necesita acceso a su galeria')
     return
@@ -27,8 +31,7 @@ export default CreateCategory = ({route, navigation}) => {
     }
 
     //Set the image selected//
-    setImg({localuri:imageChosen.uri})
-
+    setImg({ localUri:imageChosen.uri })
     }
 
     return(
@@ -57,11 +60,25 @@ export default CreateCategory = ({route, navigation}) => {
                 </Text>
             </TouchableOpacity>
             <Image
-            source={{uri:img.localuri}}
+            source={{
+                uri:
+                    img !== null
+                    ? img.localUri
+                    : '',//Aca va la imagen por defecto//
+            }}
             style={styles.img}/>
             <Text style={styles.name}>
                 {name}
             </Text>
+            <TouchableOpacity 
+            onPress={() => navigation.navigate("SelectCategories", {
+                category : name,
+                image : img
+            })}>
+                <Text>
+                    Continuar
+                </Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -117,6 +134,6 @@ const styles = StyleSheet.create ({
         width: 200,
         borderRadius:100,
         marginVertical:30,
-        borderColor:'#d39f00'
+        backgroundColor:'#d39f00'
     }
 })

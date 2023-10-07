@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from 'react-native';
 
-export default Activity = () =>{
+export default Market = () =>{
     return(
         <View style={styles.container}>
             

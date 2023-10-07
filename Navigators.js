@@ -11,13 +11,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 //Bottom screens
 import Home from "./Screens/Home";
 import Settings from "./Screens/Settings";
-import Activity from "./Screens/Activity";
+import Market from "./Screens/Market";
 
 //Stack screens
 import Gain from "./Screens/Gain";
 import SelectCategories from "./Screens/SelectCategories";
 import ConfirmationScreen from "./Screens/ConfirmationScreen";
 import CreateCategory from "./Screens/CreateCategory";
+
 const Stack = createNativeStackNavigator()
 
 const Stacks = () =>{
@@ -98,11 +99,11 @@ const TabNavigation = () =>{
             )
             }}
             />
-            <Tab.Screen name="Activity"
-            component={Activity}
+            <Tab.Screen name="Market"
+            component={Market}
             options={{
                 tabBarIcon:()=>(
-                <MaterialCommunityIcons name="format-list-bulleted" color="black" size={35}/>//Activities icon
+                    <MaterialCommunityIcons name="finance" size={35} color="black" />//Market icon
             )
             }}
             />

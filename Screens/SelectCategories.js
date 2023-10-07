@@ -21,6 +21,11 @@ import Create from '../resources/icons/create.svg';
 export default SelectCategories = ( { route, navigation } ) => {
     const newValue = route.params.price;
     const amount = route.params.amo;
+
+    //Categories created//
+    // const name = route.params.category;
+    // const img = route.params.image;
+    
     //Value text input//
     const [valueNote, setValueNote] = useState('')
 
@@ -134,6 +139,17 @@ export default SelectCategories = ( { route, navigation } ) => {
                         <Text style={styles.textIcon}>Viajes</Text>
                     </View>
                 </View>
+
+                {/* <View style={styles.miniSection}>
+                        <TouchableOpacity style={[styles.category, styles.created]} 
+                        onPress={() => handleImageSelected({img})}>
+                            <Text>
+                                {img}
+                            </Text>
+                        </TouchableOpacity>
+                        <Text style={styles.textIcon}>{name}</Text>
+                </View> */}
+
                 <View  style={styles.section}>
                     <View style={styles.miniSection}>
                         <TouchableOpacity style={[styles.category, styles.create]}
