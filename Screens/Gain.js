@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView, StatusBar } from 'react-native';
+import { LogBox } from 'react-native';//Component used to ignore warnings//
 
 export default Gain = ({route, navigation}) => {
     //Amount//
     const [amount, setAmount] = useState ('')
+
+    //Ignore warning//
+    LogBox.ignoreLogs([
+        'Non-serializable values were found in the navigation state',
+    ]);
 
     //Initial price//
     const initialPrice = route.params.amountValue;

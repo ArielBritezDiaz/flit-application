@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-
-//Default image icon//
-import Default from '../resources/icons/defaultSelectImage.svg';
+import { LogBox } from 'react-native';//Component used to ignore warnings//
 
 export default CreateCategory = ({navigation}) => {
     //Category name//
@@ -11,6 +9,9 @@ export default CreateCategory = ({navigation}) => {
 
     //Category image//
     const [img, setImg] = useState(null)
+
+    //Ignore all warnings//
+    LogBox.ignoreAllLogs();
 
     //Request permission to the gallery//
     const galleryPermission = async() =>{
@@ -60,12 +61,7 @@ export default CreateCategory = ({navigation}) => {
                 </Text>
             </TouchableOpacity>
             <Image
-            source={{
-                uri:
-                    img !== null
-                    ? img.localUri
-                    : '',//Aca va la imagen por defecto//
-            }}
+            source={{ uri : img.localUri }}
             style={styles.img}/>
             <Text style={styles.name}>
                 {name}

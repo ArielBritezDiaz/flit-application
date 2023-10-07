@@ -91,7 +91,7 @@ const TabNavigation = () =>{
             },
         }}
         >
-            <Tab.Screen name="Home"
+            <Tab.Screen name="Inicio"
             component={Stacks}
             options={{
                 tabBarIcon:()=>(
@@ -104,14 +104,6 @@ const TabNavigation = () =>{
             options={{
                 tabBarIcon:()=>(
                     <MaterialCommunityIcons name="finance" size={35} color="black" />//Market icon
-            )
-            }}
-            />
-            <Tab.Screen name="Settings" 
-            component={Settings}
-            options={{
-                tabBarIcon:()=>(
-                <MaterialCommunityIcons name="brightness-5" color={'#000'} size={35}/>//Settings icon
             )
             }}
             />
