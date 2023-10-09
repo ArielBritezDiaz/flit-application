@@ -163,7 +163,7 @@ export default SelectCategories = ( { route, navigation } ) => {
                 </View>
                 <View style={styles.notes}>
                     <Modal
-                    animationType="slide"
+                    animationType="fade"
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() =>{
@@ -173,11 +173,10 @@ export default SelectCategories = ( { route, navigation } ) => {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <TextInput
-                        style={styles.notes}
+                        style={styles.notesInput}
                         name="notes"
                         maxLength={50}
                         autoCorrect={true}
-                        defaultValue=""
                         cursorColor={'#D39F00'}
                         keyboardType="default"
                         multiline={true}
@@ -187,6 +186,13 @@ export default SelectCategories = ( { route, navigation } ) => {
                         selectionColor={"#D39F00"}
                         >
                         </TextInput>
+                        <TouchableOpacity onPress={() => {
+                        setModalVisible(!modalVisible);
+                        Alert.alert('Nota guardada');}}>
+                        <Text style={styles.btnHide}>
+                            Guardar
+                        </Text>
+                        </TouchableOpacity>
                         </View>
                     </View>
                     </Modal>
@@ -299,6 +305,16 @@ const styles = StyleSheet.create ({
         color:'#f5f5fa',
         fontSize:20
     },
+    notesInput:{
+        textAlign:'center',
+        textAlignVertical:'center',
+        fontSize:20,
+        color:'#f5f5fa',
+        borderBottomWidth:2,
+        borderColor:'#d39f00',
+        width:200,
+        paddingVertical:10
+    },
     notestxt:{
         color:'#2f2f2f',
         paddingVertical:5,
@@ -314,11 +330,12 @@ const styles = StyleSheet.create ({
         display:'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection:'column',
-        marginTop:20
+        marginTop:20,
+        backgroundColor:'rgba(0, 0, 0, 0.7)'
     },
     modalView: {
-        maxWidth:'70%',
+        height:300,
+        width:'90%',
         backgroundColor: '#2f2f2f',
         borderRadius: 20,
         padding: 100,
@@ -330,7 +347,19 @@ const styles = StyleSheet.create ({
         },
         shadowOpacity: 0.9,
         shadowRadius: 100,
-        elevation: 90,
+        elevation: 100,
+    },
+    btnHide:{
+        textAlign:'center',
+        textAlignVertical:'center',
+        color:'#2f2f2f',
+        backgroundColor:'#d39f00',
+        borderRadius:10,
+        paddingVertical:5,
+        paddingHorizontal:30,
+        marginTop:40,
+        fontSize:15,
+        fontWeight:'bold'
     },
     continue:{
         justifyContent:'center',
