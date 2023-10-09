@@ -20,7 +20,7 @@ export default Home = () =>{
 
     return(
         <View style={styles.container}>
-            <StatusBar barStyle={'light-content'} hidden={false}/>
+            <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <View style={styles.balance}>
                 <View style={styles.balanceTotal}>
                     <Text style={styles.totalTxt}>

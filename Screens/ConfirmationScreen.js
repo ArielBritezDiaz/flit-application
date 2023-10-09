@@ -8,6 +8,7 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
 
     return(
         <View style={styles.container}>
+            <StatusBar hidden={false} style="light" />
             <Text style={styles.price}>
                 ${amount}
             </Text>

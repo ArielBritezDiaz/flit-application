@@ -47,7 +47,7 @@ export default Gain = ({route, navigation}) => {
 
     return(
         <View style={styles.container}>
-            <StatusBar translucent={true} />
+            <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <View style={styles.price}>
                 <Text style={styles.symbol}>
                     $

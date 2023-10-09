@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { useEffect } from "react";
-import { StyleSheet, View, TextInput, TouchableOpacity, Text,Image } from "react-native";
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, Image, Modal, Alert } from "react-native";
 
 /* Import icons svg */
 import Health from '../resources/icons/health.svg';
@@ -22,8 +22,12 @@ export default SelectCategories = ( { route, navigation } ) => {
     const newValue = route.params.price;
     const amount = route.params.amo;
     
+    //Modal state//
+    const [modalVisible, setModalVisible] = useState(false);
+
+    //Category created//
     const name = route.params.category;
-    const {img} = route.params;
+    const { img } = route.params;
 
     //Value text input//
     const [valueNote, setValueNote] = useState('')
@@ -37,7 +41,7 @@ export default SelectCategories = ( { route, navigation } ) => {
 
     return(
         <View style={styles.container}>
-            <StatusBar hidden={false} />
+            <StatusBar hidden={false} style="light" />
             <View style={styles.miniContainer}>
                 <View style={styles.section}>
                     <View style={styles.miniSection}>
@@ -142,9 +146,9 @@ export default SelectCategories = ( { route, navigation } ) => {
                 <View style={styles.section}>
                     <View style={styles.miniSection}>
                         <TouchableOpacity style={[styles.category, styles.created]}
-                        onPress={() => handleImageSelected()}>
+                        onPress={() => handleImageSelected(img)}>
                             <Image
-                            source={{uri:img}} 
+                            source={{uri:img}}
                             style={{ width: 70, height: 70, borderRadius: 50 }}/>
                         </TouchableOpacity>
                         <Text style={styles.textIcon}>{name}</Text>
@@ -158,21 +162,40 @@ export default SelectCategories = ( { route, navigation } ) => {
                     </View>
                 </View>
                 <View style={styles.notes}>
-                    <TextInput
+                    <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() =>{
+                        Alert.alert('Nota guardada')
+                        setModalVisible(!modalVisible)
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <TextInput
                         style={styles.notes}
                         name="notes"
-                        maxLength={100}
+                        maxLength={50}
                         autoCorrect={true}
                         defaultValue=""
                         cursorColor={'#D39F00'}
                         keyboardType="default"
                         multiline={true}
-                        placeholder="Notes"
+                        placeholder="Nota"
                         placeholderTextColor={"#8B8F8E"}
                         onChangeText={txt => setValueNote(txt)}
                         selectionColor={"#D39F00"}
-                    >
-                    </TextInput>
+                        >
+                        </TextInput>
+                        </View>
+                    </View>
+                    </Modal>
+                    <TouchableOpacity
+                    onPress={() => setModalVisible(true)}>
+                        <Text style={styles.notestxt}>
+                            Notas
+                        </Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.continue}>
                     <TouchableOpacity onPress={()=>navigation.navigate("ConfirmationScreen", {
@@ -271,10 +294,43 @@ const styles = StyleSheet.create ({
         color: "#f5f5fa"
     },
     notes: {
-        color: "#f5f5fa",
         justifyContent: "center",
         alignItems: "center",
-        marginTop:10
+        color:'#f5f5fa',
+        fontSize:20
+    },
+    notestxt:{
+        color:'#2f2f2f',
+        paddingVertical:5,
+        paddingHorizontal:30,
+        backgroundColor:'#d39f00',
+        elevation:30,
+        fontSize:15,
+        fontWeight:'bold',
+        borderRadius:10
+    },
+    centeredView: {
+        flex: 1,
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection:'column',
+        marginTop:20
+    },
+    modalView: {
+        maxWidth:'70%',
+        backgroundColor: '#2f2f2f',
+        borderRadius: 20,
+        padding: 100,
+        alignItems: 'center',
+        shadowColor: '#fff',
+        shadowOffset: {
+        width: 0,
+        height: 2,
+        },
+        shadowOpacity: 0.9,
+        shadowRadius: 100,
+        elevation: 90,
     },
     continue:{
         justifyContent:'center',

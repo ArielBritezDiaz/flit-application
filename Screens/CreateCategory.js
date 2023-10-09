@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { LogBox } from 'react-native';//Component used to ignore warnings//
@@ -37,6 +38,7 @@ export default CreateCategory = ({navigation}) => {
 
     return(
         <View style={styles.container}>
+            <StatusBar hidden={false} style="light" />
             <Text style={styles.txt}>
                 ¿Cual va a ser el nombre de su categoría?
             </Text>
