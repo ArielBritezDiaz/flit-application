@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { useEffect } from "react";
-import { StyleSheet, View, TextInput, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, View, TextInput, TouchableOpacity, Text,Image } from "react-native";
 
 /* Import icons svg */
 import Health from '../resources/icons/health.svg';
@@ -21,11 +21,10 @@ import Create from '../resources/icons/create.svg';
 export default SelectCategories = ( { route, navigation } ) => {
     const newValue = route.params.price;
     const amount = route.params.amo;
-
-    //Categories created//
-    // const name = route.params.category;
-    // const img = route.params.image;
     
+    const name = route.params.category;
+    const {img} = route.params;
+
     //Value text input//
     const [valueNote, setValueNote] = useState('')
 
@@ -140,17 +139,16 @@ export default SelectCategories = ( { route, navigation } ) => {
                     </View>
                 </View>
 
-                {/* <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.created]} 
-                        onPress={() => handleImageSelected({img})}>
-                            <Text>
-                                {img}
-                            </Text>
+                <View style={styles.section}>
+                    <View style={styles.miniSection}>
+                        <TouchableOpacity style={[styles.category, styles.created]}
+                        onPress={() => handleImageSelected()}>
+                            <Image
+                            source={{uri:img}} 
+                            style={{ width: 70, height: 70, borderRadius: 50 }}/>
                         </TouchableOpacity>
                         <Text style={styles.textIcon}>{name}</Text>
-                </View> */}
-
-                <View  style={styles.section}>
+                    </View>
                     <View style={styles.miniSection}>
                         <TouchableOpacity style={[styles.category, styles.create]}
                         onPress={() => navigation.navigate("CreateCategory")}>
@@ -260,6 +258,9 @@ const styles = StyleSheet.create ({
     },
     create: {
         backgroundColor: "#15B087"
+    },
+    created:{
+        backgroundColor: "#2f2f2e"
     },
     miniSection: {
         display: "flex",

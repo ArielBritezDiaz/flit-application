@@ -8,7 +8,7 @@ export default CreateCategory = ({navigation}) => {
     const [name, setName] = useState('')
 
     //Category image//
-    const [img, setImg] = useState(null)
+    const [img, setImg] = useState({ localUri: '' })
 
     //Ignore all warnings//
     LogBox.ignoreAllLogs();
@@ -66,15 +66,17 @@ export default CreateCategory = ({navigation}) => {
             <Text style={styles.name}>
                 {name}
             </Text>
+            <View style={styles.continue}>
             <TouchableOpacity 
             onPress={() => navigation.navigate("SelectCategories", {
                 category : name,
-                image : img
+                img : img.localUri
             })}>
-                <Text>
+                <Text style={styles.continueBtn}>
                     Continuar
                 </Text>
             </TouchableOpacity>
+            </View>
         </View>
     );
 }
@@ -113,11 +115,12 @@ const styles = StyleSheet.create ({
         borderTopLeftRadius:100,
         borderBottomRightRadius:100,
         borderBottomLeftRadius:100,
+        elevation:30
     },
     btntxt:{
         fontSize:20,
-        color:'#f5f5fa',
-        fontWeight:'bold'
+        color:'#2f2f2f',
+        fontWeight:'bold',
     },
     name:{
         fontSize:20,
@@ -130,6 +133,21 @@ const styles = StyleSheet.create ({
         width: 200,
         borderRadius:100,
         marginVertical:30,
-        backgroundColor:'#d39f00'
+        backgroundColor:'#d39f00',
+        elevation:30
+    },
+    continue:{
+        justifyContent:'center',
+        alignItems:'center',
+        marginTop:10
+    },
+    continueBtn:{
+        fontSize:25,
+        fontWeight:'bold',
+        backgroundColor:'#d39f00',
+        color:'#2f2f2f',
+        borderRadius:12,
+        paddingHorizontal: 90,
+        elevation:30,
     }
 })
