@@ -12,6 +12,9 @@ export default Market = () => {
     //Coins arrray//
     const [coin, setCoin] = useState([])
 
+    //Searching//
+    const [search, setSearch] = useState('')
+
     //API data function//
     const loadData = async () =>{
         const resp = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=ars&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en");
@@ -35,11 +38,15 @@ return(
             autoCorrect={true}
             multiline={false}
             keyboardType="default"
+            onChangeText={txt => setSearch(txt)}
             style={styles.searcher}/>
         </View>
         <FlatList
         style={styles.list}
-        data={coin}
+        data={
+            coin.filter((coin) => coin.name.toLowerCase().includes(search) ||//Filter by full name
+            coin.symbol.toLowerCase().includes(search))//Filter by abbreviated name
+        }
         renderItem={ ({item}) => {
             return <CoinItem coin={item}/>
         }}
