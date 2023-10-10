@@ -34,6 +34,7 @@ return(
         <View style={styles.header}>
             <TextInput
             maxLength={30}
+            autoCapitalize='none'
             placeholder='Buscar cryptomoneda'
             placeholderTextColor={'#8B8F8E'}
             selectionColor={"#D39F00"}

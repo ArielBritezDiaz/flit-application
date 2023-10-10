@@ -175,7 +175,7 @@ export default SelectCategories = ( { route, navigation } ) => {
                             <TextInput
                         style={styles.notesInput}
                         name="notes"
-                        maxLength={50}
+                        maxLength={20}
                         autoCorrect={true}
                         cursorColor={'#D39F00'}
                         keyboardType="default"

@@ -93,7 +93,7 @@ const styles = StyleSheet.create ({
     },
     totalContent:{
         fontSize: 40,
-        color:'#fff',
+        color:'#f5f5fa',
         fontWeight:'bold',
         paddingRight: 10
     },

@@ -67,6 +67,6 @@ const styles = StyleSheet.create ({
     },
     touchable:{
         position:'relative',
-        top:150
+        top:100
     }
 })

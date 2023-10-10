@@ -60,7 +60,7 @@ export default Gain = ({route, navigation}) => {
                     multiline={true}
                     numberOfLines={2}
                     placeholder='0,00'
-                    maxLength={12}
+                    maxLength={10}
                     placeholderTextColor={'#D39F00'}
                     cursorColor={'#D39F00'}
                 >
