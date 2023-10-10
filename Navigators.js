@@ -99,7 +99,7 @@ const TabNavigation = () =>{
             )
             }}
             />
-            <Tab.Screen name="Market"
+            <Tab.Screen name="Mercado"
             component={Market}
             options={{
                 tabBarIcon:()=>(
