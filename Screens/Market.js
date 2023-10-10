@@ -15,6 +15,9 @@ export default Market = () => {
     //Searching//
     const [search, setSearch] = useState('')
 
+    //Refresh data//
+    const [refresh, setRefreshing] = useState(false)
+
     //API data function//
     const loadData = async () =>{
         const resp = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=ars&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en");
@@ -51,6 +54,12 @@ return(
             return <CoinItem coin={item}/>
         }}
         showsVerticalScrollIndicator={false}
+        refreshing={refresh}
+        onRefresh={async() =>{//Listener to refresh the view//
+            setRefreshing(true)
+            await loadData();//Load the data after refresh
+            setRefreshing(false)
+        }}
         />
     </View>
 )
