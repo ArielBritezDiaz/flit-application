@@ -72,7 +72,8 @@ export default CreateCategory = ({navigation}) => {
             <TouchableOpacity 
             onPress={() => navigation.navigate("SelectCategories", {
                 category : name,
-                img : img.localUri
+                img : img.localUri,
+                countCategory: 1
             })}>
                 <Text style={styles.continueBtn}>
                     Continuar

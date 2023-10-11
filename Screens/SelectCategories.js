@@ -28,16 +28,44 @@ export default SelectCategories = ( { route, navigation } ) => {
     //Category created//
     const name = route.params.category;
     const { img } = route.params;
+    const countCategory = route.params.countCategory;
 
     //Value text input//
     const [valueNote, setValueNote] = useState('')
 
     //Handle image selected//
     const [imageValue, setImageValue] = useState('')
+    const [taskCompleted, setTaskCompleted] = useState(null)
+    const [c, setC] = useState(0);
 
     const handleImageSelected = (img) =>{
         setImageValue(img)
+
+        setC(c + 1);
+        console.log(c)
+        if((c % 2) == 0) {
+            setTaskCompleted(true)
+        } else if(c % 2 == 1) {
+            setTaskCompleted(false)
+        }
+        
     }
+
+    const getTouchableOpacityStyle = () => {
+        if(taskCompleted === null) {
+            return [styles.category, styles.health]
+        } else if(taskCompleted === true) {
+            return taskCompleted ? [styles.category, styles.test] : [styles.category, styles.health]
+        } else if(taskCompleted === false) {
+            return [styles.category, styles.health]
+        }
+    }
+
+    const countCategoryCreate = (countCategory) => {
+
+    }
+
+    
 
     return(
         <View style={styles.container}>
@@ -45,7 +73,7 @@ export default SelectCategories = ( { route, navigation } ) => {
             <View style={styles.miniContainer}>
                 <View style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.health]} 
+                        <TouchableOpacity style={getTouchableOpacityStyle()} 
                         onPress={() => handleImageSelected(<Health/>)}>
                             <Health width={50} height={50} />
                         </TouchableOpacity>
@@ -153,7 +181,7 @@ export default SelectCategories = ( { route, navigation } ) => {
                         </TouchableOpacity>
                         <Text style={styles.textIcon}>{name}</Text>
                     </View>
-                    <View style={styles.miniSection}>
+                    <View style={[styles.miniSection, styles.miniSectionCreate]}>
                         <TouchableOpacity style={[styles.category, styles.create]}
                         onPress={() => navigation.navigate("CreateCategory")}>
                             <Create width={50} height={50} />
@@ -163,27 +191,28 @@ export default SelectCategories = ( { route, navigation } ) => {
                 </View>
                 <View style={styles.notes}>
                     <Modal
-                    animationType="fade"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() =>{
-                        Alert.alert('Nota guardada')
-                        setModalVisible(!modalVisible)
-                    }}>
+                        animationType="fade"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() =>{
+                            Alert.alert('Nota guardada')
+                            setModalVisible(!modalVisible)
+                        }}
+                    >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <TextInput
-                        style={styles.notesInput}
-                        name="notes"
-                        maxLength={20}
-                        autoCorrect={true}
-                        cursorColor={'#D39F00'}
-                        keyboardType="default"
-                        multiline={true}
-                        placeholder="Nota"
-                        placeholderTextColor={"#8B8F8E"}
-                        onChangeText={txt => setValueNote(txt)}
-                        selectionColor={"#D39F00"}
+                        <TextInput
+                            style={styles.notesInput}
+                            name="notes"
+                            maxLength={20}
+                            autoCorrect={true}
+                            cursorColor={'#D39F00'}
+                            keyboardType="default"
+                            multiline={true}
+                            placeholder="Nota"
+                            placeholderTextColor={"#8B8F8E"}
+                            onChangeText={txt => setValueNote(txt)}
+                            selectionColor={"#D39F00"}
                         >
                         </TextInput>
                         <TouchableOpacity onPress={() => {
@@ -221,6 +250,11 @@ export default SelectCategories = ( { route, navigation } ) => {
 }
 
 const styles = StyleSheet.create ({
+    test: {
+        borderWidth: 2,
+        borderColor: "#fff",
+        backgroundColor: "#C10B0B"
+    },
     container: {
         display: 'flex',
         flex: 1,
@@ -286,7 +320,15 @@ const styles = StyleSheet.create ({
         backgroundColor: "#D9D50A"
     },
     create: {
+        borderWidth: 2,
+        borderColor:'#fff',
         backgroundColor: "#15B087"
+    },
+    miniSectionCreate: {
+        alignItems: "center",
+        justifyContent: "center",
+        borderWidth: 2,
+        borderColor:'#fff',
     },
     created:{
         backgroundColor: "#2f2f2e"
