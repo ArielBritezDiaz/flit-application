@@ -11,6 +11,9 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 export default Home = () =>{
     const [amountValue, setAmountValue] = useState (0);
 
+    //Show amount icons//
+    const [showAmount, setShowAmount] = useState(true);
+
     const navigation = useNavigation()
 
     //Update balance//
@@ -29,13 +32,20 @@ export default Home = () =>{
                 </View>
                 <View style={styles.total}>
                     <Text style={styles.totalContent}>
-                        ${amountValue}
+                        {showAmount 
+                        ? `$${amountValue}` 
+                        : <Entypo name="dots-three-horizontal" size={40} color="white" />}
                     </Text>
-                    <TouchableOpacity>
-                        <Ionicons name="eye" size={40} color="#000" style={styles.eye}/>
+                    <TouchableOpacity 
+                    onPress={() => setShowAmount(!showAmount)}>
+                    <Entypo
+                            name={showAmount 
+                            ? 'eye' 
+                            : 'eye-with-line'}
+                            size={40}
+                            color="black"
+                        />
                     </TouchableOpacity>
-                    {/* <Entypo name="eye-with-line" size={40} color="black" />
-                    <Entypo name="dots-three-horizontal" size={24} color="black" /> */}
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>

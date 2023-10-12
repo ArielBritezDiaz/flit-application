@@ -167,7 +167,6 @@ export default SelectCategories = ( { route, navigation } ) => {
                     transparent={true}
                     visible={modalVisible}
                     onRequestClose={() =>{
-                        Alert.alert('Nota guardada')
                         setModalVisible(!modalVisible)
                     }}>
                     <View style={styles.centeredView}>
@@ -187,8 +186,7 @@ export default SelectCategories = ( { route, navigation } ) => {
                         >
                         </TextInput>
                         <TouchableOpacity onPress={() => {
-                        setModalVisible(!modalVisible);
-                        Alert.alert('Nota guardada');}}>
+                        setModalVisible(!modalVisible)}}>
                         <Text style={styles.btnHide}>
                             Guardar
                         </Text>
