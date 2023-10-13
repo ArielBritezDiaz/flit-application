@@ -7,10 +7,13 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
     const amount = route.params.amo;
     const hexColor = route.params.hexColor.backgroundColor
     const nameCategory = route.params.nameCategory
-    console.log(route.params.nameCategory)
+    // console.log(`valueNote typeof: ${typeof(valueNote)} \n Contenido de valueNote: ${valueNote}`)
 
-    function Note() {
-        return 
+    function NoteEmpty({valueNote}) {
+        if(valueNote === "") {
+            return null
+        }
+        return <Text style={styles.note}>{valueNote}</Text>
     }
 
     return(
@@ -20,10 +23,8 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
                 ${amount}
             </Text>
             
-            if(valueNote =! ""){
-                <Text style={styles.note}> {valueNote} </Text>
-            }
-
+            <NoteEmpty valueNote={valueNote}></NoteEmpty>
+            
             <Text style={[styles.icon, {backgroundColor: hexColor}]}>
                 {imageValue}
             </Text>

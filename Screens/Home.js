@@ -21,6 +21,11 @@ export default Home = () =>{
     return(
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
+            <View >
+                    <TouchableOpacity style={styles.profile}>
+
+                    </TouchableOpacity>
+            </View>
             <View style={styles.balance}>
                 <View style={styles.balanceTotal}>
                     <Text style={styles.totalTxt}>
@@ -32,20 +37,22 @@ export default Home = () =>{
                         ${amountValue}
                     </Text>
                     <TouchableOpacity>
-                        <Ionicons name="eye" size={40} color="#000" style={styles.eye}/>
+                        <Ionicons name="eye" size={40} color="#0f0c0c" style={styles.eye}/>
                     </TouchableOpacity>
                     {/* <Entypo name="eye-with-line" size={40} color="black" />
                     <Entypo name="dots-three-horizontal" size={24} color="black" /> */}
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>
-                    <TouchableOpacity onPress={()=>navigation.navigate("Gain", {amountValue, updatePrice})}
+                    <TouchableOpacity onPress={() => navigation.navigate("Gain", {amountValue, updatePrice})}
                     >
-                        <MaterialCommunityIcons name="cash-plus" size={40} color="white" />
+                        <MaterialCommunityIcons name="cash-plus" size={40} color="#f5f5fa" />
                     </TouchableOpacity>
                     </View>
                     <View style={styles.expense}>
-                        <MaterialCommunityIcons name="cash-minus" size={40} color="white" />
+                        <TouchableOpacity onPress={() => navigation.navigate("Expense", {amountValue, updatePrice})}>
+                            <MaterialCommunityIcons name="cash-minus" size={40} color="#f5f5fa" />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

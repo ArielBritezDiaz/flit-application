@@ -1,7 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { useEffect } from "react";
-import { StyleSheet, View, TextInput, TouchableOpacity, Text, Image, Modal, Alert } from "react-native";
+import { StyleSheet, View, TextInput, TouchableOpacity, Text, Modal, Alert } from "react-native";
 
 /* Import icons svg */
 import Health from '../resources/icons/health.svg';
@@ -26,9 +25,9 @@ export default SelectCategories = ( { route, navigation } ) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     //Category created//
-    const name = route.params.category;
-    const { img } = route.params;
-    const countCategory = route.params.countCategory;
+    // const name = route.params.category;
+    // const { img } = route.params;
+    // const countCategory = route.params.countCategory;
 
     //Value text input//
     const [valueNote, setValueNote] = useState('')
@@ -42,6 +41,7 @@ export default SelectCategories = ( { route, navigation } ) => {
     const [c, setC] = useState(0);
 
     const nameCategories = ["Salud", "Hogar", "Familia", "Educación", "Comida", "Compras", "Transporte", "Gimansio", "Regalos", "Ocio", "Servicios", "Viajes"]
+    
 
     const handleImageSelected = (img, hexColor, nameCategory, iconNumberProp) =>{
         setImageValue(img)
@@ -60,88 +60,17 @@ export default SelectCategories = ( { route, navigation } ) => {
 
     const getTouchableOpacityStyle = (iconNumber) => {
         // console.log(`iconNumbera: ${iconNumbera}`)
-        switch(iconNumber) {
-            case 1:
-                if(taskCompleted === 1 && iconNumbera === 1) {
-                    // console.log(`iconNumber de case 1: ${iconNumber}`)
-                    return iconNumber === 1 ? [styles.category, styles.healthSelected] : [styles.category, styles.health]
-                }
-                return [styles.category, styles.health]
-            case 2:
-                if(taskCompleted === 1 && iconNumbera === 2) {
-                    // console.log(`iconNumber: ${iconNumber}`)
-                    return iconNumber === 2 ? [styles.category, styles.homeSelected] : [styles.category, styles.home]
-                }
-                return [styles.category, styles.home]
-            case 3:
-                if(taskCompleted === 1 && iconNumbera === 3) {
-                    // console.log(`iconNumber: ${iconNumber}`)
-                    return iconNumber === 3 ? [styles.category, styles.familySelected] : [styles.category, styles.family]
-                }
-                return [styles.category, styles.family]
-            case 4:
-                if(taskCompleted === 1 && iconNumbera === 4) {
-                    // console.log(`iconNumber de case 1: ${iconNumber}`)
-                    return iconNumber === 4 ? [styles.category, styles.educationSelected] : [styles.category, styles.education]
-                }
-                return [styles.category, styles.education]
-            case 5:
-                if(taskCompleted === 1 && iconNumbera === 5) {
-                    // console.log(`iconNumber: ${iconNumber}`)
-                    return iconNumber === 5 ? [styles.category, styles.foodSelected] : [styles.category, styles.food]
-                }
-                return [styles.category, styles.food]
-            case 6:
-                if(taskCompleted === 1 && iconNumbera === 6) {
-                    // console.log(`iconNumber: ${iconNumber}`)
-                    return iconNumber === 6 ? [styles.category, styles.shoppingSelected] : [styles.category, styles.shopping]
-                }
-                return [styles.category, styles.shopping]
-            case 7:
-                if(taskCompleted === 1 && iconNumbera === 7) {
-                    // console.log(`iconNumber de case 1: ${iconNumber}`)
-                    return iconNumber === 7 ? [styles.category, styles.transportSelected] : [styles.category, styles.transport]
-                }
-                return [styles.category, styles.transport]
-            case 8:
-                if(taskCompleted === 1 && iconNumbera === 8) {
-                    // console.log(`iconNumber: ${iconNumber}`)
-                    return iconNumber === 8 ? [styles.category, styles.gymSelected] : [styles.category, styles.gym]
-                }
-                return [styles.category, styles.gym]
-            case 9:
-                if(taskCompleted === 1 && iconNumbera === 9) {
-                    // console.log(`iconNumber: ${iconNumber}`)
-                    return iconNumber === 9 ? [styles.category, styles.giftSelected] : [styles.category, styles.gift]
-                }
-                return [styles.category, styles.gift]
-            case 10:
-                if(taskCompleted === 1 && iconNumbera === 10) {
-                    // console.log(`iconNumber de case 1: ${iconNumber}`)
-                    return iconNumber === 10 ? [styles.category, styles.leisureSelected] : [styles.category, styles.leisure]
-                }
-                return [styles.category, styles.leisure]
-            case 11:
-                if(taskCompleted === 1 && iconNumbera === 11) {
-                    // console.log(`iconNumber: ${iconNumber}`)
-                    return iconNumber === 11 ? [styles.category, styles.servicesSelected] : [styles.category, styles.services]
-                }
-                return [styles.category, styles.services]
-            case 12:
-                if(taskCompleted === 1 && iconNumbera === 12) {
-                    // console.log(`iconNumber: ${iconNumber}`)
-                    return iconNumber === 12 ? [styles.category, styles.travelSelected] : [styles.category, styles.travel]
-                }
-                return [styles.category, styles.travel]
+
+        const categorySelected = ["healthSelected", "homeSelected", "familySelected", "educationSelected", "foodSelected", "shoppingSelected", "transportSelected", "gymSelected", "giftSelected", "leisureSelected", "servicesSelected", "travelSelected"]
+        const categoryBase = ["health", "home", "family", "education", "food", "shopping", "transport", "gym", "gift", "leisure", "services", "travel"]
+
+        for(let i = iconNumber; i <= 12; i++) {
+            if(taskCompleted === 1 && iconNumbera === i) {
+                return iconNumber === i ? [styles.category, styles[categorySelected[i - 1]]] : [styles.category, styles[categoryBase[iconNumber - 1]]];
+            }
+            return [styles.category, styles[categoryBase[iconNumber - 1]]];
         }
-        
     }
-
-    const countCategoryCreate = (countCategory) => {
-
-    }
-
-    
 
     return(
         <View style={styles.container}>
@@ -310,7 +239,7 @@ export default SelectCategories = ( { route, navigation } ) => {
                     <TouchableOpacity
                     onPress={() => setModalVisible(true)}>
                         <Text style={styles.notestxt}>
-                            Notas
+                            Nota
                         </Text>
                     </TouchableOpacity>
                 </View>

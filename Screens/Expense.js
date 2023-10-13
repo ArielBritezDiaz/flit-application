@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView, StatusBar } from 'react-native';
 import { LogBox } from 'react-native';//Component used to ignore warnings//
 
-export default Gain = ({route, navigation}) => {
+export default Expense = ({route, navigation}) => {
     //Amount//
     const [amount, setAmount] = useState ('')
 
@@ -21,7 +21,7 @@ export default Gain = ({route, navigation}) => {
 
     //Gain counter//
     const handleGainCounter = () =>{
-        const newValue = parseInt(initialPrice) + parseInt(amount)
+        const newValue = parseInt(initialPrice) - parseInt(amount)
         parseFloat(newValue)
         updatePrice(newValue)
         navigation.navigate('SelectCategories', {price : newValue, amo : amount})
