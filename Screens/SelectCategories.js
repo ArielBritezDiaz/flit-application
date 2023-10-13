@@ -16,7 +16,7 @@ import Gift from '../resources/icons/gift.svg';
 import Leisure from '../resources/icons/leisure.svg';
 import Services from '../resources/icons/services.svg';
 import Travel from '../resources/icons/travel.svg';
-import Create from '../resources/icons/create.svg';
+// import Create from '../resources/icons/create.svg';
 
 export default SelectCategories = ( { route, navigation } ) => {
     const newValue = route.params.price;
@@ -35,30 +35,106 @@ export default SelectCategories = ( { route, navigation } ) => {
 
     //Handle image selected//
     const [imageValue, setImageValue] = useState('')
-    const [taskCompleted, setTaskCompleted] = useState(null)
+    const [taskCompleted, setTaskCompleted] = useState(0)
+    const [iconNumbera, setIconNumber] = useState(0)
+    const [hexColor, setHexColor] = useState('')
+    const [nameCategory, setNameCategory] = useState('')
     const [c, setC] = useState(0);
 
-    const handleImageSelected = (img) =>{
+    const nameCategories = ["Salud", "Hogar", "Familia", "Educación", "Comida", "Compras", "Transporte", "Gimansio", "Regalos", "Ocio", "Servicios", "Viajes"]
+
+    const handleImageSelected = (img, hexColor, nameCategory, iconNumberProp) =>{
         setImageValue(img)
+        setIconNumber(iconNumberProp)
+        setHexColor(hexColor)
+        setNameCategory(nameCategory)
+        console.log(nameCategory)
 
         setC(c + 1);
-        console.log(c)
+        // console.log(`c: ${c}`)
         if((c % 2) == 0) {
-            setTaskCompleted(true)
-        } else if(c % 2 == 1) {
-            setTaskCompleted(false)
+            setTaskCompleted(1)
+            return iconNumberProp
         }
-        
     }
 
-    const getTouchableOpacityStyle = () => {
-        if(taskCompleted === null) {
-            return [styles.category, styles.health]
-        } else if(taskCompleted === true) {
-            return taskCompleted ? [styles.category, styles.test] : [styles.category, styles.health]
-        } else if(taskCompleted === false) {
-            return [styles.category, styles.health]
+    const getTouchableOpacityStyle = (iconNumber) => {
+        // console.log(`iconNumbera: ${iconNumbera}`)
+        switch(iconNumber) {
+            case 1:
+                if(taskCompleted === 1 && iconNumbera === 1) {
+                    // console.log(`iconNumber de case 1: ${iconNumber}`)
+                    return iconNumber === 1 ? [styles.category, styles.healthSelected] : [styles.category, styles.health]
+                }
+                return [styles.category, styles.health]
+            case 2:
+                if(taskCompleted === 1 && iconNumbera === 2) {
+                    // console.log(`iconNumber: ${iconNumber}`)
+                    return iconNumber === 2 ? [styles.category, styles.homeSelected] : [styles.category, styles.home]
+                }
+                return [styles.category, styles.home]
+            case 3:
+                if(taskCompleted === 1 && iconNumbera === 3) {
+                    // console.log(`iconNumber: ${iconNumber}`)
+                    return iconNumber === 3 ? [styles.category, styles.familySelected] : [styles.category, styles.family]
+                }
+                return [styles.category, styles.family]
+            case 4:
+                if(taskCompleted === 1 && iconNumbera === 4) {
+                    // console.log(`iconNumber de case 1: ${iconNumber}`)
+                    return iconNumber === 4 ? [styles.category, styles.educationSelected] : [styles.category, styles.education]
+                }
+                return [styles.category, styles.education]
+            case 5:
+                if(taskCompleted === 1 && iconNumbera === 5) {
+                    // console.log(`iconNumber: ${iconNumber}`)
+                    return iconNumber === 5 ? [styles.category, styles.foodSelected] : [styles.category, styles.food]
+                }
+                return [styles.category, styles.food]
+            case 6:
+                if(taskCompleted === 1 && iconNumbera === 6) {
+                    // console.log(`iconNumber: ${iconNumber}`)
+                    return iconNumber === 6 ? [styles.category, styles.shoppingSelected] : [styles.category, styles.shopping]
+                }
+                return [styles.category, styles.shopping]
+            case 7:
+                if(taskCompleted === 1 && iconNumbera === 7) {
+                    // console.log(`iconNumber de case 1: ${iconNumber}`)
+                    return iconNumber === 7 ? [styles.category, styles.transportSelected] : [styles.category, styles.transport]
+                }
+                return [styles.category, styles.transport]
+            case 8:
+                if(taskCompleted === 1 && iconNumbera === 8) {
+                    // console.log(`iconNumber: ${iconNumber}`)
+                    return iconNumber === 8 ? [styles.category, styles.gymSelected] : [styles.category, styles.gym]
+                }
+                return [styles.category, styles.gym]
+            case 9:
+                if(taskCompleted === 1 && iconNumbera === 9) {
+                    // console.log(`iconNumber: ${iconNumber}`)
+                    return iconNumber === 9 ? [styles.category, styles.giftSelected] : [styles.category, styles.gift]
+                }
+                return [styles.category, styles.gift]
+            case 10:
+                if(taskCompleted === 1 && iconNumbera === 10) {
+                    // console.log(`iconNumber de case 1: ${iconNumber}`)
+                    return iconNumber === 10 ? [styles.category, styles.leisureSelected] : [styles.category, styles.leisure]
+                }
+                return [styles.category, styles.leisure]
+            case 11:
+                if(taskCompleted === 1 && iconNumbera === 11) {
+                    // console.log(`iconNumber: ${iconNumber}`)
+                    return iconNumber === 11 ? [styles.category, styles.servicesSelected] : [styles.category, styles.services]
+                }
+                return [styles.category, styles.services]
+            case 12:
+                if(taskCompleted === 1 && iconNumbera === 12) {
+                    // console.log(`iconNumber: ${iconNumber}`)
+                    return iconNumber === 12 ? [styles.category, styles.travelSelected] : [styles.category, styles.travel]
+                }
+                return [styles.category, styles.travel]
         }
+        
     }
 
     const countCategoryCreate = (countCategory) => {
@@ -73,107 +149,107 @@ export default SelectCategories = ( { route, navigation } ) => {
             <View style={styles.miniContainer}>
                 <View style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={getTouchableOpacityStyle()} 
-                        onPress={() => handleImageSelected(<Health/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(1)} 
+                        onPress={() => handleImageSelected(<Health/>, styles.health, nameCategories[0], 1)}>
                             <Health width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Salud</Text>
+                        <Text style={styles.textIcon}>{nameCategories[0]}</Text>
                     </View>
 
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.home]} 
-                        onPress={() => handleImageSelected(<Home/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(2)}
+                        onPress={() => handleImageSelected(<Home/>, styles.home, nameCategories[1], 2)}>
                             <Home width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Hogar</Text>
+                        <Text style={styles.textIcon}>{nameCategories[1]}</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.family]}
-                        onPress={() => handleImageSelected(<Family/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(3)}
+                        onPress={() => handleImageSelected(<Family/>, styles.family, nameCategories[2], 3)}>
                             <Family width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Familia</Text>
+                        <Text style={styles.textIcon}>{nameCategories[2]}</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.education]} 
-                        onPress={() => handleImageSelected(<Education/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(4)} 
+                        onPress={() => handleImageSelected(<Education/>, styles.education, nameCategories[3], 4)}>
                             <Education width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Educacion</Text>
+                        <Text style={styles.textIcon}>{nameCategories[3]}</Text>
                     </View>
                     
                 </View>
                 <View  style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.food]} 
-                        onPress={() => handleImageSelected(<Food/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(5)} 
+                        onPress={() => handleImageSelected(<Food/>, styles.food, nameCategories[4], 5)}>
                             <Food width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Comida</Text>
+                        <Text style={styles.textIcon}>{nameCategories[4]}</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.shopping]} 
-                        onPress={() => handleImageSelected(<Shopping/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(6)} 
+                        onPress={() => handleImageSelected(<Shopping/>, styles.shopping, nameCategories[5], 6)}>
                             <Shopping width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Compras</Text>
+                        <Text style={styles.textIcon}>{nameCategories[5]}</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.transport]} 
-                        onPress={() => handleImageSelected(<Transport/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(7)} 
+                        onPress={() => handleImageSelected(<Transport/>, styles.transport, nameCategories[6], 7)}>
                             <Transport width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Transporte</Text>
+                        <Text style={styles.textIcon}>{nameCategories[6]}</Text>
                     </View>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.gym]} 
-                        onPress={() => handleImageSelected(<Gym/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(8)} 
+                        onPress={() => handleImageSelected(<Gym/>, styles.gym, nameCategories[7], 8)}>
                             <Gym width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>GYM</Text>
+                        <Text style={styles.textIcon}>{nameCategories[7]}</Text>
                     </View>
                 </View>
                 <View  style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.gift]} 
-                        onPress={() => handleImageSelected(<Gift/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(9)} 
+                        onPress={() => handleImageSelected(<Gift/>, styles.gift, nameCategories[8], 9)}>
                             <Gift width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Regalos</Text>
+                        <Text style={styles.textIcon}>{nameCategories[8]}</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.leisure]} 
-                        onPress={() => handleImageSelected(<Leisure/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(10)} 
+                        onPress={() => handleImageSelected(<Leisure/>, styles.leisure, nameCategories[9], 10)}>
                             <Leisure width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Ocio</Text>
+                        <Text style={styles.textIcon}>{nameCategories[9]}</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.services]} 
-                        onPress={() => handleImageSelected(<Services/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(11)} 
+                        onPress={() => handleImageSelected(<Services/>, styles.services, nameCategories[10], 11)}>
                             <Services width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Servicios</Text>
+                        <Text style={styles.textIcon}>{nameCategories[10]}</Text>
                     </View>
                     
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.travel]}
-                        onPress={() => handleImageSelected(<Travel/>)}>
+                        <TouchableOpacity style={getTouchableOpacityStyle(12)}
+                        onPress={() => handleImageSelected(<Travel/>, styles.travel, nameCategories[11], 12)}>
                             <Travel width={50} height={50} />
                         </TouchableOpacity>
-                        <Text style={styles.textIcon}>Viajes</Text>
+                        <Text style={styles.textIcon}>{nameCategories[11]}</Text>
                     </View>
                 </View>
 
-                <View style={styles.section}>
+                {/* <View style={styles.section}>
                     <View style={styles.miniSection}>
-                        <TouchableOpacity style={[styles.category, styles.created]}
+                        <TouchableOpacity style={getTouchableOpacityStyle()}
                         onPress={() => handleImageSelected(img)}>
                             <Image
                             source={{uri:img}}
@@ -181,14 +257,14 @@ export default SelectCategories = ( { route, navigation } ) => {
                         </TouchableOpacity>
                         <Text style={styles.textIcon}>{name}</Text>
                     </View>
-                    <View style={[styles.miniSection, styles.miniSectionCreate]}>
+                    <View style={getTouchableOpacityStyle()}>
                         <TouchableOpacity style={[styles.category, styles.create]}
                         onPress={() => navigation.navigate("CreateCategory")}>
                             <Create width={50} height={50} />
                         </TouchableOpacity>
                         <Text style={styles.textIcon}>Crear</Text>
                     </View>
-                </View>
+                </View> */}
                 <View style={styles.notes}>
                     <Modal
                         animationType="fade"
@@ -201,27 +277,33 @@ export default SelectCategories = ( { route, navigation } ) => {
                     >
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                        <TextInput
-                            style={styles.notesInput}
-                            name="notes"
-                            maxLength={20}
-                            autoCorrect={true}
-                            cursorColor={'#D39F00'}
-                            keyboardType="default"
-                            multiline={true}
-                            placeholder="Nota"
-                            placeholderTextColor={"#8B8F8E"}
-                            onChangeText={txt => setValueNote(txt)}
-                            selectionColor={"#D39F00"}
-                        >
-                        </TextInput>
-                        <TouchableOpacity onPress={() => {
-                        setModalVisible(!modalVisible);
-                        Alert.alert('Nota guardada');}}>
-                        <Text style={styles.btnHide}>
-                            Guardar
-                        </Text>
-                        </TouchableOpacity>
+                            <TextInput
+                                style={styles.notesInput}
+                                name="notes"
+                                maxLength={20}
+                                autoCorrect={true}
+                                cursorColor={'#D39F00'}
+                                keyboardType="default"
+                                multiline={true}
+                                placeholder="Nota"
+                                placeholderTextColor={"#8B8F8E"}
+                                onChangeText={txt => {
+                                    setValueNote(txt)
+                                    // console.log(`nota: ${txt}`)
+                                }}
+                                selectionColor={"#D39F00"}
+                            >
+                            </TextInput>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                    Alert.alert('Nota guardada');
+                                }}
+                            >
+                            <Text style={styles.btnHide}>
+                                Guardar
+                            </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                     </Modal>
@@ -234,10 +316,12 @@ export default SelectCategories = ( { route, navigation } ) => {
                 </View>
                 <View style={styles.continue}>
                     <TouchableOpacity onPress={()=>navigation.navigate("ConfirmationScreen", {
+                        amo: amount,
                         note: valueNote,
                         price: newValue,
                         image: imageValue,
-                        amo: amount
+                        nameCategory,
+                        hexColor
                     })}> 
                         <Text style={styles.continueBtn} name="continue">
                             Continuar
@@ -250,11 +334,6 @@ export default SelectCategories = ( { route, navigation } ) => {
 }
 
 const styles = StyleSheet.create ({
-    test: {
-        borderWidth: 2,
-        borderColor: "#fff",
-        backgroundColor: "#C10B0B"
-    },
     container: {
         display: 'flex',
         flex: 1,
@@ -286,37 +365,97 @@ const styles = StyleSheet.create ({
     health: {
         backgroundColor: "#C10B0B"
     },
+    healthSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
+        backgroundColor: "#C10B0B"
+    },
     home: {
+        backgroundColor: "#23BC12"
+    },
+    homeSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
         backgroundColor: "#23BC12"
     },
     family: {
         backgroundColor: "#083ea7"
     },
+    familySelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
+        backgroundColor: "#083ea7"
+    },
     education: {
+        backgroundColor: "#621BBA"
+    },
+    educationSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
         backgroundColor: "#621BBA"
     },
     food: {
         backgroundColor: "#C76204"
     },
+    foodSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
+        backgroundColor: "#C76204"
+    },
     shopping: {
+        backgroundColor: "#A504B3"
+    },
+    shoppingSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
         backgroundColor: "#A504B3"
     },
     transport: {
         backgroundColor: "#C7B204"
     },
+    transportSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
+        backgroundColor: "#C7B204"
+    },
     gym: {
+        backgroundColor: "#2C3335"
+    },
+    gymSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
         backgroundColor: "#2C3335"
     },
     gift: {
         backgroundColor: "#C7046D"
     },
+    giftSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
+        backgroundColor: "#C7046D"
+    },
     leisure: {
+        backgroundColor: "#36A507"
+    },
+    leisureSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
         backgroundColor: "#36A507"
     },
     services: {
         backgroundColor: "#0780A4"
     },
+    servicesSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
+        backgroundColor: "#0780A4"
+    },
     travel: {
+        backgroundColor: "#D9D50A"
+    },
+    travelSelected: {
+        borderWidth: 2,
+        borderColor: "#f5f5fa",
         backgroundColor: "#D9D50A"
     },
     create: {
@@ -379,7 +518,7 @@ const styles = StyleSheet.create ({
         height:300,
         width:'90%',
         backgroundColor: '#2f2f2f',
-        borderRadius: 20,
+        borderRadius: 10,
         padding: 100,
         alignItems: 'center',
         shadowColor: '#fff',
