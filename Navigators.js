@@ -9,16 +9,16 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 //Bottom screens
-import Home from "./Screens/Home";
-import Settings from "./Screens/Settings";
-import Market from "./Screens/Market";
+import Home from "./src/Screens/Home";
+import Settings from "./src/Screens/Settings";
+import Market from "./src/Screens/Market";
 
 //Stack screens
-import Gain from "./Screens/Gain";
-import Expense from "./Screens/Expense";
-import SelectCategories from "./Screens/SelectCategories";
-import ConfirmationScreen from "./Screens/ConfirmationScreen";
-import CreateCategory from "./Screens/CreateCategory";
+import Gain from "./src/Screens/Gain";
+import Expense from "./src/Screens/Expense";
+import SelectCategories from "./src/Screens/SelectCategories";
+import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
+import CreateCategory from "./src/Screens/CreateCategory";
 
 const Stack = createNativeStackNavigator()
 
