@@ -5,6 +5,16 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
     const valueNote = route.params.note;
     const imageValue = route.params.image;
     const amount = route.params.amo;
+    const hexColor = route.params.hexColor.backgroundColor
+    const nameCategory = route.params.nameCategory
+    // console.log(`valueNote typeof: ${typeof(valueNote)} \n Contenido de valueNote: ${valueNote}`)
+
+    function NoteEmpty({valueNote}) {
+        if(valueNote === "") {
+            return null
+        }
+        return <Text style={styles.note}>{valueNote}</Text>
+    }
 
     return(
         <View style={styles.container}>
@@ -12,11 +22,14 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
             <Text style={styles.price}>
                 ${amount}
             </Text>
-            <Text style={styles.note}>
-                {valueNote}
-            </Text>
-            <Text style={styles.icon}>
+            
+            <NoteEmpty valueNote={valueNote}></NoteEmpty>
+            
+            <Text style={[styles.icon, {backgroundColor: hexColor}]}>
                 {imageValue}
+            </Text>
+            <Text style={[styles.textIcon]}>
+                {nameCategory}
             </Text>
             <View style={styles.btn}>
             <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}
@@ -50,9 +63,12 @@ const styles = StyleSheet.create ({
     },
     icon:{
         elevation:30,
-        backgroundColor:'#d39f00',
         padding:10,
         borderRadius:50
+    },
+    textIcon: {
+        marginTop:10,
+        color: "#f5f5fa"
     },
     btntxt:{
         fontSize:25,

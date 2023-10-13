@@ -24,6 +24,11 @@ export default Home = () =>{
     return(
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
+            <View >
+                    <TouchableOpacity style={styles.profile}>
+
+                    </TouchableOpacity>
+            </View>
             <View style={styles.balance}>
                 <View style={styles.balanceTotal}>
                     <Text style={styles.totalTxt}>
@@ -36,6 +41,7 @@ export default Home = () =>{
                         ? `$${amountValue}` 
                         : <Entypo name="dots-three-horizontal" size={40} color="white" />}
                     </Text>
+<<<<<<< HEAD
                     <TouchableOpacity 
                     onPress={() => setShowAmount(!showAmount)}>
                     <Entypo
@@ -45,17 +51,22 @@ export default Home = () =>{
                             size={40}
                             color="black"
                         />
+=======
+                    <TouchableOpacity>
+>>>>>>> 46501e73babd3a7aede399a69fc0f3a47d4b0e1e
                     </TouchableOpacity>
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>
-                    <TouchableOpacity onPress={()=>navigation.navigate("Gain", {amountValue, updatePrice})}
+                    <TouchableOpacity onPress={() => navigation.navigate("Gain", {amountValue, updatePrice})}
                     >
-                        <MaterialCommunityIcons name="cash-plus" size={40} color="white" />
+                        <MaterialCommunityIcons name="cash-plus" size={40} color="#f5f5fa" />
                     </TouchableOpacity>
                     </View>
                     <View style={styles.expense}>
-                        <MaterialCommunityIcons name="cash-minus" size={40} color="white" />
+                        <TouchableOpacity onPress={() => navigation.navigate("Expense", {amountValue, updatePrice})}>
+                            <MaterialCommunityIcons name="cash-minus" size={40} color="#f5f5fa" />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
