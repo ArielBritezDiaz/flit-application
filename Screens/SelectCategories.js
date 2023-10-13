@@ -191,6 +191,7 @@ export default SelectCategories = ( { route, navigation } ) => {
                 </View>
                 <View style={styles.notes}>
                     <Modal
+<<<<<<< HEAD
                         animationType="fade"
                         transparent={true}
                         visible={modalVisible}
@@ -199,6 +200,14 @@ export default SelectCategories = ( { route, navigation } ) => {
                             setModalVisible(!modalVisible)
                         }}
                     >
+=======
+                    animationType="fade"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() =>{
+                        setModalVisible(!modalVisible)
+                    }}>
+>>>>>>> Mariano
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                         <TextInput
@@ -216,8 +225,7 @@ export default SelectCategories = ( { route, navigation } ) => {
                         >
                         </TextInput>
                         <TouchableOpacity onPress={() => {
-                        setModalVisible(!modalVisible);
-                        Alert.alert('Nota guardada');}}>
+                        setModalVisible(!modalVisible)}}>
                         <Text style={styles.btnHide}>
                             Guardar
                         </Text>
