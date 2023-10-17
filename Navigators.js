@@ -10,15 +10,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 //Bottom screens
 import Home from "./src/Screens/Home";
-import Settings from "./src/Screens/Settings";
 import Market from "./src/Screens/Market";
+import History from "./src/Screens/History";
 
 //Stack screens
 import Gain from "./src/Screens/Gain";
 import Expense from "./src/Screens/Expense";
 import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
-import CreateCategory from "./src/Screens/CreateCategory";
 
 const Stack = createNativeStackNavigator()
 
@@ -44,7 +43,7 @@ const Stacks = () =>{
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
-                    headerTitle: "Ingrese el monto de ganancia"
+                    headerTitle: "Ingrese el monto"
                 }}
             />
             <Stack.Screen
@@ -53,7 +52,7 @@ const Stacks = () =>{
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
-                    headerTitle: "Ingrese el monto de pérdida"
+                    headerTitle: "Ingrese el monto"
                 }}
             />
             <Stack.Screen
@@ -72,15 +71,6 @@ const Stacks = () =>{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
                     headerTitle: "Confirme su seleccion"
-                }}
-            />
-            <Stack.Screen
-                name="CreateCategory"
-                component={CreateCategory}
-                options={{
-                    headerBackTitleVisible:false,
-                    headerTintColor:'#D39F00',
-                    headerTitle: "Cree su categoria"
                 }}
             />
         </Stack.Navigator>
@@ -114,6 +104,14 @@ const TabNavigation = () =>{
                 options={{
                     tabBarIcon:()=>(
                         <MaterialCommunityIcons name="finance" size={35} color="black" />//Market icon
+                )
+                }}
+            />
+            <Tab.Screen name="Historial"
+                component={History}
+                options={{
+                    tabBarIcon:()=>(
+                        <MaterialCommunityIcons name="history" size={35} color="black" />
                 )
                 }}
             />

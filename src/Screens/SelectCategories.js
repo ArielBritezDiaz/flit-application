@@ -24,11 +24,6 @@ export default SelectCategories = ( { route, navigation } ) => {
     //Modal state//
     const [modalVisible, setModalVisible] = useState(false);
 
-    //Category created//
-    // const name = route.params.category;
-    // const { img } = route.params;
-    // const countCategory = route.params.countCategory;
-
     //Value text input//
     const [valueNote, setValueNote] = useState('')
 
@@ -40,7 +35,7 @@ export default SelectCategories = ( { route, navigation } ) => {
     const [nameCategory, setNameCategory] = useState('')
     const [c, setC] = useState(0);
 
-    const nameCategories = ["Salud", "Hogar", "Familia", "Educación", "Comida", "Compras", "Transporte", "Gimansio", "Regalos", "Ocio", "Servicios", "Viajes"]
+    const nameCategories = ["Salud", "Hogar", "Familia", "Educación", "Comida", "Compras", "Transporte", "Gimnasio", "Regalos", "Ocio", "Servicios", "Viajes"]
     
 
     const handleImageSelected = (img, hexColor, nameCategory, iconNumberProp) =>{
@@ -176,31 +171,12 @@ export default SelectCategories = ( { route, navigation } ) => {
                     </View>
                 </View>
 
-                {/* <View style={styles.section}>
-                    <View style={styles.miniSection}>
-                        <TouchableOpacity style={getTouchableOpacityStyle()}
-                        onPress={() => handleImageSelected(img)}>
-                            <Image
-                            source={{uri:img}}
-                            style={{ width: 70, height: 70, borderRadius: 50 }}/>
-                        </TouchableOpacity>
-                        <Text style={styles.textIcon}>{name}</Text>
-                    </View>
-                    <View style={getTouchableOpacityStyle()}>
-                        <TouchableOpacity style={[styles.category, styles.create]}
-                        onPress={() => navigation.navigate("CreateCategory")}>
-                            <Create width={50} height={50} />
-                        </TouchableOpacity>
-                        <Text style={styles.textIcon}>Crear</Text>
-                    </View>
-                </View> */}
                 <View style={styles.notes}>
                     <Modal
                         animationType="fade"
                         transparent={true}
                         visible={modalVisible}
                         onRequestClose={() =>{
-                            Alert.alert('Nota guardada')
                             setModalVisible(!modalVisible)
                         }}
                     >
@@ -218,7 +194,6 @@ export default SelectCategories = ( { route, navigation } ) => {
                                 placeholderTextColor={"#8B8F8E"}
                                 onChangeText={txt => {
                                     setValueNote(txt)
-                                    // console.log(`nota: ${txt}`)
                                 }}
                                 selectionColor={"#D39F00"}
                             >
@@ -226,7 +201,6 @@ export default SelectCategories = ( { route, navigation } ) => {
                             <TouchableOpacity
                                 onPress={() => {
                                     setModalVisible(!modalVisible);
-                                    Alert.alert('Nota guardada');
                                 }}
                             >
                             <Text style={styles.btnHide}>

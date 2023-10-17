@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useNavigation } from "@react-navigation/native";
 
 //Icons libraries
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -54,7 +53,9 @@ export default Home = () =>{
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>
-                    <TouchableOpacity onPress={() => navigation.navigate("Gain", {amountValue, updatePrice})}
+                    <TouchableOpacity onPress={() =>{
+                    navigation.navigate("Gain", {amountValue, updatePrice});
+                }}
                     >
                         <MaterialCommunityIcons name="cash-plus" size={40} color="#f5f5fa" />
                     </TouchableOpacity>

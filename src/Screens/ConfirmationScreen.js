@@ -5,8 +5,9 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
     const valueNote = route.params.note;
     const imageValue = route.params.image;
     const amount = route.params.amo;
-    const hexColor = route.params.hexColor.backgroundColor
-    const nameCategory = route.params.nameCategory
+    const hexColor = route.params.hexColor.backgroundColor;
+    const nameCategory = route.params.nameCategory;
+    console.log(imageValue)
     // console.log(`valueNote typeof: ${typeof(valueNote)} \n Contenido de valueNote: ${valueNote}`)
 
     function NoteEmpty({valueNote}) {
@@ -22,7 +23,7 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
             <Text style={styles.price}>
                 ${amount}
             </Text>
-            
+
             <NoteEmpty valueNote={valueNote}></NoteEmpty>
             
             <Text style={[styles.icon, {backgroundColor: hexColor}]}>
@@ -32,7 +33,14 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
                 {nameCategory}
             </Text>
             <View style={styles.btn}>
-            <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}
+            <TouchableOpacity onPress={() => {
+            navigation.navigate("HomeScreen");
+            navigation.navigate("Historial" ,{ 
+                amount : amount,
+                valueNote : valueNote,
+                nameCategory : nameCategory,
+                hexColor: hexColor
+            });}}
                 style={styles.touchable}>
                 <Text style={styles.btntxt}>Confirmar</Text>
             </TouchableOpacity>
