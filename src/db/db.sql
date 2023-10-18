@@ -22,9 +22,10 @@ CREATE TABLE Category(
 
 CREATE TABLE MoneyRegistry(
     id_moneyregistry INT NOT NULL AUTO_INCREMENT,
-    total_amount MONEY NOT NULL,
-    entered_amount MONEY NOT NULL,
+    total_amount DECIMAL(19, 4) NOT NULL,
+    entered_amount DECIMAL(19, 4) NOT NULL,
     gain_expense VARCHAR(255) NOT NULL,
+    note VARCHAR(50),
     date DATETIME NOT NULL
 );
 
