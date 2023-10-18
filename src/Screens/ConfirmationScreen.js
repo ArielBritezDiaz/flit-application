@@ -1,7 +1,29 @@
+import { useNavigationState } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 
-export default ConfirmationScreen = ( { route, navigation } ) =>{
+import { mysql } from 'mysql2/promise'
+import { dotenv } from 'dotenv'
+import { express } from 'express'
+
+const app = express()
+const port = process.env.PORT
+
+app.use(express.json())
+
+dotenv.config()
+
+const db = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE
+}
+
+const pool = mysql.createPool(db)
+
+export default ConfirmationScreen = ( { route, navigation } ) => {
+    //Variables
     const valueNote = route.params.note;
     const imageValue = route.params.image;
     const amount = route.params.amo;
@@ -9,11 +31,22 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
     const nameCategory = route.params.nameCategory
     // console.log(`valueNote typeof: ${typeof(valueNote)} \n Contenido de valueNote: ${valueNote}`)
 
+    //Server variables
+    const navigationState = useNavigationState(state => state)
+    console.log(navigationState.routes[navigationState.index].name)
+
+    //Functions
     function NoteEmpty({valueNote}) {
         if(valueNote === "") {
             return null
         }
         return <Text style={styles.note}>{valueNote}</Text>
+    }
+
+    const newRegister = async () => {
+        try {
+
+        }
     }
 
     return(
