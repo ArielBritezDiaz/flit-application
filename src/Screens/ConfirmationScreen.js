@@ -2,26 +2,6 @@ import { useNavigationState } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 
-import { mysql } from 'mysql2/promise'
-import { dotenv } from 'dotenv'
-import { express } from 'express'
-
-const app = express()
-const port = process.env.PORT
-
-app.use(express.json())
-
-dotenv.config()
-
-const db = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
-}
-
-const pool = mysql.createPool(db)
-
 export default ConfirmationScreen = ( { route, navigation } ) => {
     //Variables
     const valueNote = route.params.note;
@@ -43,11 +23,20 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
         return <Text style={styles.note}>{valueNote}</Text>
     }
 
-    const newRegister = async () => {
-        try {
-
+    useEffect(() => {
+        const obtenerRuta = async () => {
+            try {
+                const currentRoute = navigationState.routes[navigationState.index].name;
+                const response = await fetch(`http://localhost/ConfirmationScreen?ruta=${currentRoute}`);
+                const data = await response.json();
+                console.log(data);
+            } catch(error) {
+                console.error(error)
+            }
         }
-    }
+
+        obtenerRuta();
+      }, []);
 
     return(
         <View style={styles.container}>

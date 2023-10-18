@@ -26,8 +26,10 @@ CREATE TABLE MoneyRegistry(
     entered_amount DECIMAL(19, 4) NOT NULL,
     gain_expense VARCHAR(255) NOT NULL,
     note VARCHAR(50),
+    id_user INT,
     id_category INT,
     date DATETIME NOT NULL,
+    FOREIGN KEY (id_user) REFERENCES User(id_user),
     FOREIGN KEY (id_category) REFERENCES Category(id_category)
 );
 
