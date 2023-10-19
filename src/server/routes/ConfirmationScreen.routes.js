@@ -8,12 +8,11 @@ app.use(json());
 
 // const pool = mysql.createPool(db)
 
-app.get('/ConfirmationScreen', (req, res) => {
-  const ruta = req.query.ruta;
-  console.log(`Ruta desde la aplicación: ${ruta}`);
+app.post('/api/ConfirmationScreen', (req, res) => {
+  console.log(req.body)
   const mensaje = 'Ruta conseguida';
   console.log(mensaje);
-  res.send(mensaje);
+  res.send(req.body.navigation)
 });
 
 app.listen(port, () => {

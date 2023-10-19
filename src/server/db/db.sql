@@ -16,8 +16,7 @@ CREATE TABLE User(
 CREATE TABLE Category(
     id_category INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(20) NOT NULL,
-    icon VARCHAR(255),
-    description VARCHAR(255)
+    icon VARCHAR(255)
 );
 
 CREATE TABLE MoneyRegistry(
@@ -33,12 +32,18 @@ CREATE TABLE MoneyRegistry(
     FOREIGN KEY (id_category) REFERENCES Category(id_category)
 );
 
--- CREATE TABLE Category_MoneyRegistry(
---     id_category_moneyregistry INT NOT NULL  AUTO_INCREMENT,
---     id_category INT,
---     id_moneyregistry INT,
---     FOREIGN KEY (id_category) REFERENCES Category(id_category),
---     FOREIGN KEY (id_moneyregistry) REFERENCES MoneyRegistry(id_moneyregistry)
--- );
-
 /* Insert data */
+INSERT INTO Category(name, icon) VALUES(
+    ("health", "../../resources/icons/health.svg"),
+    ("home", ),
+    ("family", ),
+    ("education", ),
+    ("food", ),
+    ("shopping", ),
+    ("transport", ),
+    ("gym", ),
+    ("gift", ),
+    ("leisure", ),
+    ("services", ),
+    ("travel", )
+)

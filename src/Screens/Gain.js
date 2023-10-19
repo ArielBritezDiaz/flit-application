@@ -24,7 +24,13 @@ export default Gain = ({route, navigation}) => {
         const newValue = parseInt(initialPrice) + parseInt(amount)
         parseFloat(newValue)
         updatePrice(newValue)
-        navigation.navigate('SelectCategories', {price : newValue, amo : amount})
+        if(amount == 0) {
+            //Mostrar modal con mensaje simple
+            console.log("error")
+        } else {
+            navigation.navigate('SelectCategories', {price : newValue, amo : amount})
+        }
+        
     }
 
     //Function when the user types amount//
