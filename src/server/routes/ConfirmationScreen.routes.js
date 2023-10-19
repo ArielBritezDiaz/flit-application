@@ -19,9 +19,3 @@ app.get('/ConfirmationScreen', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor en puerto ${PORT} escuchando`);
 });
-
-// const newRegister = async () => {
-//     try {
-        
-//     }
-// };

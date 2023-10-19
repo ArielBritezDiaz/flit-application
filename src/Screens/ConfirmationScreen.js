@@ -23,21 +23,6 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
         return <Text style={styles.note}>{valueNote}</Text>
     }
 
-    useEffect(() => {
-        const obtenerRuta = async () => {
-            try {
-                const currentRoute = navigationState.routes[navigationState.index].name;
-                const response = await fetch(`http://localhost/ConfirmationScreen?ruta=${currentRoute}`);
-                const data = await response.json();
-                console.log(data);
-            } catch(error) {
-                console.error(error)
-            }
-        }
-
-        obtenerRuta();
-      }, []);
-
     return(
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" />
