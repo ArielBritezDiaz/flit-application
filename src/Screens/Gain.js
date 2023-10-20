@@ -28,7 +28,7 @@ export default Gain = ({route, navigation}) => {
             //Mostrar modal con mensaje simple
             console.log("error")
         } else {
-            navigation.navigate('SelectCategories', {price : newValue, amo : amount})
+            navigation.navigate('SelectCategories', {price : newValue, amo : amount, gain_expense: "gain"})
         }
         
     }

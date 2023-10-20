@@ -10,6 +10,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
     const image = route.params.image;
     const hexColor = route.params.hexColor.backgroundColor
     const nameCategory = route.params.nameCategory
+    const gain_expense = route.params.gain_expense
 
     //Formatted values to backend
     const amountFormatted = Number(parseFloat(amount / 1).toFixed(4))
@@ -30,7 +31,8 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
         totalAmount,
         image,
         hexColor,
-        nameCategory
+        nameCategory,
+        gain_expense
     }
 
     //Server variables
@@ -46,7 +48,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
     }
 
     const sendData = () => {
-        fetch("http://192.168.1.50:3000/api/ConfirmationScreen", {
+        fetch("http://192.168.16.247:3000/api/ConfirmationScreen", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -58,14 +60,13 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             } else {
                 throw error = new Error("Solicitud no exitosa")
             }
-        })
-        .catch(error => {
+        }).catch(error => {
             console.log("backend error: ", error)
-            navigation.navigate("HomeScreen")
+            navigation.navigate("HomeScreen", {
+                totalAmount
+            })
         })
     }
-
-    
 
     return(
         <View style={styles.container}>

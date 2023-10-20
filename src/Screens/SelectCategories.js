@@ -19,6 +19,7 @@ import Travel from '../resources/icons/travel.svg';
 export default SelectCategories = ( { route, navigation } ) => {
     const newValue = route.params.price;
     const amount = route.params.amo;
+    const gain_expense = route.params.gain_expense;
     
     //Modal state//
     const [modalVisible, setModalVisible] = useState(false);
@@ -224,7 +225,8 @@ export default SelectCategories = ( { route, navigation } ) => {
                         price: newValue,
                         image: imageValue,
                         hexColor,
-                        nameCategory
+                        nameCategory,
+                        gain_expense
                     })}> 
                         <Text style={styles.continueBtn} name="continue">
                             Continuar

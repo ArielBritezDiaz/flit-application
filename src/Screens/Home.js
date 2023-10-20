@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { useState } from 'react';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 //Icons libraries
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-export default Home = () =>{
+export default Home = ({route}) => {
     const [amountValue, setAmountValue] = useState (0);
 
     //Show amount icons//
@@ -20,6 +20,51 @@ export default Home = () =>{
     const updatePrice = pr =>{
         setAmountValue(pr)
     }
+
+    const [data, setData] = useState(0)
+
+    const getDataDB = async () => {
+        await fetch("http://192.168.16.247:3000/api/Home", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if(response.ok) {
+                return response.json()
+            } else {
+                console.log("Error en get de /api/Home")
+            }
+        }).then(result => {
+            setData(result[0])
+            return result
+        }).catch(error => {
+            console.error("Error en /api/Home", error)
+        })
+    }
+
+    useFocusEffect(async () => {
+        setTimeout(() => {
+            getDataDB()
+            if(data["entered_amount"] != amountValue) {
+                setAmountValue(data["entered_amount"])
+                console.log("aaa")
+            }
+            return console.log("Finish")
+        }, 5000)
+    })
+
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         getDataDB()
+    //         if(data["entered_amount"] != amountValue) {
+    //             setAmountValue(data["entered_amount"])
+    //             console.log("bbbb")
+    //         }
+    //         console.log("interval")
+    //     }, 2000)
+    //     return () => clearInterval(interval)        
+    // })
 
     return(
         <View style={styles.container}>
@@ -37,16 +82,11 @@ export default Home = () =>{
                 </View>
                 <View style={styles.total}>
                     <Text style={styles.totalContent}>
-                        {showAmount 
-                            ? `$${amountValue}` 
-                            : <Entypo name="dots-three-horizontal" size={40} color="white" />
-                        }
+                        { showAmount ? `$${Number(amountValue)}` : <Entypo name="dots-three-horizontal" size={40} color="white" /> }
                     </Text>
                     <TouchableOpacity onPress={() => setShowAmount(!showAmount)} >
                         <Entypo
-                            name={showAmount 
-                            ? 'eye' 
-                            : 'eye-with-line'}
+                            name={showAmount ? 'eye' : 'eye-with-line'}
                             size={40}
                             color="black"
                         />
