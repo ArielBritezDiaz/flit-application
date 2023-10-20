@@ -4,6 +4,8 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useEffect } from 'react';
+import * as Font from 'expo-font';
 
 //Icons librarie
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,6 +20,12 @@ import Gain from "./src/Screens/Gain";
 import Expense from "./src/Screens/Expense";
 import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
+
+const loadFonts = async () => {
+    await Font.loadAsync({
+      MaterialCommunityIcons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf'),
+    });
+};
 
 const Stack = createNativeStackNavigator()
 
@@ -112,6 +120,9 @@ const TabNavigation = () =>{
 }
 
 export default Navigations = () =>{
+    useEffect(() => {
+        loadFonts();
+      }, []);
     return(
         <NavigationContainer>
         <TabNavigation/>

@@ -16,7 +16,7 @@ app.post('/api/ConfirmationScreen', async (req, res) => {
         const date = new Date();
         const dateFormatted = date.toISOString().slice(0, 19).replace("T", " ")
 
-        const [rows] = await pool.query("INSERT INTO MoneyRegistry(total_amount, entered_amount, gain_expense, note, date) VALUES(?, ?, ?, ?, ?)", [amountFormatted,    totalAmount, gain_expense, note, dateFormatted])
+        const [rows] = await pool.query("INSERT INTO MoneyRegistry(total_amount, entered_amount, gain_expense, note, date) VALUES(?, ?, ?, ?, ?)", [amountFormatted, totalAmount, gain_expense, note, dateFormatted])
 
         console.log(rows)
         res.send(req.body.navigation, ({

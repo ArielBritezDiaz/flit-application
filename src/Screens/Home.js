@@ -24,7 +24,7 @@ export default Home = ({route}) => {
     const [data, setData] = useState(0)
 
     const getDataDB = async () => {
-        await fetch("http://192.168.16.247:3000/api/Home", {
+        await fetch("http://192.168.1.50:3000/api/Home", {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
@@ -43,28 +43,15 @@ export default Home = ({route}) => {
         })
     }
 
-    useFocusEffect(async () => {
+    useFocusEffect(() => {
         setTimeout(() => {
             getDataDB()
-            if(data["entered_amount"] != amountValue) {
+            if(amountValue === 0 && amountValue != data["entered_amount"] || isNaN(amountValue)) {
                 setAmountValue(data["entered_amount"])
-                console.log("aaa")
             }
-            return console.log("Finish")
-        }, 5000)
+            return
+        }, 300)
     })
-
-    // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         getDataDB()
-    //         if(data["entered_amount"] != amountValue) {
-    //             setAmountValue(data["entered_amount"])
-    //             console.log("bbbb")
-    //         }
-    //         console.log("interval")
-    //     }, 2000)
-    //     return () => clearInterval(interval)        
-    // })
 
     return(
         <View style={styles.container}>

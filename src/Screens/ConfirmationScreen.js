@@ -48,7 +48,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
     }
 
     const sendData = () => {
-        fetch("http://192.168.16.247:3000/api/ConfirmationScreen", {
+        fetch("http://192.168.1.50:3000/api/ConfirmationScreen", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -61,7 +61,6 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
                 throw error = new Error("Solicitud no exitosa")
             }
         }).catch(error => {
-            console.log("backend error: ", error)
             navigation.navigate("HomeScreen", {
                 totalAmount
             })
