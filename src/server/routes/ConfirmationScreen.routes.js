@@ -7,6 +7,17 @@ const port = PORT;
 
 app.use(json());
 
+app.get('/api/Home', async (req, res) => {
+    try {
+        const [rows] = await pool.query("SELECT (entered_amount) FROM MoneyRegistry ORDER BY (id_moneyregistry) DESC LIMIT 1")
+        res.send(rows)
+    } catch(error) {
+        return res.status(500).json({
+            "message": "Internal server error"
+        })
+    }
+})
+
 app.post('/api/ConfirmationScreen', async (req, res) => {
     try {
         console.log(req.body)
@@ -18,7 +29,7 @@ app.post('/api/ConfirmationScreen', async (req, res) => {
 
         const [rows] = await pool.query("INSERT INTO MoneyRegistry(total_amount, entered_amount, gain_expense, note, date) VALUES(?, ?, ?, ?, ?)", [amountFormatted, totalAmount, gain_expense, note, dateFormatted])
 
-        console.log(rows)
+        // console.log(rows)
         res.send(req.body.navigation, ({
             totalAmount
         }))
@@ -29,9 +40,10 @@ app.post('/api/ConfirmationScreen', async (req, res) => {
     }
 });
 
-app.get('/api/Home', async (req, res) => {
+app.get('/api/History', async (req, res) => {
     try {
-        const [rows] = await pool.query("SELECT (entered_amount) FROM MoneyRegistry ORDER BY (id_moneyregistry) DESC LIMIT 1")
+        const [rows] = await pool.query("SELECT id_moneyregistry, entered_amount, gain_expense, note, date FROM MoneyRegistry")
+        // console.log(rows)
         res.send(rows)
     } catch(error) {
         return res.status(500).json({

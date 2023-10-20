@@ -34,7 +34,7 @@ export default SelectCategories = ( { route, navigation } ) => {
     const [hexColor, setHexColor] = useState('')
     const [nameCategory, setNameCategory] = useState('')
     const [c, setC] = useState(0);
-
+    
     //Categories array (Spanish)
     const nameCategories = ["Salud", "Hogar", "Familia", "Educación", "Comida", "Compras", "Transporte", "Gimansio", "Regalos", "Ocio", "Servicios", "Viajes"]
 

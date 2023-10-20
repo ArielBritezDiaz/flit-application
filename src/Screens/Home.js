@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
-import { useState } from 'react';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 //Icons libraries
@@ -20,6 +19,18 @@ export default Home = ({route}) => {
     const updatePrice = pr =>{
         setAmountValue(pr)
     }
+
+    if(isNaN(amountValue)) {
+        setAmountValue(0)
+    }
+
+    //Show hidden navigation tab//
+    useEffect(()=>{
+        navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00'}})
+        return ()=>{
+            navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
+        }
+    }, [])
 
     const [data, setData] = useState(0)
 
@@ -50,16 +61,22 @@ export default Home = ({route}) => {
                 setAmountValue(data["entered_amount"])
             }
             return
-        }, 300)
+        }, 200)
     })
 
     return(
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <View >
-                    <TouchableOpacity style={styles.profile}>
-
-                    </TouchableOpacity>
+                <TouchableOpacity style={styles.profile} 
+                onPress={()=>navigation.navigate("Profile", {
+                    userName : user,
+                    password
+                })}
+                >
+                    <FontAwesome name="user" size={25} color="#D39F00" style={styles.user} />
+                    <Text style={styles.textProfile}>{user}</Text>
+                </TouchableOpacity>
             </View>
             <View style={styles.balance}>
                 <View style={styles.balanceTotal}>

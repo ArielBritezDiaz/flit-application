@@ -20,6 +20,8 @@ import Gain from "./src/Screens/Gain";
 import Expense from "./src/Screens/Expense";
 import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
+import Profile from "./src/Screens/Profile";
+import Login from "./src/Screens/Login";
 
 const loadFonts = async () => {
     await Font.loadAsync({
@@ -27,7 +29,7 @@ const loadFonts = async () => {
     });
 };
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
 
 const Stacks = () =>{
     return(
@@ -113,6 +115,15 @@ const TabNavigation = () =>{
                     tabBarIcon:()=>(
                         <MaterialCommunityIcons name="finance" size={35} color="black" />//Market icon
                 )
+                }}
+            />
+
+            <Tab.Screen name="Historial"
+                component={History}
+                options={{
+                    tabBarIcon:()=>(
+                        <MaterialCommunityIcons name="history" size={35} color="black" />
+                    )
                 }}
             />
         </Tab.Navigator>
