@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 
 //Navigators
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -18,8 +19,8 @@ import Gain from "./src/Screens/Gain";
 import Expense from "./src/Screens/Expense";
 import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
-import Perfil from "./src/Screens/Perfil";
-
+import Profile from "./src/Screens/Profile";
+import Login from "./src/Screens/Login";
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,15 @@ const Stacks = () =>{
                     backgroundColor:'#2F2F2F',
                 }
             }}>
+
+            <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{
+                    headerShown:false,
+                }}
+            />
+
             <Stack.Screen
                 name="HomeScreen"
                 component={Home}
@@ -39,15 +49,17 @@ const Stacks = () =>{
                     headerShown:false,
                 }}
             />
+
             <Stack.Screen
-                name="Perfil"
-                component={Perfil}
+                name="Profile"
+                component={Profile}
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
                     headerTitle: "Perfil"
                 }}
             />
+
             <Stack.Screen
                 name="Gain"
                 component={Gain}
@@ -57,6 +69,7 @@ const Stacks = () =>{
                     headerTitle: "Ingrese el monto"
                 }}
             />
+
             <Stack.Screen
                 name="Expense"
                 component={Expense}
@@ -66,6 +79,7 @@ const Stacks = () =>{
                     headerTitle: "Ingrese el monto"
                 }}
             />
+
             <Stack.Screen
                 name="SelectCategories"
                 component={SelectCategories}
@@ -75,6 +89,7 @@ const Stacks = () =>{
                     headerTitle: "Seleccione una categoria"
                 }}
             />
+
             <Stack.Screen
                 name="ConfirmationScreen"
                 component={ConfirmationScreen}
@@ -84,9 +99,11 @@ const Stacks = () =>{
                     headerTitle: "Confirme su seleccion"
                 }}
             />
+
         </Stack.Navigator>
     )
 }
+
 const Tab = createBottomTabNavigator()
 
 const TabNavigation = () =>{
@@ -119,15 +136,6 @@ const TabNavigation = () =>{
                 )
                 }}
             />
-
-            {/* <Tab.Screen name="Login"
-                component={Login}
-                options={{
-                    tabBarIcon:()=>(
-                        <MaterialCommunityIcons name="finance" size={35} color="black" />//Market icon
-                )
-                }}
-            /> */}
 
             <Tab.Screen name="Historial"
                 component={History}

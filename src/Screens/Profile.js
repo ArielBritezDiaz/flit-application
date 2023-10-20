@@ -1,9 +1,12 @@
 import React from "react";
 import { StyleSheet, View, Text, StatusBar, Image} from 'react-native';
-import { useState, useEffect } from 'react';
-import { Feather } from '@expo/vector-icons';
+import { useEffect } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
 
-export default Perfil = ({ route, navigation }) =>{
+export default Profile = ({ route, navigation }) =>{
+    //Login data//
+    const user = route.params.userName;
+    const password = route.params.password;
 
     //Hide the bottom tabs navigation//
     useEffect(()=>{
@@ -12,11 +15,16 @@ export default Perfil = ({ route, navigation }) =>{
             navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
         }
     }, [])
+
     return(
         <View style={styles.container}>
-            <Feather name="user" size={40} color="black" style={styles.icon}/>
+            <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
+            <FontAwesome name="user" size={40} color="#D39F00" style={styles.user} />
             <Text style={styles.txt}>
-            Username
+                Usuario: {user}
+            </Text>
+            <Text style={styles.txt}>
+                Contraseña: {password}
             </Text>
         </View>
     )
@@ -29,11 +37,8 @@ const styles = StyleSheet.create ({
         alignItems: 'center',
         justifyContent:'center'
     },
-    icon:{
-        marginVertical: 30,
-        borderRadius:50,
-        backgroundColor:'#d39f00',
-        padding:10
+    user:{
+        marginVertical: 20
     },
     txt:{
         fontSize:30,

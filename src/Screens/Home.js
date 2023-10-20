@@ -1,35 +1,51 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useNavigation } from "@react-navigation/native";
 
 //Icons libraries
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons'; 
 
-export default Home = () =>{
+export default Home = ({ route }) =>{
     const [amountValue, setAmountValue] = useState (0);
 
     //Show amount icons//
     const [showAmount, setShowAmount] = useState(true);
 
-    const navigation = useNavigation()
+    //Login data//
+    const user = route.params?.name || "";
+    const password = route.params?.password || "";
+
+    //Navigation to profile screen//
+    const navigation = useNavigation();
 
     //Update balance//
     const updatePrice = pr =>{
         setAmountValue(pr)
     }
 
+    //Show hidden navigation tab//
+    useEffect(()=>{
+        navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00'}})
+        return ()=>{
+            navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
+        }
+    }, [])
+
     return(
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <View >
                     <TouchableOpacity style={styles.profile} 
-                    onPress={()=>navigation.navigate("Perfil")}
+                    onPress={()=>navigation.navigate("Profile", {
+                        userName : user,
+                        password : password
+                    })}
                     >
-                        <Feather name="user" size={24} color="black" />
-                        <Text style={styles.textProfile}>Username</Text>
+                        <FontAwesome name="user" size={25} color="#D39F00" style={styles.user} />
+                        <Text style={styles.textProfile}>{user}</Text>
                     </TouchableOpacity>
             </View>
 
@@ -89,15 +105,20 @@ const styles = StyleSheet.create ({
         flexDirection: "row",
         borderRadius: 100,
         backgroundColor: "#67645D",
-        elevation: 30
+        elevation: 30,
     },
     textProfile:{
-        color: "#fff",
-        paddingTop: 2,
-        paddingLeft: 5
+        color: "#f5f5fa",
+        textAlignVertical:'center',
+        fontSize:15,
+        fontWeight:'bold'
+    },
+    user:{
+        paddingRight:10,
+        paddingLeft:5
     },
     balance:{
-        marginTop: 20,
+        marginTop: 50,
         width:'90%',
         height:'25%',
         backgroundColor:'#2F2F2F',

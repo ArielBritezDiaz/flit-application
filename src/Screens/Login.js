@@ -1,14 +1,31 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView} from 'react-native';
 import { useState } from 'react';
+import { useEffect } from "react";
 
-export default Login = () =>{
+export default Login = ({navigation}) =>{
     const [user,setUser] = useState("");
     const [password, setPassword] = useState("");
 
+    //Navigate to the home screen and pass data//
+    const handleLogin = () => {
+        navigation.navigate('HomeScreen', {
+            name : user,
+            password : password
+        });
+    };
+
+    //Hide bottom tabs navigation//
+    useEffect(()=>{
+        navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
+        return ()=>{
+            navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
+        }
+    }, [])
+
     return(
-        <View style={styles.container}>
-             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
+        <ScrollView contentContainerStyle={styles.container}>
+            <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             {/* Logo */}
             <Image source={require('../assets/logo.png')} style={styles.img}></Image>
             {/* Username input */}
@@ -16,7 +33,6 @@ export default Login = () =>{
             style={styles.input}
             placeholder="Usuario"
             name="user"
-            minLength= {8}
             keyboardType="default"
             cursorColor={'#D39F00'}
             placeholderTextColor={"#D39F00"}
@@ -29,7 +45,6 @@ export default Login = () =>{
             style={styles.input}
             name="password"
             placeholder="Contraseña"
-            minLength= {8}
             keyboardType="default"
             cursorColor={'#D39F00'}
             placeholderTextColor={"#D39F00"}
@@ -37,23 +52,19 @@ export default Login = () =>{
                 setPassword(txt)
             }}
             ></TextInput>
-            <TouchableOpacity>
+            <TouchableOpacity 
+            onPress={handleLogin}>
                 <Text style={styles.btn}>
                     Iniciar sesion
                 </Text>
             </TouchableOpacity>
-            <TouchableOpacity>
-                <Text style={styles.signUp}>
-                    Registrarse
-                </Text>
-            </TouchableOpacity>
-        </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create ({
     container:{
-        height:'100%',
+        flexGrow: 1,
         backgroundColor: '#2f2f2f',
         alignItems: 'center',
     },
@@ -63,7 +74,7 @@ const styles = StyleSheet.create ({
         marginVertical: 70
     },
     input:{
-        marginVertical: 20,
+        marginVertical: 25,
         width:"70%",
         borderWidth: 3,
         borderRadius: 10,
@@ -72,11 +83,10 @@ const styles = StyleSheet.create ({
         paddingHorizontal: 20,
         fontSize:18,
         color:"#D39F00",
-        fontWeight:'bold',
-        elevation:30
+        fontWeight:'bold'
     },
     btn:{
-        marginVertical:30,
+        marginVertical:40,
         color:'#2f2f2f',
         backgroundColor:'#D39F00',
         borderRadius: 12,
@@ -85,10 +95,5 @@ const styles = StyleSheet.create ({
         paddingVertical:10,
         elevation:30,
         fontWeight:'bold'
-    },
-    signUp:{
-        color:'#d39f00',
-        fontSize:15,
-        marginTop: 10
     }
 })
