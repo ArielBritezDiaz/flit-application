@@ -18,23 +18,34 @@ import Gain from "./src/Screens/Gain";
 import Expense from "./src/Screens/Expense";
 import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
+import Perfil from "./src/Screens/Perfil";
 
-const Stack = createNativeStackNavigator()
+
+const Stack = createNativeStackNavigator();
 
 const Stacks = () =>{
     return(
         <Stack.Navigator
             screenOptions={{
+                initialRouteName: 'Login',
                 headerStyle:{
                     backgroundColor:'#2F2F2F',
                 }
-            }}
-        >
+            }}>
             <Stack.Screen
                 name="HomeScreen"
                 component={Home}
                 options={{
                     headerShown:false,
+                }}
+            />
+            <Stack.Screen
+                name="Perfil"
+                component={Perfil}
+                options={{
+                    headerBackTitleVisible:false,
+                    headerTintColor:'#D39F00',
+                    headerTitle: "Perfil"
                 }}
             />
             <Stack.Screen
@@ -99,6 +110,7 @@ const TabNavigation = () =>{
                 )
                 }}
             />
+
             <Tab.Screen name="Mercado"
                 component={Market}
                 options={{
@@ -107,6 +119,16 @@ const TabNavigation = () =>{
                 )
                 }}
             />
+
+            {/* <Tab.Screen name="Login"
+                component={Login}
+                options={{
+                    tabBarIcon:()=>(
+                        <MaterialCommunityIcons name="finance" size={35} color="black" />//Market icon
+                )
+                }}
+            /> */}
+
             <Tab.Screen name="Historial"
                 component={History}
                 options={{

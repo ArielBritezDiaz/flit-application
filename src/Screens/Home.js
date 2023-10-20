@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 //Icons libraries
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 export default Home = () =>{
     const [amountValue, setAmountValue] = useState (0);
@@ -24,10 +25,14 @@ export default Home = () =>{
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <View >
-                    <TouchableOpacity style={styles.profile}>
-
+                    <TouchableOpacity style={styles.profile} 
+                    onPress={()=>navigation.navigate("Perfil")}
+                    >
+                        <Feather name="user" size={24} color="black" />
+                        <Text style={styles.textProfile}>Username</Text>
                     </TouchableOpacity>
             </View>
+
             <View style={styles.balance}>
                 <View style={styles.balanceTotal}>
                     <Text style={styles.totalTxt}>
@@ -77,8 +82,22 @@ const styles = StyleSheet.create ({
         backgroundColor: '#2f2f2f',
         alignItems: 'center',
     },
+    profile:{
+        marginTop: 50,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
+        flexDirection: "row",
+        borderRadius: 100,
+        backgroundColor: "#67645D",
+        elevation: 30
+    },
+    textProfile:{
+        color: "#fff",
+        paddingTop: 2,
+        paddingLeft: 5
+    },
     balance:{
-        marginTop: 100,
+        marginTop: 20,
         width:'90%',
         height:'25%',
         backgroundColor:'#2F2F2F',

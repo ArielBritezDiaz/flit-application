@@ -27,7 +27,7 @@ export default History = ({route}) =>{
                 </Text>
                 <View style={styles.details}>
                     <Text style={styles.amount}>
-                        {`${item.amount}`}
+                        {`$${item.amount}`}
                     </Text>
                     <Text style={styles.note}>
                         {`${item.note}` !== '' ? item.note : '-'}
@@ -48,7 +48,8 @@ const styles = StyleSheet.create ({
         alignItems: 'center',
         backgroundColor:'#2f2f2f',
         paddingVertical:10,
-        height:'100%'
+        height:'100%',
+        marginTop: 20
     },
     list:{
         width:'90%'
