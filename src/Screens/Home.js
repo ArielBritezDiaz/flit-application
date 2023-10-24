@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
-import { useState,useEffect } from 'react';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 
 //Icons libraries
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; 
 
-export default Home = ({ route }) =>{
+export default Home = ({route}) => {
     const [amountValue, setAmountValue] = useState (0);
 
     //Show amount icons//
@@ -26,6 +25,10 @@ export default Home = ({ route }) =>{
         setAmountValue(pr)
     }
 
+    if(isNaN(amountValue)) {
+        setAmountValue(0)
+    }
+
     //Show hidden navigation tab//
     useEffect(()=>{
         navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00'}})
@@ -34,19 +37,51 @@ export default Home = ({ route }) =>{
         }
     }, [])
 
+    const [data, setData] = useState(0)
+
+    const getDataDB = async () => {
+        await fetch("http://192.168.1.50:3000/api/Home", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if(response.ok) {
+                return response.json()
+            } else {
+                console.log("Error en get de /api/Home")
+            }
+        }).then(result => {
+            setData(result[0])
+            return result
+        }).catch(error => {
+            console.error("Error en /api/Home", error)
+        })
+    }
+
+    useFocusEffect(() => {
+        setTimeout(() => {
+            getDataDB()
+            if(amountValue === 0 && amountValue != data["entered_amount"] || isNaN(amountValue)) {
+                setAmountValue(data["entered_amount"])
+            }
+            return
+        }, 200)
+    })
+
     return(
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <View >
-                    <TouchableOpacity style={styles.profile} 
-                    onPress={()=>navigation.navigate("Profile", {
-                        userName : user,
-                        password : password
-                    })}
-                    >
-                        <FontAwesome name="user" size={25} color="#D39F00" style={styles.user} />
-                        <Text style={styles.textProfile}>{user}</Text>
-                    </TouchableOpacity>
+                <TouchableOpacity style={styles.profile} 
+                onPress={()=>navigation.navigate("Profile", {
+                    userName : user,
+                    password
+                })}
+                >
+                    <FontAwesome name="user" size={25} color="#D39F00" style={styles.user} />
+                    <Text style={styles.textProfile}>{user}</Text>
+                </TouchableOpacity>
             </View>
 
             <View style={styles.balance}>
@@ -57,16 +92,11 @@ export default Home = ({ route }) =>{
                 </View>
                 <View style={styles.total}>
                     <Text style={styles.totalContent}>
-                        {showAmount 
-                            ? `$${amountValue}` 
-                            : <Entypo name="dots-three-horizontal" size={40} color="white" />
-                        }
+                        { showAmount ? `$${Number(amountValue)}` : <Entypo name="dots-three-horizontal" size={40} color="white" /> }
                     </Text>
                     <TouchableOpacity onPress={() => setShowAmount(!showAmount)} >
                         <Entypo
-                            name={showAmount 
-                            ? 'eye' 
-                            : 'eye-with-line'}
+                            name={showAmount ? 'eye' : 'eye-with-line'}
                             size={40}
                             color="black"
                         />

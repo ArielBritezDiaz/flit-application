@@ -5,6 +5,8 @@ import { useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useEffect } from 'react';
+import * as Font from 'expo-font';
 
 //Icons librarie
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,6 +23,12 @@ import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
 import Profile from "./src/Screens/Profile";
 import Login from "./src/Screens/Login";
+
+const loadFonts = async () => {
+    await Font.loadAsync({
+      MaterialCommunityIcons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf'),
+    });
+};
 
 const Stack = createNativeStackNavigator();
 
@@ -99,7 +107,6 @@ const Stacks = () =>{
                     headerTitle: "Confirme su seleccion"
                 }}
             />
-
         </Stack.Navigator>
     )
 }
@@ -142,7 +149,7 @@ const TabNavigation = () =>{
                 options={{
                     tabBarIcon:()=>(
                         <MaterialCommunityIcons name="history" size={35} color="black" />
-                )
+                    )
                 }}
             />
         </Tab.Navigator>
@@ -150,6 +157,9 @@ const TabNavigation = () =>{
 }
 
 export default Navigations = () =>{
+    useEffect(() => {
+        loadFonts();
+      }, []);
     return(
         <NavigationContainer>
         <TabNavigation/>

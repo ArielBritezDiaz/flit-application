@@ -1,17 +1,50 @@
-import React from "react";
 import { useState, useEffect } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, View, FlatList, Text, StatusBar, Settings} from 'react-native';
 
 export default History = ({route}) =>{
     const [dataList, setDataList] = useState([]);
-    const amountValue = route.params.amount;
-    const note = route.params.valueNote;
-    const category = route.params.nameCategory;
-    const hexColor = route.params.hexColor;
+
+    const [data, setData] = useState([])
+    const [dataOrganized, setDataOrganized] = useState([])
+
+    const getDataHistoryDB = async () => {
+        const response = await fetch("http://192.168.1.50:3000/api/History", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const result = await response.json()
+        setData(result)
+    }
+
+    useEffect(() => {
+        getDataHistoryDB()
+    }, [])
+
+    setTimeout(() => {
+        setDataOrganized(data.map((dato) => {
+            return {
+                id_moneyregistry: dato.id_moneyregistry,
+                entered_amount: dato.entered_amount,
+                gain_expense: dato.gain_expense,
+                note: dato.note,
+                date: dato.date
+            }
+        }))
+        setDataList(dataOrganized)
+    }, 300)
     
-    useEffect(()=>{
-        setDataList([...dataList,{ amount : amountValue, note : note, category : category, hexColor: hexColor}]);
-    }, [amountValue, note, category, hexColor])
+    useEffect(() => {
+        console.log("Data content", data)
+    }, [])
+    
+
+    const amountValue = 0;
+    const note = 'y';
+    const category = 'i';
+    const hexColor = '#000';
 
     return(
         <View style={styles.container}>
@@ -21,17 +54,20 @@ export default History = ({route}) =>{
             showsVerticalScrollIndicator={false}
             style={styles.list}
             renderItem={({ item }) => (
-            <View style={[styles.item, { backgroundColor: item.hexColor }]}>
+            <View style={[styles.item, { backgroundColor: "#000" }]}>
                 <Text style={styles.cat}>
-                    {`${item.category}`}
+                    {`${item.id_moneyregistry}`}
+                </Text>
+                <Text style={styles.cat}>
+                    {`$${Number(item.entered_amount)}`}
                 </Text>
                 <View style={styles.details}>
                     <Text style={styles.amount}>
-                        {`$${item.amount}`}
+                        {`${item.gain_expense.charAt(0).toUpperCase() + item.gain_expense.slice(1)}`}
                     </Text>
                     <Text style={styles.note}>
                         {`${item.note}` !== '' ? item.note : '-'}
-                    </Text> 
+                    </Text>
                 </View>
             </View>
             )}

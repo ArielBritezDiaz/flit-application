@@ -1,20 +1,70 @@
+import { useNavigationState } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 
-export default ConfirmationScreen = ( { route, navigation } ) =>{
-    const valueNote = route.params.note;
-    const imageValue = route.params.image;
-    const amount = route.params.amo;
-    const hexColor = route.params.hexColor.backgroundColor;
-    const nameCategory = route.params.nameCategory;
-    console.log(imageValue)
-    // console.log(`valueNote typeof: ${typeof(valueNote)} \n Contenido de valueNote: ${valueNote}`)
+export default ConfirmationScreen = ( { route, navigation } ) => {
+    //Variables
+    const amount = route.params.amount;
+    const note = route.params.note;
+    const totalAmount = route.params.price;
+    const image = route.params.image;
+    const hexColor = route.params.hexColor.backgroundColor
+    const nameCategory = route.params.nameCategory
+    const gain_expense = route.params.gain_expense
 
-    function NoteEmpty({valueNote}) {
-        if(valueNote === "") {
+    //Formatted values to backend
+    const amountFormatted = Number(parseFloat(amount / 1).toFixed(4))
+
+    console.log(`Data to BackEnd:
+        amountFormatted: ${amountFormatted}
+        note: ${note}
+        totalAmount: ${totalAmount}
+        image: ${JSON.stringify(image)}
+        hexColor: ${hexColor}
+        nameCategory: ${nameCategory}
+    `)
+
+    //Data to backend
+    const data = {
+        amountFormatted,
+        note,
+        totalAmount,
+        image,
+        hexColor,
+        nameCategory,
+        gain_expense
+    }
+
+    //Server variables
+    const navigationState = useNavigationState(state => state)
+    console.log(`Actual URL: /${navigationState.routes[navigationState.index].name}`)
+
+    //Functions
+    function NoteEmpty({note}) {
+        if(note === "") {
             return null
         }
-        return <Text style={styles.note}>{valueNote}</Text>
+        return <Text style={styles.note}>{note}</Text>
+    }
+
+    const sendData = () => {
+        fetch("http://192.168.1.50:3000/api/ConfirmationScreen", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if(response.ok) {
+                navigation.navigate("HomeScreen")
+            } else {
+                throw error = new Error("Solicitud no exitosa")
+            }
+        }).catch(error => {
+            navigation.navigate("HomeScreen", {
+                totalAmount
+            })
+        })
     }
 
     return(
@@ -23,24 +73,17 @@ export default ConfirmationScreen = ( { route, navigation } ) =>{
             <Text style={styles.price}>
                 ${amount}
             </Text>
-
-            <NoteEmpty valueNote={valueNote}></NoteEmpty>
+            
+            <NoteEmpty note={note}></NoteEmpty>
             
             <Text style={[styles.icon, {backgroundColor: hexColor}]}>
-                {imageValue}
+                {image}
             </Text>
             <Text style={[styles.textIcon]}>
                 {nameCategory}
             </Text>
             <View style={styles.btn}>
-            <TouchableOpacity onPress={() => {
-            navigation.navigate("HomeScreen");
-            navigation.navigate("Historial" ,{ 
-                amount : amount,
-                valueNote : valueNote,
-                nameCategory : nameCategory,
-                hexColor: hexColor
-            });}}
+            <TouchableOpacity onPress={sendData}
                 style={styles.touchable}>
                 <Text style={styles.btntxt}>Confirmar</Text>
             </TouchableOpacity>

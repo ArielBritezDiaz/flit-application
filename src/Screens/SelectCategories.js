@@ -15,16 +15,16 @@ import Gift from '../resources/icons/gift.svg';
 import Leisure from '../resources/icons/leisure.svg';
 import Services from '../resources/icons/services.svg';
 import Travel from '../resources/icons/travel.svg';
-// import Create from '../resources/icons/create.svg';
 
 export default SelectCategories = ( { route, navigation } ) => {
     const newValue = route.params.price;
     const amount = route.params.amo;
+    const gain_expense = route.params.gain_expense;
     
     //Modal state//
     const [modalVisible, setModalVisible] = useState(false);
 
-    //Value text input//
+    //Value note
     const [valueNote, setValueNote] = useState('')
 
     //Handle image selected//
@@ -34,10 +34,14 @@ export default SelectCategories = ( { route, navigation } ) => {
     const [hexColor, setHexColor] = useState('')
     const [nameCategory, setNameCategory] = useState('')
     const [c, setC] = useState(0);
-
-    const nameCategories = ["Salud", "Hogar", "Familia", "Educación", "Comida", "Compras", "Transporte", "Gimnasio", "Regalos", "Ocio", "Servicios", "Viajes"]
     
+    //Categories array (Spanish)
+    const nameCategories = ["Salud", "Hogar", "Familia", "Educación", "Comida", "Compras", "Transporte", "Gimansio", "Regalos", "Ocio", "Servicios", "Viajes"]
 
+    //Categories arrays (English)
+    const categorySelected = ["healthSelected", "homeSelected", "familySelected", "educationSelected", "foodSelected", "shoppingSelected", "transportSelected", "gymSelected", "giftSelected", "leisureSelected", "servicesSelected", "travelSelected"]
+    const categoryBase = ["health", "home", "family", "education", "food", "shopping", "transport", "gym", "gift", "leisure", "services", "travel"]
+    
     const handleImageSelected = (img, hexColor, nameCategory, iconNumberProp) =>{
         setImageValue(img)
         setIconNumber(iconNumberProp)
@@ -46,7 +50,6 @@ export default SelectCategories = ( { route, navigation } ) => {
         console.log(nameCategory)
 
         setC(c + 1);
-        // console.log(`c: ${c}`)
         if((c % 2) == 0) {
             setTaskCompleted(1)
             return iconNumberProp
@@ -54,11 +57,6 @@ export default SelectCategories = ( { route, navigation } ) => {
     }
 
     const getTouchableOpacityStyle = (iconNumber) => {
-        // console.log(`iconNumbera: ${iconNumbera}`)
-
-        const categorySelected = ["healthSelected", "homeSelected", "familySelected", "educationSelected", "foodSelected", "shoppingSelected", "transportSelected", "gymSelected", "giftSelected", "leisureSelected", "servicesSelected", "travelSelected"]
-        const categoryBase = ["health", "home", "family", "education", "food", "shopping", "transport", "gym", "gift", "leisure", "services", "travel"]
-
         for(let i = iconNumber; i <= 12; i++) {
             if(taskCompleted === 1 && iconNumbera === i) {
                 return iconNumber === i ? [styles.category, styles[categorySelected[i - 1]]] : [styles.category, styles[categoryBase[iconNumber - 1]]];
@@ -219,12 +217,13 @@ export default SelectCategories = ( { route, navigation } ) => {
                 </View>
                 <View style={styles.continue}>
                     <TouchableOpacity onPress={()=>navigation.navigate("ConfirmationScreen", {
-                        amo: amount,
+                        amount,
                         note: valueNote,
                         price: newValue,
                         image: imageValue,
+                        hexColor,
                         nameCategory,
-                        hexColor
+                        gain_expense
                     })}> 
                         <Text style={styles.continueBtn} name="continue">
                             Continuar
