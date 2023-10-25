@@ -1,5 +1,5 @@
 import { useNavigationState } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 
 export default ConfirmationScreen = ( { route, navigation } ) => {
@@ -11,6 +11,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
     const hexColor = route.params.hexColor.backgroundColor
     const nameCategory = route.params.nameCategory
     const gain_expense = route.params.gain_expense
+    const iconNumberPosition = route.params.iconNumberPosition
 
     //Formatted values to backend
     const amountFormatted = Number(parseFloat(amount / 1).toFixed(4))
@@ -19,21 +20,16 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
         amountFormatted: ${amountFormatted}
         note: ${note}
         totalAmount: ${totalAmount}
-        image: ${JSON.stringify(image)}
-        hexColor: ${hexColor}
-        nameCategory: ${nameCategory}
+        Icon values = {
+            iconNumberPosition: ${iconNumberPosition}
+            image: ${JSON.stringify(image)}
+            hexColor: ${hexColor}
+            styles.icon: ${JSON.stringify(styles.icon)}
+            nameCategory: ${nameCategory}
+        }
     `)
 
-    //Data to backend
-    const data = {
-        amountFormatted,
-        note,
-        totalAmount,
-        image,
-        hexColor,
-        nameCategory,
-        gain_expense
-    }
+    
 
     //Server variables
     const navigationState = useNavigationState(state => state)
@@ -48,6 +44,27 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
     }
 
     const sendData = () => {
+
+        const imageValues = {
+            iconNumberPosition,
+            image,
+            hexColor,
+            styles_icon: styles.icon,
+            nameCategory
+        }
+    
+        //Data to backend
+        const data = {
+            amountFormatted,
+            note,
+            totalAmount,
+            image,
+            hexColor,
+            nameCategory,
+            gain_expense,
+            imageValues
+        }
+
         fetch("http://192.168.1.50:3000/api/ConfirmationScreen", {
             method: "POST",
             headers: {
@@ -61,9 +78,10 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
                 throw error = new Error("Solicitud no exitosa")
             }
         }).catch(error => {
+            console.error("Error en la solicitud:", error);
             navigation.navigate("HomeScreen", {
                 totalAmount
-            })
+            });
         })
     }
 

@@ -30,7 +30,7 @@ export default SelectCategories = ( { route, navigation } ) => {
     //Handle image selected//
     const [imageValue, setImageValue] = useState('')
     const [taskCompleted, setTaskCompleted] = useState(0)
-    const [iconNumbera, setIconNumber] = useState(0)
+    const [iconNumberPosition, setIconNumber] = useState(0)
     const [hexColor, setHexColor] = useState('')
     const [nameCategory, setNameCategory] = useState('')
     const [c, setC] = useState(0);
@@ -42,23 +42,22 @@ export default SelectCategories = ( { route, navigation } ) => {
     const categorySelected = ["healthSelected", "homeSelected", "familySelected", "educationSelected", "foodSelected", "shoppingSelected", "transportSelected", "gymSelected", "giftSelected", "leisureSelected", "servicesSelected", "travelSelected"]
     const categoryBase = ["health", "home", "family", "education", "food", "shopping", "transport", "gym", "gift", "leisure", "services", "travel"]
     
-    const handleImageSelected = (img, hexColor, nameCategory, iconNumberProp) =>{
+    const handleImageSelected = (img, hexColor, nameCategory, iconNumberPosition) =>{
         setImageValue(img)
-        setIconNumber(iconNumberProp)
+        setIconNumber(iconNumberPosition)
         setHexColor(hexColor)
         setNameCategory(nameCategory)
-        console.log(nameCategory)
 
         setC(c + 1);
         if((c % 2) == 0) {
             setTaskCompleted(1)
-            return iconNumberProp
+            return iconNumberPosition
         }
     }
 
     const getTouchableOpacityStyle = (iconNumber) => {
         for(let i = iconNumber; i <= 12; i++) {
-            if(taskCompleted === 1 && iconNumbera === i) {
+            if(taskCompleted === 1 && iconNumberPosition === i) {
                 return iconNumber === i ? [styles.category, styles[categorySelected[i - 1]]] : [styles.category, styles[categoryBase[iconNumber - 1]]];
             }
             return [styles.category, styles[categoryBase[iconNumber - 1]]];
@@ -223,7 +222,8 @@ export default SelectCategories = ( { route, navigation } ) => {
                         image: imageValue,
                         hexColor,
                         nameCategory,
-                        gain_expense
+                        gain_expense,
+                        iconNumberPosition
                     })}> 
                         <Text style={styles.continueBtn} name="continue">
                             Continuar

@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; 
 
 export default Home = ({route}) => {
-    const [amountValue, setAmountValue] = useState (0);
+    const [amountValue, setAmountValue] = useState (null);
 
     //Show amount icons//
     const [showAmount, setShowAmount] = useState(true);
@@ -37,37 +37,42 @@ export default Home = ({route}) => {
         }
     }, [])
 
-    const [data, setData] = useState(0)
+    const [data, setData] = useState({})
 
     const getDataDB = async () => {
-        await fetch("http://192.168.1.50:3000/api/Home", {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
+        try {
+            const response = await fetch("http://192.168.1.50:3000/api/Home", {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+    
+            if (!response.ok) {
+                console.log("Error en get de /api/Home");
+                setAmountValue(0); // Establecer amountValue en 0 si hay un error
+                return;
             }
-        }).then(response => {
-            if(response.ok) {
-                return response.json()
+    
+            const result = await response.json();
+    
+            if (result && result.length > 0 && result[0]["entered_amount"]) {
+                setData(result[0]);
+                setAmountValue(result[0]["entered_amount"]);
             } else {
-                console.log("Error en get de /api/Home")
+                setAmountValue(0); // Establecer amountValue en 0 si no se encuentran datos
             }
-        }).then(result => {
-            setData(result[0])
-            return result
-        }).catch(error => {
-            console.error("Error en /api/Home", error)
-        })
-    }
+        } catch (error) {
+            console.error("Error en /api/Home", error);
+        }
+    };
+    
 
-    useFocusEffect(() => {
-        setTimeout(() => {
-            getDataDB()
-            if(amountValue === 0 && amountValue != data["entered_amount"] || isNaN(amountValue)) {
-                setAmountValue(data["entered_amount"])
-            }
-            return
-        }, 200)
-    })
+    useEffect(() => {
+        if (amountValue === null) {
+          getDataDB();
+        }
+      }, []);
 
     return(
         <View style={styles.container}>
