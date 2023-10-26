@@ -3,21 +3,13 @@ import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, 
 import { useState } from 'react';
 import { useEffect } from "react";
 
-export default LogIn = ({navigation}) =>{
+export default Login = ({navigation}) =>{
     const [user,setUser] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("")
 
-    const handleLogin = () => {
-        navigation.navigate('HomeScreen', {
-            email : email,
-            name : user,
-            password : password
-        });
-    };
-
     const handleRegister = () => {
-        navigation.navigate('Register', {
+        navigation.navigate('HomeScreen', {
             email : email,
             name : user,
             password : password
@@ -69,14 +61,9 @@ export default LogIn = ({navigation}) =>{
                 }}
                 secureTextEntry={true}
             ></TextInput>
-            <TouchableOpacity onPress={handleLogin}>
-                <Text style={styles.btnRegister}>
-                    Iniciar sesión
-                </Text>
-            </TouchableOpacity>
             <TouchableOpacity onPress={handleRegister}>
-                <Text style={styles.btnLogin}>
-                    Registarse
+                <Text style={styles.btnRegister}>
+                    Registrarse
                 </Text>
             </TouchableOpacity>
         </ScrollView>
