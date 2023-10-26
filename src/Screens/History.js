@@ -12,7 +12,7 @@ export default History = ({route}) =>{
 
     const getDataHistoryDB = async () => {
         try {
-            const response = await fetch("http://192.168.1.50:3000/api/History", {
+            const response = await fetch("http://192.168.16.247:3000/api/History", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,11 +38,12 @@ export default History = ({route}) =>{
                 setDataList(organizedData);
                 // console.log("result.combinedRows", result.combinedRows.rows)
                 // console.log(result.rowsCategory[0].hexColor)
-                // console.log("organizedData", organizedData)
+                console.log("organizedData", organizedData)
             }
     
             if (result && result.rowsCategory) {
                 setDataCategory(result.rowsCategory)
+                console.log("dataCategory", dataCategory)
             }
         } catch (error) {
             console.error("Error desde la API:", error);
@@ -65,17 +66,20 @@ export default History = ({route}) =>{
             renderItem={({ item }) => (
             <View style={[styles.item, { backgroundColor: "f2f2f2" }]}>
                 <Text style={styles.cat}>
-                    {`${item.id_moneyregistry}`}
+                    {`${(item.id_moneyregistry)}`}
                 </Text>
                 
-                <View style={[styles.icon, { backgroundColor: item.hexColor }]}>
-                    <SvgXml xml={item.image} width="40px" height="40px" />
+                <View>
+                    <View style={[styles.icon, { backgroundColor: item.hexColor }]}>
+                        <SvgXml xml={item.image} width="35px" height="35px" />
+                    </View>
+                    
+
+                    <Text style={styles.cat}>
+                        {`$${Number(item.entered_amount)}`}
+                    </Text>
                 </View>
                 
-
-                <Text style={styles.cat}>
-                    {`$${Number(item.entered_amount)}`}
-                </Text>
                 <View style={styles.details}>
                     <Text style={styles.amount}>
                         {`${item.gain_expense.charAt(0).toUpperCase() + item.gain_expense.slice(1)}`}
@@ -146,8 +150,8 @@ const styles = StyleSheet.create ({
         textAlignVertical:'center'
     },
     icon: {
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center',

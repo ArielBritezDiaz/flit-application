@@ -45,7 +45,7 @@ app.post('/api/ConfirmationScreen', async (req, res) => {
 
 app.get('/api/History', async (req, res) => {
     try {
-        const [rows] = await pool.query("SELECT id_moneyregistry, entered_amount, gain_expense, note, id_category, date FROM MoneyRegistry")
+        const [rows] = await pool.query("SELECT id_moneyregistry, entered_amount, gain_expense, note, id_category, date FROM MoneyRegistry ORDER BY id_moneyregistry DESC")
         // console.log(rows[0].id_category)
         const id_category = rows[0].id_category
         const [rowsCategory] = await pool.query(`SELECT * FROM Category`)

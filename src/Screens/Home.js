@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import axios from 'axios'
 
 //Icons libraries
 import { Entypo } from '@expo/vector-icons';
@@ -41,7 +42,7 @@ export default Home = ({route}) => {
 
     const getDataDB = async () => {
         try {
-            const response = await fetch("http://192.168.1.50:3000/api/Home", {
+            const response = await fetch("http://192.168.16.247:3000/api/Home", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -49,7 +50,7 @@ export default Home = ({route}) => {
             });
     
             if (!response.ok) {
-                console.log("Error en get de /api/Home");
+                console.log("Error en get de /api/Home", response);
                 setAmountValue(0); // Establecer amountValue en 0 si hay un error
                 return;
             }
