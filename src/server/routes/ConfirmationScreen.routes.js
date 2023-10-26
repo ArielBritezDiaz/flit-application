@@ -9,6 +9,7 @@ app.use(json());
 
 app.get('/api/Home', async (req, res) => {
     try {
+        console.log("Funciona")
         const [rows] = await pool.query("SELECT (entered_amount) FROM MoneyRegistry ORDER BY (id_moneyregistry) DESC LIMIT 1")
         res.send(rows)
     } catch(error) {
@@ -45,9 +46,12 @@ app.post('/api/ConfirmationScreen', async (req, res) => {
 
 app.get('/api/History', async (req, res) => {
     try {
-        const [rows] = await pool.query("SELECT id_moneyregistry, entered_amount, gain_expense, note, id_category, date FROM MoneyRegistry ORDER BY id_moneyregistry DESC")
-        // console.log(rows[0].id_category)
-        const id_category = rows[0].id_category
+        const [rows] = await pool.query("SELECT id_moneyregistry, entered_amount, gain_expense, note, id_category, date FROM MoneyRegistry")
+        // ORDER BY id_moneyregistry DESC
+        // for(let i=0; i<=12; i++) {
+        //     console.log("rows", rows[i].id_category)
+        // }
+        
         const [rowsCategory] = await pool.query(`SELECT * FROM Category`)
         // console.log("rowsCategory:")
         // console.log(JSON.stringify(rowsCategory))
