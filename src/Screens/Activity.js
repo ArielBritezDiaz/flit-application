@@ -4,7 +4,6 @@ import { StyleSheet, View } from 'react-native';
 export default Activity = () =>{
     return(
         <View style={styles.container}>
-            
         </View>
     )
 }

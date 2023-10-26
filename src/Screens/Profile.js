@@ -4,11 +4,9 @@ import { useEffect } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default Profile = ({ route, navigation }) =>{
-    //Login data//
     const user = route.params.userName;
     const password = route.params.password;
 
-    //Hide the bottom tabs navigation//
     useEffect(()=>{
         navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
         return ()=>{

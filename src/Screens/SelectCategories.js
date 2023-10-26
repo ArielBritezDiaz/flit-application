@@ -2,7 +2,6 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, Modal, Alert } from "react-native";
 
-/* Import icons svg */
 import Health from '../resources/icons/health.svg';
 import Home from '../resources/icons/home.svg';
 import Family from '../resources/icons/family.svg';
@@ -21,13 +20,10 @@ export default SelectCategories = ( { route, navigation } ) => {
     const amount = route.params.amo;
     const gain_expense = route.params.gain_expense;
     
-    //Modal state//
     const [modalVisible, setModalVisible] = useState(false);
 
-    //Value note
     const [valueNote, setValueNote] = useState('')
 
-    //Handle image selected//
     const [imageValue, setImageValue] = useState('')
     const [taskCompleted, setTaskCompleted] = useState(0)
     const [iconNumberPosition, setIconNumber] = useState(0)
@@ -35,10 +31,8 @@ export default SelectCategories = ( { route, navigation } ) => {
     const [nameCategory, setNameCategory] = useState('')
     const [c, setC] = useState(0);
     
-    //Categories array (Spanish)
     const nameCategories = ["Salud", "Hogar", "Familia", "Educación", "Comida", "Compras", "Transporte", "Gimansio", "Regalos", "Ocio", "Servicios", "Viajes"]
 
-    //Categories arrays (English)
     const categorySelected = ["healthSelected", "homeSelected", "familySelected", "educationSelected", "foodSelected", "shoppingSelected", "transportSelected", "gymSelected", "giftSelected", "leisureSelected", "servicesSelected", "travelSelected"]
     const categoryBase = ["health", "home", "family", "education", "food", "shopping", "transport", "gym", "gift", "leisure", "services", "travel"]
     

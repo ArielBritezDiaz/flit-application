@@ -8,8 +8,7 @@ import Down from '../resources/icons/down.svg'
 
 export default History = ({route}) =>{
     const [dataList, setDataList] = useState([]);
-        
-    //Modal state//
+
     const [modalVisible, setModalVisible] = useState(false);
 
     const [selectedNote, setSelectedNote] = useState('');
@@ -20,7 +19,7 @@ export default History = ({route}) =>{
 
     const getDataHistoryDB = async () => {
         try {
-            const response = await fetch("http://192.168.1.50:3000/api/History", {
+            const response = await fetch("http://192.168.16.247:3000/api/History", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -48,14 +47,10 @@ export default History = ({route}) =>{
                     };
                 });
                 setDataList(organizedData.reverse());
-                // console.log("result.combinedRows", result.combinedRows.rows)
-                // console.log(result.rowsCategory[0].hexColor)
-                // console.log("organizedData", organizedData)
             }
     
             if (result && result.rowsCategory) {
                 setDataCategory(result.rowsCategory)
-                // console.log("dataCategory", dataCategory)
             }
         } catch (error) {
             console.error("Error desde la API:", error);
@@ -64,8 +59,6 @@ export default History = ({route}) =>{
     
     useFocusEffect(() => {
         getDataHistoryDB()
-        // console.log("dataList", dataList)
-        // console.log("dataCategory", dataCategory)
     })
 
     return(
@@ -98,12 +91,12 @@ export default History = ({route}) =>{
                     <View style={styles.catBottom}>
                         <View style={styles.details}>
                             <View style={styles.notes}>
-                            <Modal
-                                animationType="fade"
-                                transparent={true}
-                                visible={modalVisible}
-                                onRequestClose={() => setModalVisible(!modalVisible)}
-                            >
+                                <Modal
+                                    animationType="fade"
+                                    transparent={true}
+                                    visible={modalVisible}
+                                    onRequestClose={() => setModalVisible(!modalVisible)}
+                                >
                                 <View style={styles.centeredView}>
                                     <View style={styles.modalView}>
                                         <Text style={styles.notesInput}>

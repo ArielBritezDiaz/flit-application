@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 
 export default ConfirmationScreen = ( { route, navigation } ) => {
-    //Variables
     const amount = route.params.amount;
     const note = route.params.note;
     const totalAmount = route.params.price;
@@ -13,7 +12,6 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
     const gain_expense = route.params.gain_expense
     const iconNumberPosition = route.params.iconNumberPosition
 
-    //Formatted values to backend
     const amountFormatted = Number(parseFloat(amount / 1).toFixed(4))
 
     console.log(`Data to BackEnd:
@@ -29,13 +27,9 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
         }
     `)
 
-    
-
-    //Server variables
     const navigationState = useNavigationState(state => state)
     console.log(`Actual URL: /${navigationState.routes[navigationState.index].name}`)
 
-    //Functions
     function NoteEmpty({note}) {
         if(note === "") {
             return null
@@ -52,8 +46,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             styles_icon: styles.icon,
             nameCategory
         }
-    
-        //Data to backend
+        
         const data = {
             amountFormatted,
             note,
@@ -65,7 +58,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             imageValues
         }
 
-        fetch("http://192.168.1.50:3000/api/ConfirmationScreen", {
+        fetch("http://192.168.16.247:3000/api/ConfirmationScreen", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'

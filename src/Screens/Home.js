@@ -10,17 +10,13 @@ import { FontAwesome } from '@expo/vector-icons';
 export default Home = ({route}) => {
     const [amountValue, setAmountValue] = useState (null);
 
-    //Show amount icons//
     const [showAmount, setShowAmount] = useState(true);
 
-    //Login data//
     const user = route.params?.name || "";
     const password = route.params?.password || "";
 
-    //Navigation to profile screen//
     const navigation = useNavigation();
 
-    //Update balance//
     const updatePrice = pr =>{
         setAmountValue(pr)
     }
@@ -31,7 +27,6 @@ export default Home = ({route}) => {
 
     const [data, setData] = useState(null)
 
-    //Show hidden navigation tab//
     useEffect(()=>{
         navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00'}})
         return ()=>{
@@ -42,7 +37,7 @@ export default Home = ({route}) => {
 
     const getDataDB = async () => {
         try {
-            const response = await fetch("http://192.168.1.50:3000/api/Home", {
+            const response = await fetch("http://192.168.16.247:3000/api/Home", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -51,7 +46,7 @@ export default Home = ({route}) => {
     
             if (!response.ok) {
                 console.log("Error en get de /api/Home", response);
-                setAmountValue(0); // Establecer amountValue en 0 si hay un error
+                setAmountValue(0);
                 return;
             }
     
@@ -61,7 +56,7 @@ export default Home = ({route}) => {
                 setData(result[0]);
                 setAmountValue(result[0]["entered_amount"]);
             } else {
-                setAmountValue(0); // Establecer amountValue en 0 si no se encuentran datos
+                setAmountValue(0);
             }
         } catch (error) {
             console.error("Error en /api/Home", error);

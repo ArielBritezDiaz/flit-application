@@ -9,6 +9,3 @@ export const pool = createPool({
     port: DB_PORT,
     database: DB_DATABASE
 })
-
-//Ejemplo
-//pool.query('SELECT * FROM (table), (err, result) => {}') // Con esto utilizamos consultas SQL

@@ -7,7 +7,6 @@ export default Login = ({navigation}) =>{
     const [user,setUser] = useState("");
     const [password, setPassword] = useState("");
 
-    //Navigate to the home screen and pass data//
     const handleLogin = () => {
         navigation.navigate('HomeScreen', {
             name : user,
@@ -15,7 +14,6 @@ export default Login = ({navigation}) =>{
         });
     };
 
-    //Hide bottom tabs navigation//
     useEffect(()=>{
         navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
         return ()=>{
@@ -26,36 +24,44 @@ export default Login = ({navigation}) =>{
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
-            {/* Logo */}
             <Image source={require('../assets/logo.png')} style={styles.img}></Image>
-            {/* Username input */}
             <TextInput
-            style={styles.input}
-            placeholder="Usuario"
-            name="user"
-            keyboardType="default"
-            cursorColor={'#D39F00'}
-            placeholderTextColor={"#D39F00"}
-            onChangeText={txt => {
-                setUser(txt)
-            }}
+                style={styles.input}
+                placeholder="Usuario"
+                name="user"
+                keyboardType="default"
+                cursorColor={'#D39F00'}
+                placeholderTextColor={"#D39F00"}
+                onChangeText={txt => {
+                    setUser(txt)
+                }}
             ></TextInput>
-            {/* Password input */}
             <TextInput
-            style={styles.input}
-            name="password"
-            placeholder="Contraseña"
-            keyboardType="default"
-            cursorColor={'#D39F00'}
-            placeholderTextColor={"#D39F00"}
-            onChangeText={txt => {
-                setPassword(txt)
-            }}
+                style={styles.input}
+                placeholder="Correo electrónico"
+                name="email"
+                keyboardType="default"
+                cursorColor={'#D39F00'}
+                placeholderTextColor={"#D39F00"}
+                onChangeText={txt => {
+                    setUser(txt)
+                }}
             ></TextInput>
-            <TouchableOpacity 
-            onPress={handleLogin}>
+            <TextInput
+                style={styles.input}
+                name="password"
+                placeholder="Contraseña"
+                keyboardType="default"
+                cursorColor={'#D39F00'}
+                placeholderTextColor={"#D39F00"}
+                onChangeText={txt => {
+                    setPassword(txt)
+                }}
+                secureTextEntry={true}
+            ></TextInput>
+            <TouchableOpacity onPress={handleLogin}>
                 <Text style={styles.btn}>
-                    Iniciar sesion
+                    Registrarse
                 </Text>
             </TouchableOpacity>
         </ScrollView>
@@ -74,7 +80,7 @@ const styles = StyleSheet.create ({
         marginVertical: 70
     },
     input:{
-        marginVertical: 25,
+        marginVertical: 23,
         width:"70%",
         borderWidth: 3,
         borderRadius: 10,
@@ -82,8 +88,7 @@ const styles = StyleSheet.create ({
         paddingVertical:10,
         paddingHorizontal: 20,
         fontSize:18,
-        color:"#D39F00",
-        fontWeight:'bold'
+        color:"#f5f5fa"
     },
     btn:{
         marginVertical:40,

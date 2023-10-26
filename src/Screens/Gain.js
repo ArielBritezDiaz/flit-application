@@ -4,36 +4,28 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView, Status
 import { LogBox } from 'react-native';//Component used to ignore warnings//
 
 export default Gain = ({route, navigation}) => {
-    //Amount//
     const [amount, setAmount] = useState ('')
 
-    //Ignore warning//
     LogBox.ignoreLogs([
         'Non-serializable values were found in the navigation state',
     ]);
 
-    //Initial price//
     const initialPrice = route.params.amountValue;
     const updatePrice = route.params.updatePrice;
 
-    //PredefinedAmounts//
     const [selectedAmount, setSelectedAmount] = useState('')
 
-    //Gain counter//
     const handleGainCounter = () =>{
         const newValue = parseInt(initialPrice) + parseInt(amount)
         parseFloat(newValue)
         updatePrice(newValue)
         if(amount == 0) {
-            //Mostrar modal con mensaje simple
             console.log("error")
         } else {
             navigation.navigate('SelectCategories', {price : newValue, amo : amount, gain_expense: "gain"})
         }
-        
     }
 
-    //Function when the user types amount//
     const typingAmount = (amount) => {
         const value = amount.replace('$', amount)
         const comaDecimal = value.replace(/[^0-9,]/g, '')//Coma decimal//
@@ -43,7 +35,6 @@ export default Gain = ({route, navigation}) => {
         }
     }
 
-    //Hide the bottom tabs navigation//
     useEffect(()=>{
         navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
         return ()=>{

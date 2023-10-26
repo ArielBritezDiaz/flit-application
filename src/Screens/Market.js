@@ -4,21 +4,15 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
-//API data component//
 import CoinItem from '../components/CoinItem';
 
 export default Market = () => {
-
-    //Coins arrray//
     const [coin, setCoin] = useState([])
 
-    //Searching//
     const [search, setSearch] = useState('')
 
-    //Refresh data//
     const [refresh, setRefreshing] = useState(false)
 
-    //API data function//
     const loadData = async () =>{
         const resp = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=ars&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en");
         const data = await resp.json()
@@ -28,39 +22,41 @@ export default Market = () => {
     useEffect(()=>{
         loadData()
     }, [])
+
 return(
     <View style={styles.container}>
         <StatusBar hidden={false} translucent={true} style="light" backgroundColor='#2f2f2f'/>
         <View style={styles.header}>
             <TextInput
-            maxLength={30}
-            autoCapitalize='none'
-            placeholder='Buscar cryptomoneda'
-            placeholderTextColor={'#8B8F8E'}
-            selectionColor={"#D39F00"}
-            cursorColor={'#D39F00'}
-            autoCorrect={true}
-            multiline={false}
-            keyboardType="default"
-            onChangeText={txt => setSearch(txt)}
-            style={styles.searcher}/>
+                maxLength={30}
+                autoCapitalize='none'
+                placeholder='Buscar cryptomoneda'
+                placeholderTextColor={'#8B8F8E'}
+                selectionColor={"#D39F00"}
+                cursorColor={'#D39F00'}
+                autoCorrect={true}
+                multiline={false}
+                keyboardType="default"
+                onChangeText={txt => setSearch(txt)}
+                style={styles.searcher}
+            />
         </View>
         <FlatList
-        style={styles.list}
-        data={
-            coin.filter((coin) => coin.name.toLowerCase().includes(search) ||//Filter by full name
-            coin.symbol.toLowerCase().includes(search))//Filter by abbreviated name
-        }
-        renderItem={ ({item}) => {
-            return <CoinItem coin={item}/>
-        }}
-        showsVerticalScrollIndicator={false}
-        refreshing={refresh}
-        onRefresh={async() =>{//Listener to refresh the view//
-            setRefreshing(true)
-            await loadData();//Load the data after refresh
-            setRefreshing(false)
-        }}
+            style={styles.list}
+            data={
+                coin.filter((coin) => coin.name.toLowerCase().includes(search) ||//Filter by full name
+                coin.symbol.toLowerCase().includes(search))//Filter by abbreviated name
+            }
+            renderItem={ ({item}) => {
+                return <CoinItem coin={item}/>
+            }}
+            showsVerticalScrollIndicator={false}
+            refreshing={refresh}
+            onRefresh={async() =>{//Listener to refresh the view//
+                setRefreshing(true)
+                await loadData();//Load the data after refresh
+                setRefreshing(false)
+            }}
         />
     </View>
 )

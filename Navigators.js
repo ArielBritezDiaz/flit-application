@@ -22,7 +22,7 @@ import Expense from "./src/Screens/Expense";
 import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
 import Profile from "./src/Screens/Profile";
-import Login from "./src/Screens/Login";
+import Login from "./src/Screens/LogIn";
 
 const loadFonts = async () => {
     await Font.loadAsync({
@@ -117,10 +117,10 @@ const TabNavigation = () =>{
     return(
         <Tab.Navigator
             screenOptions={{
-                initialRouteName: 'Home',//The initial screen of the application
+                initialRouteName: 'Home',
                 tabBarActiveTintColor: '#f5f5fa', 
                 tabBarInactiveTintColor: '#0f0c0c',
-                headerShown: false,//Hide the top tab
+                headerShown: false,
                 tabBarStyle:{ 
                     backgroundColor: '#D39F00',
                 },
@@ -131,7 +131,7 @@ const TabNavigation = () =>{
                 component={Stacks}
                 options={{
                     tabBarIcon:()=>(
-                        <MaterialCommunityIcons name="home" color={'#0f0c0c'} size={35}/>//Home icon
+                        <MaterialCommunityIcons name="home" color={'#0f0c0c'} size={35} />
                     )
                 }}
             />
@@ -141,7 +141,7 @@ const TabNavigation = () =>{
                 component={Market}
                 options={{
                     tabBarIcon:()=>(
-                        <MaterialCommunityIcons name="finance" size={35} color="#0f0c0c" />//Market icon
+                        <MaterialCommunityIcons name="finance" size={35} color="#0f0c0c" />
                     )
                 }}
             />
