@@ -155,12 +155,13 @@ const styles = StyleSheet.create ({
         textAlignVertical:'center',
         fontSize:30,
         borderWidth:5,
-        borderRadius:12,
+        borderRadius:10,
         borderColor:'#D39F00',
         paddingHorizontal:20,
         marginHorizontal:20,
         color:'#d39f00',
-        fontWeight:'bold'
+        fontWeight:'bold',
+        backgroundColor: "#1F1B18"
     },
     continue:{
         height:100,
@@ -178,6 +179,7 @@ const styles = StyleSheet.create ({
         textAlign:'center',
         textAlignVertical:'center',
         paddingHorizontal:90,
-        elevation:0
+        elevation:0,
+        paddingVertical: 3
     }
 })

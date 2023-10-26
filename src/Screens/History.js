@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { StyleSheet, View, FlatList, Text, StatusBar, Settings} from 'react-native';
+import { StyleSheet, View, FlatList, Text, StatusBar, Settings, Modal, TouchableOpacity } from 'react-native';
 import { SvgXml } from "react-native-svg";
 
 import Up from '../resources/icons/up.svg'
@@ -9,6 +9,10 @@ import Down from '../resources/icons/down.svg'
 export default History = ({route}) =>{
     const [dataList, setDataList] = useState([]);
         
+    //Modal state//
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const [selectedNote, setSelectedNote] = useState('');
 
     const [dataCategory, setDataCategory] = useState([])
 
@@ -29,12 +33,6 @@ export default History = ({route}) =>{
                     const correspondingCategory = result.combinedRows.rowsCategory.find(
                         (category) => category.id_category === dato.id_category
                     );
-                    
-                    // if(dato.gain_expense === "gain") {
-                    //     setIconUpDown(Up)
-                    // } else if(dato.gain_expense === "expense") {
-                    //     setIconUpDown(Down)
-                    // }
 
                     return {
                         id_moneyregistry: dato.id_moneyregistry,
@@ -78,7 +76,7 @@ export default History = ({route}) =>{
             showsVerticalScrollIndicator={false}
             style={styles.list}
             renderItem={({ item }) => (
-                <View style={[styles.item, { backgroundColor: "#0f0c0c" }]}>
+                <View style={[styles.item]}>
                     <View style={styles.cat}>
                         <View style={[styles.catView, {alignItems: "center"}]}>
                             <Text style={styles.catText}>
@@ -99,12 +97,35 @@ export default History = ({route}) =>{
             
                     <View style={styles.catBottom}>
                         <View style={styles.details}>
-                            <Text style={styles.note}>
-                                Ver nota
-                            </Text>
-                            <Text style={styles.note}>
-                                {`${item.note}` !== '' ? item.note : '-'}
-                            </Text>
+                            <View style={styles.notes}>
+                            <Modal
+                                animationType="fade"
+                                transparent={true}
+                                visible={modalVisible}
+                                onRequestClose={() => setModalVisible(!modalVisible)}
+                            >
+                                <View style={styles.centeredView}>
+                                    <View style={styles.modalView}>
+                                        <Text style={styles.notesInput}>
+                                            {selectedNote !== '' ? selectedNote : '-'}
+                                        </Text>
+                                        <TouchableOpacity onPress={() => setModalVisible(false)}>
+                                            <Text style={styles.btnHide}>
+                                                Salir
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </Modal>
+                            <TouchableOpacity onPress={() => {
+                                setSelectedNote(item.note);
+                                setModalVisible(true);
+                            }}>
+                                <Text style={styles.notestxt}>
+                                    Ver nota
+                                </Text>
+                            </TouchableOpacity>
+                            </View>
                         </View>
                         <Text style={styles.number}>
                             {`${item.id_moneyregistry}`}
@@ -112,9 +133,6 @@ export default History = ({route}) =>{
                     </View>
                 </View>
             )}
-            
-            
-            
             keyExtractor={(item, index) => index.toString()}
             />
         </View>
@@ -135,6 +153,7 @@ const styles = StyleSheet.create ({
         width:'90%'
     },
     item:{
+        backgroundColor: "#1F1B18",
         marginVertical:10,
         padding:10,
         borderRadius:10,
@@ -149,7 +168,7 @@ const styles = StyleSheet.create ({
     },
     number:{
         textTransform:'uppercase',
-        fontSize:15,
+        fontSize:20,
         color:'#f5f5fa',
         textAlign:'right',
         marginRight: 15
@@ -165,7 +184,8 @@ const styles = StyleSheet.create ({
     catView: {
         flex: 1, flexDirection: 'row',
         justifyContent: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingHorizontal: 5
     },
     catBottom: {
         flexDirection: 'row',
@@ -203,5 +223,67 @@ const styles = StyleSheet.create ({
         justifyContent: 'center',
         alignItems: 'center',
         alignSelf: 'flex-end'
+    },
+    notes: {
+        justifyContent: "center",
+        alignItems: "center",
+        color:'#f5f5fa',
+        fontSize:20
+    },
+    notesInput:{
+        textAlign:'center',
+        textAlignVertical:'center',
+        fontSize:25,
+        color:'#f5f5fa',
+        borderBottomWidth:2,
+        borderColor:'#d39f00',
+        width:250,
+        paddingVertical:10
+    },
+    notestxt:{
+        color:'#f5f5fa',
+        backgroundColor: "#2C2520",
+        paddingVertical:5,
+        paddingHorizontal:5,
+        elevation:30,
+        fontSize:15,
+        fontWeight:'bold',
+        borderRadius:5
+    },
+    centeredView: {
+        flex: 1,
+        display:'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop:20,
+        backgroundColor:'rgba(0, 0, 0, 0.1)'
+    },
+    modalView: {
+        height:310,
+        width:'90%',
+        backgroundColor: '#2f2f2f',
+        borderRadius: 10,
+        padding: 100,
+        alignItems: 'center',
+        shadowColor: '#0f0c0c',
+        shadowOffset: {
+        width: 0,
+        height: 2,
+        },
+        shadowOpacity: 0.9,
+        shadowRadius: 100,
+        elevation: 10,
+    },
+    btnHide:{
+        textAlign:'center',
+        textAlignVertical:'center',
+        color:'#2f2f2f',
+        backgroundColor:'#d39f00',
+        borderRadius:10,
+        paddingVertical:5,
+        paddingHorizontal:30,
+        marginTop:40,
+        fontSize:16,
+        fontWeight:'bold'
     }
 })

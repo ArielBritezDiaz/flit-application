@@ -126,29 +126,32 @@ const TabNavigation = () =>{
                 },
             }}
         >
-            <Tab.Screen name="Inicio"
+            <Tab.Screen
+                name="Inicio"
                 component={Stacks}
                 options={{
                     tabBarIcon:()=>(
-                    <MaterialCommunityIcons name="home" color={'#000'} size={35}/>//Home icon
-                )
+                        <MaterialCommunityIcons name="home" color={'#0f0c0c'} size={35}/>//Home icon
+                    )
                 }}
             />
 
-            <Tab.Screen name="Mercado"
+            <Tab.Screen
+                name="Mercado"
                 component={Market}
                 options={{
                     tabBarIcon:()=>(
-                        <MaterialCommunityIcons name="finance" size={35} color="black" />//Market icon
-                )
+                        <MaterialCommunityIcons name="finance" size={35} color="#0f0c0c" />//Market icon
+                    )
                 }}
             />
 
-            <Tab.Screen name="Historial"
+            <Tab.Screen
+                name="Historial"
                 component={History}
                 options={{
                     tabBarIcon:()=>(
-                        <MaterialCommunityIcons name="history" size={35} color="black" />
+                        <MaterialCommunityIcons name="history" size={35} color="#0f0c0c" />
                     )
                 }}
             />
@@ -162,7 +165,7 @@ export default Navigations = () =>{
       }, []);
     return(
         <NavigationContainer>
-        <TabNavigation/>
+            <TabNavigation/>
         </NavigationContainer>
     )
 }

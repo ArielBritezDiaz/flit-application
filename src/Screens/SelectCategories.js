@@ -391,11 +391,11 @@ const styles = StyleSheet.create ({
     notesInput:{
         textAlign:'center',
         textAlignVertical:'center',
-        fontSize:20,
+        fontSize:25,
         color:'#f5f5fa',
         borderBottomWidth:2,
         borderColor:'#d39f00',
-        width:200,
+        width:250,
         paddingVertical:10
     },
     notestxt:{
@@ -404,7 +404,7 @@ const styles = StyleSheet.create ({
         paddingHorizontal:30,
         backgroundColor:'#d39f00',
         elevation:30,
-        fontSize:15,
+        fontSize:16,
         fontWeight:'bold',
         borderRadius:10
     },
@@ -414,23 +414,23 @@ const styles = StyleSheet.create ({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop:20,
-        backgroundColor:'rgba(0, 0, 0, 0.7)'
+        backgroundColor:'rgba(0, 0, 0, 0.6)'
     },
     modalView: {
-        height:300,
+        height:310,
         width:'90%',
         backgroundColor: '#2f2f2f',
         borderRadius: 10,
         padding: 100,
         alignItems: 'center',
-        shadowColor: '#fff',
+        shadowColor: '#0f0c0c',
         shadowOffset: {
         width: 0,
         height: 2,
         },
         shadowOpacity: 0.9,
         shadowRadius: 100,
-        elevation: 100,
+        elevation: 10,
     },
     btnHide:{
         textAlign:'center',
@@ -441,7 +441,7 @@ const styles = StyleSheet.create ({
         paddingVertical:5,
         paddingHorizontal:30,
         marginTop:40,
-        fontSize:15,
+        fontSize:16,
         fontWeight:'bold'
     },
     continue:{
@@ -456,6 +456,7 @@ const styles = StyleSheet.create ({
         color:'#2f2f2f',
         borderRadius:12,
         paddingHorizontal: 90,
+        paddingVertical: 3,
         elevation:30,
     }
 })

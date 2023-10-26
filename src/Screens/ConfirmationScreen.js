@@ -148,7 +148,8 @@ const styles = StyleSheet.create ({
         textAlign:'center',
         textAlignVertical:'center',
         paddingHorizontal:90,
-        elevation:30
+        elevation:30,
+        paddingVertical: 3
     },
     touchable:{
         position:'relative',

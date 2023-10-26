@@ -1,125 +1,125 @@
-/* Creation DB */
-CREATE DATABASE flit_db;
+-- /* Creation DB */
+-- CREATE DATABASE flit_db;
 
-/* Select DB */
-USE flit_db;
+-- /* Select DB */
+-- USE flit_db;
 
-/* Creation tables */
-CREATE TABLE User(
-    id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(20) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    passw VARCHAR(255) NOT NULL,
-    profile_picture VARCHAR(255) NOT NULL
-);
+-- /* Creation tables */
+-- CREATE TABLE User(
+--     id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(20) NOT NULL,
+--     email VARCHAR(100) NOT NULL,
+--     passw VARCHAR(255) NOT NULL,
+--     profile_picture VARCHAR(255) NOT NULL
+-- );
 
-CREATE TABLE Category(
-    id_category INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(20) NOT NULL,
-    icon VARCHAR(255)
-);
+-- CREATE TABLE Category(
+--     id_category INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(20) NOT NULL,
+--     icon VARCHAR(255)
+-- );
 
-CREATE TABLE MoneyRegistry(
-    id_moneyregistry INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    total_amount DECIMAL(19, 4) NOT NULL,
-    entered_amount DECIMAL(19, 4) NOT NULL,
-    gain_expense VARCHAR(255) NOT NULL,
-    note VARCHAR(50),
-    id_user INT,
-    id_category INT,
-    date DATETIME NOT NULL,
-    FOREIGN KEY (id_user) REFERENCES User(id_user),
-    FOREIGN KEY (id_category) REFERENCES Category(id_category)
-);
+-- CREATE TABLE MoneyRegistry(
+--     id_moneyregistry INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     total_amount DECIMAL(19, 4) NOT NULL,
+--     entered_amount DECIMAL(19, 4) NOT NULL,
+--     gain_expense VARCHAR(255) NOT NULL,
+--     note VARCHAR(50),
+--     id_user INT,
+--     id_category INT,
+--     date DATETIME NOT NULL,
+--     FOREIGN KEY (id_user) REFERENCES User(id_user),
+--     FOREIGN KEY (id_category) REFERENCES Category(id_category)
+-- );
 
-ALTER TABLE MoneyRegistry
-ADD CONSTRAINT fk_category
-FOREIGN KEY (id_category) REFERENCES TemporalCategory(id_temporalcategory);
-
-
-CREATE TABLE TemporalCategory(
-    id_temporalcategory INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    image VARCHAR(255) NOT NULL,
-    hexColor VARCHAR(255) NOT NULL,
-    styles_icon VARCHAR(255) NOT NULL,
-    nameCategory VARCHAR(255) NOT NULL
-)
-
-/* Insert data */
-INSERT INTO TemporalCategory(image, hexColor, styles_icon, nameCategory) VALUES
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C10B0B', '{"elevation":30,"padding":10,"borderRadius":50}', 'Salud'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#23BC12', '{"elevation":30,"padding":10,"borderRadius":50}', 'Hogar'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#083ea7', '{"elevation":30,"padding":10,"borderRadius":50}', 'Familia'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#621BBA', '{"elevation":30,"padding":10,"borderRadius":50}', 'Educación'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C76204', '{"elevation":30,"padding":10,"borderRadius":50}', 'Comida'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#A504B3', '{"elevation":30,"padding":10,"borderRadius":50}', 'Compras'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C7B204', '{"elevation":30,"padding":10,"borderRadius":50}', 'Transporte'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#2C3335', '{"elevation":30,"padding":10,"borderRadius":50}', 'Gimansio'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C7046D', '{"elevation":30,"padding":10,"borderRadius":50}', 'Regalos'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#36A507', '{"elevation":30,"padding":10,"borderRadius":50}', 'Ocio'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#0780A4', '{"elevation":30,"padding":10,"borderRadius":50}', 'Servicios'),
-    ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#D9D50A', '{"elevation":30,"padding":10,"borderRadius":50}', 'Viajes');
-
-INSERT INTO User(name, email, passw, profile_picture) VALUES(
-    "Ariel", "arielbrtz@gmail.com", "1234", "abcd"
-);
+-- ALTER TABLE MoneyRegistry
+-- ADD CONSTRAINT fk_category
+-- FOREIGN KEY (id_category) REFERENCES TemporalCategory(id_temporalcategory);
 
 
--- 
-/* Creation DB */
-CREATE DATABASE flit_db;
+-- CREATE TABLE TemporalCategory(
+--     id_temporalcategory INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     image VARCHAR(255) NOT NULL,
+--     hexColor VARCHAR(255) NOT NULL,
+--     styles_icon VARCHAR(255) NOT NULL,
+--     nameCategory VARCHAR(255) NOT NULL
+-- )
 
-/* Select DB */
-USE flit_db;
+-- /* Insert data */
+-- INSERT INTO TemporalCategory(image, hexColor, styles_icon, nameCategory) VALUES
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C10B0B', '{"elevation":30,"padding":10,"borderRadius":50}', 'Salud'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#23BC12', '{"elevation":30,"padding":10,"borderRadius":50}', 'Hogar'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#083ea7', '{"elevation":30,"padding":10,"borderRadius":50}', 'Familia'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#621BBA', '{"elevation":30,"padding":10,"borderRadius":50}', 'Educación'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C76204', '{"elevation":30,"padding":10,"borderRadius":50}', 'Comida'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#A504B3', '{"elevation":30,"padding":10,"borderRadius":50}', 'Compras'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C7B204', '{"elevation":30,"padding":10,"borderRadius":50}', 'Transporte'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#2C3335', '{"elevation":30,"padding":10,"borderRadius":50}', 'Gimansio'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C7046D', '{"elevation":30,"padding":10,"borderRadius":50}', 'Regalos'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#36A507', '{"elevation":30,"padding":10,"borderRadius":50}', 'Ocio'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#0780A4', '{"elevation":30,"padding":10,"borderRadius":50}', 'Servicios'),
+--     ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#D9D50A', '{"elevation":30,"padding":10,"borderRadius":50}', 'Viajes');
 
-/* Creation tables */
-CREATE TABLE User(
-    id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(20) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    passw VARCHAR(255) NOT NULL,
-    profile_picture VARCHAR(255) NOT NULL
-);
+-- INSERT INTO User(name, email, passw, profile_picture) VALUES(
+--     "Ariel", "arielbrtz@gmail.com", "1234", "abcd"
+-- );
 
-CREATE TABLE MoneyRegistry(
-    id_moneyregistry INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    total_amount DECIMAL(19, 4) NOT NULL,
-    entered_amount DECIMAL(19, 4) NOT NULL,
-    gain_expense VARCHAR(255) NOT NULL,
-    note VARCHAR(50),
-    id_user INT,
-    id_category INT,
-    date DATETIME NOT NULL,
-    FOREIGN KEY (id_user) REFERENCES User(id_user),
-    FOREIGN KEY (id_category) REFERENCES Category(id_category)
-);
 
-CREATE TABLE Category(
-    id_category INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    image VARCHAR(255) NOT NULL,
-    hexColor VARCHAR(255) NOT NULL,
-    styles_icon VARCHAR(255) NOT NULL,
-    nameCategory VARCHAR(255) NOT NULL
-);
+-- -- 
+-- /* Creation DB */
+-- CREATE DATABASE flit_db;
 
-/* Insert data */
-INSERT INTO Category(svg, hexColor, styles_icon, nameCategory) VALUES
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C10B0B', '{"elevation":30,"padding":10,"borderRadius":50}', 'Salud'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#23BC12', '{"elevation":30,"padding":10,"borderRadius":50}', 'Hogar'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#083ea7', '{"elevation":30,"padding":10,"borderRadius":50}', 'Familia'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#621BBA', '{"elevation":30,"padding":10,"borderRadius":50}', 'Educación'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C76204', '{"elevation":30,"padding":10,"borderRadius":50}', 'Comida'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#A504B3', '{"elevation":30,"padding":10,"borderRadius":50}', 'Compras'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C7B204', '{"elevation":30,"padding":10,"borderRadius":50}', 'Transporte'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#2C3335', '{"elevation":30,"padding":10,"borderRadius":50}', 'Gimansio'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C7046D', '{"elevation":30,"padding":10,"borderRadius":50}', 'Regalos'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#36A507', '{"elevation":30,"padding":10,"borderRadius":50}', 'Ocio'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#0780A4', '{"elevation":30,"padding":10,"borderRadius":50}', 'Servicios'),
-('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#D9D50A', '{"elevation":30,"padding":10,"borderRadius":50}', 'Viajes');
+-- /* Select DB */
+-- USE flit_db;
 
-INSERT INTO User(name, email, passw, profile_picture) VALUES(
-    "Ariel", "arielbrtz@gmail.com", "1234", "abcd"
-);
+-- /* Creation tables */
+-- CREATE TABLE User(
+--     id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     name VARCHAR(20) NOT NULL,
+--     email VARCHAR(100) NOT NULL,
+--     passw VARCHAR(255) NOT NULL,
+--     profile_picture VARCHAR(255) NOT NULL
+-- );
+
+-- CREATE TABLE MoneyRegistry(
+--     id_moneyregistry INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     total_amount DECIMAL(19, 4) NOT NULL,
+--     entered_amount DECIMAL(19, 4) NOT NULL,
+--     gain_expense VARCHAR(255) NOT NULL,
+--     note VARCHAR(50),
+--     id_user INT,
+--     id_category INT,
+--     date DATETIME NOT NULL,
+--     FOREIGN KEY (id_user) REFERENCES User(id_user),
+--     FOREIGN KEY (id_category) REFERENCES Category(id_category)
+-- );
+
+-- CREATE TABLE Category(
+--     id_category INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+--     image VARCHAR(255) NOT NULL,
+--     hexColor VARCHAR(255) NOT NULL,
+--     styles_icon VARCHAR(255) NOT NULL,
+--     nameCategory VARCHAR(255) NOT NULL
+-- );
+
+-- /* Insert data */
+-- INSERT INTO Category(svg, hexColor, styles_icon, nameCategory) VALUES
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C10B0B', '{"elevation":30,"padding":10,"borderRadius":50}', 'Salud'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#23BC12', '{"elevation":30,"padding":10,"borderRadius":50}', 'Hogar'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#083ea7', '{"elevation":30,"padding":10,"borderRadius":50}', 'Familia'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#621BBA', '{"elevation":30,"padding":10,"borderRadius":50}', 'Educación'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C76204', '{"elevation":30,"padding":10,"borderRadius":50}', 'Comida'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#A504B3', '{"elevation":30,"padding":10,"borderRadius":50}', 'Compras'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C7B204', '{"elevation":30,"padding":10,"borderRadius":50}', 'Transporte'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#2C3335', '{"elevation":30,"padding":10,"borderRadius":50}', 'Gimansio'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#C7046D', '{"elevation":30,"padding":10,"borderRadius":50}', 'Regalos'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#36A507', '{"elevation":30,"padding":10,"borderRadius":50}', 'Ocio'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#0780A4', '{"elevation":30,"padding":10,"borderRadius":50}', 'Servicios'),
+-- ('{"key":null,"ref":null,"props":{},"_owner":null,"_store":{}}', '#D9D50A', '{"elevation":30,"padding":10,"borderRadius":50}', 'Viajes');
+
+-- INSERT INTO User(name, email, passw, profile_picture) VALUES(
+--     "Ariel", "arielbrtz@gmail.com", "1234", "abcd"
+-- );
 
 
 
@@ -292,3 +292,13 @@ INSERT INTO Category(svg, hexColor, styles_icon, nameCategory) VALUES
 INSERT INTO User(name, email, passw, profile_picture) VALUES(
     "Ariel", "arielbrtz@gmail.com", "1234", "abcd"
 );
+
+UPDATE Category SET svg='<?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg fill="#f5f5fa" width="50px" height="50px" viewBox="0 0 32 32" id="icon" xmlns="http://www.w3.org/2000/svg">
+  <path d="M20,30H17a2.0021,2.0021,0,0,1-2-2V23h2v5h3V23h2V19a1.0011,1.0011,0,0,0-1-1H12.2793l-2-6H4a1.0011,1.0011,0,0,0-1,1v6H5v9H9V21h2v7a2.0021,2.0021,0,0,1-2,2H5a2.0021,2.0021,0,0,1-2-2V21a2.0021,2.0021,0,0,1-2-2V13a3.0033,3.0033,0,0,1,3-3h6.2793a1.998,1.998,0,0,1,1.8975,1.3674L13.7207,16H21a3.0033,3.0033,0,0,1,3,3v4a2.0021,2.0021,0,0,1-2,2v3A2.0021,2.0021,0,0,1,20,30Z"/>
+  <path d="M28,30H26V19h3V13a1.0011,1.0011,0,0,0-1-1H24V10h4a3.0033,3.0033,0,0,1,3,3v6a2.0021,2.0021,0,0,1-2,2H28Z"/>
+  <path d="M7,9a4,4,0,1,1,4-4A4.0045,4.0045,0,0,1,7,9ZM7,3A2,2,0,1,0,9,5,2.0021,2.0021,0,0,0,7,3Z"/>
+  <path d="M25,9a4,4,0,1,1,4-4A4.0045,4.0045,0,0,1,25,9Zm0-6a2,2,0,1,0,2,2A2.0021,2.0021,0,0,0,25,3Z"/>
+  <path d="M18.5,15A3.5,3.5,0,1,1,22,11.5,3.5041,3.5041,0,0,1,18.5,15Zm0-5A1.5,1.5,0,1,0,20,11.5,1.5017,1.5017,0,0,0,18.5,10Z"/>
+  <rect id="_Transparent_Rectangle_" class="cls-1"/>
+</svg>' WHERE id_category='3';

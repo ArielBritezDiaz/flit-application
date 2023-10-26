@@ -98,13 +98,13 @@ export default Home = ({route}) => {
                 </View>
                 <View style={styles.total}>
                     <Text style={styles.totalContent}>
-                        { showAmount ? `$${Number(amountValue)}` : <Entypo name="dots-three-horizontal" size={40} color="white" /> }
+                        { showAmount ? `$${Number(amountValue)}` : <Entypo name="dots-three-horizontal" size={40} color="#f5f5fa" /> }
                     </Text>
                     <TouchableOpacity onPress={() => setShowAmount(!showAmount)} >
                         <Entypo
                             name={showAmount ? 'eye' : 'eye-with-line'}
                             size={40}
-                            color="black"
+                            color="#D39F00"
                         />
                     </TouchableOpacity>
                 </View>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create ({
         marginTop: 50,
         width:'90%',
         height:'25%',
-        backgroundColor:'#2F2F2F',
+        backgroundColor:'#1F1B18',
         borderRadius: 5,
         alignItems: 'center',
         elevation: 4
