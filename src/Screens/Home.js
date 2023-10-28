@@ -5,7 +5,11 @@ import { useNavigation, useFocusEffect } from "@react-navigation/native";
 //Icons libraries
 import { Entypo } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons';
+
+//SVG Icons
+import AutralianSymbol from '../resources/icons/norfolk-island-australian-dolar-svgrepo-com.svg';
+import ConfigurationSymbol from '../resources/icons/data-explorationenvironment-configuration-svgrepo-com.svg';
 
 export default Home = ({route}) => {
     const [amountValue, setAmountValue] = useState (null);
@@ -52,9 +56,9 @@ export default Home = ({route}) => {
     
             const result = await response.json();
     
-            if (result && result.length > 0 && result[0]["entered_amount"]) {
+            if (result && result.length > 0 && result[0]["total_amount"]) {
                 setData(result[0]);
-                setAmountValue(result[0]["entered_amount"]);
+                setAmountValue(result[0]["total_amount"]);
             } else {
                 setAmountValue(0);
             }
@@ -73,18 +77,19 @@ export default Home = ({route}) => {
     return(
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
-            <View >
-                <TouchableOpacity style={styles.profile} 
-                onPress={()=>navigation.navigate("Profile", {
-                    userName : user,
-                    password
-                })}
-                >
-                    <FontAwesome name="user" size={25} color="#D39F00" style={styles.user} />
-                    <Text style={styles.textProfile}>{user}</Text>
-                </TouchableOpacity>
+            <View style={styles.profileSection}>
+                <View style={styles.svgProfileSection}>
+                    <AutralianSymbol height={"100%"} width={35} style={styles.svgSymbol} />
+                </View>
+                <View style={styles.informationProfileSection}>
+                    <Text style={styles.nameProfileSection}>
+                        Ariel Díaz
+                    </Text>
+                </View>
+                <View>
+                    <ConfigurationSymbol height={"100%"} width={35} style={styles.svgSymbol} />
+                </View>
             </View>
-
             <View style={styles.balance}>
                 <View style={styles.balanceTotal}>
                     <Text style={styles.totalTxt}>
@@ -105,12 +110,13 @@ export default Home = ({route}) => {
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>
-                    <TouchableOpacity onPress={() =>{
-                    navigation.navigate("Gain", {amountValue, updatePrice});
-                }}
-                    >
-                        <MaterialCommunityIcons name="cash-plus" size={40} color="#f5f5fa" />
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() =>{
+                                navigation.navigate("Gain", {amountValue, updatePrice});
+                            }}
+                        >
+                            <MaterialCommunityIcons name="cash-plus" size={40} color="#f5f5fa" />
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.expense}>
                         <TouchableOpacity onPress={() => navigation.navigate("Expense", {amountValue, updatePrice})}>
@@ -129,27 +135,36 @@ const styles = StyleSheet.create ({
         backgroundColor: '#2f2f2f',
         alignItems: 'center',
     },
-    profile:{
-        marginTop: 50,
-        paddingHorizontal: 20,
-        paddingVertical: 5,
+    profileSection: {
+        height: 45,
+        width: "90%",
+        marginTop: 20,
+        backgroundColor: "#D39F00",
         flexDirection: "row",
-        borderRadius: 100,
-        backgroundColor: "#67645D",
-        elevation: 30,
+        borderTopStartRadius: 5,
+        borderTopEndRadius: 5
     },
-    textProfile:{
-        color: "#f5f5fa",
-        textAlignVertical:'center',
-        fontSize:15,
-        fontWeight:'bold'
+    svgProfileSection: {
+        height: "100%",
+        width:"13%",
+        marginLeft: 5
     },
-    user:{
-        paddingRight:10,
-        paddingLeft:5
+    svgSymbol: {
+        marginLeft: 4
+    },
+    informationProfileSection: {
+        height: "100%",
+        width: "72%",
+        justifyContent: "center"
+    },
+    nameProfileSection: {
+        fontSize: 20,
+        color: "#0f0c0c",
+        marginBottom: 5,
+        fontWeight: "bold"
     },
     balance:{
-        marginTop: 50,
+        marginTop: 20,
         width:'90%',
         height:'25%',
         backgroundColor:'#1F1B18',

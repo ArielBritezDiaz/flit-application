@@ -38,7 +38,6 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
     }
 
     const sendData = () => {
-
         const imageValues = {
             iconNumberPosition,
             image,
@@ -68,13 +67,10 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             if(response.ok) {
                 navigation.navigate("HomeScreen")
             } else {
-                throw error = new Error("Solicitud no exitosa")
+                throw new Error("Solicitud no exitosa")
             }
         }).catch(error => {
             console.error("Error en la solicitud:", error);
-            navigation.navigate("HomeScreen", {
-                totalAmount
-            });
         })
     }
 

@@ -6,16 +6,18 @@ import { SvgXml } from "react-native-svg";
 import Up from '../resources/icons/up.svg'
 import Down from '../resources/icons/down.svg'
 
-export default History = ({route}) =>{
+export default History = ({route}) => {
     const [dataList, setDataList] = useState([]);
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalDateVisible, setModalDateVisible] = useState(false);
 
     const [selectedNote, setSelectedNote] = useState('');
+    const [selectedDate, setSelectedDate] = useState('');
 
-    const [dataCategory, setDataCategory] = useState([])
+    const [dataCategory, setDataCategory] = useState([]);
 
-    const [iconUpDown, setIconUpDown] = useState(null)
+    const [iconUpDown, setIconUpDown] = useState(null);
 
     const getDataHistoryDB = async () => {
         try {
@@ -75,13 +77,15 @@ export default History = ({route}) =>{
                             <Text style={styles.catText}>
                                 {`$${Number(item.entered_amount)}`}
                             </Text>
-                            {(() => {
-                                if (item.gain_expense === "gain") {
-                                    return <Up width={25} height={25} />;
-                                } else if (item.gain_expense === "expense") {
-                                    return <Down width={25} height={25} />;
-                                }
-                            })()}
+                            <View style={{marginTop: 6}}>
+                                {(() => {
+                                    if (item.gain_expense === "gain") {
+                                        return <Up marginLeft={5} width={25} height={25} />;
+                                    } else if (item.gain_expense === "expense") {
+                                        return <Down marginLeft={5} width={25} height={25} />;
+                                    }
+                                })()}
+                            </View>
                         </View>
                         <View style={[styles.icon, { backgroundColor: item.hexColor }]}>
                             <SvgXml xml={item.image} width="35px" height="35px" />
@@ -116,6 +120,42 @@ export default History = ({route}) =>{
                             }}>
                                 <Text style={styles.notestxt}>
                                     Ver nota
+                                </Text>
+                            </TouchableOpacity>
+                            </View>
+                        </View>
+                        <View style={styles.details}>
+                            <View style={styles.notes}>
+                                <Modal
+                                    animationType="fade"
+                                    transparent={true}
+                                    visible={modalDateVisible}
+                                    onRequestClose={() => setModalDateVisible(!modalDateVisible)}
+                                >
+                                <View style={styles.centeredView}>
+                                    <View style={styles.modalView}>
+                                        <Text style={styles.dateInput}>
+                                        {
+                                            `${selectedDate
+                                            .replaceAll('-', '/')
+                                            .replaceAll('T', ' ')
+                                            .slice(0, -8)}`
+                                        }
+                                        </Text>
+                                        <TouchableOpacity onPress={() => setModalDateVisible(false)}>
+                                            <Text style={styles.btnHide}>
+                                                Salir
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </Modal>
+                            <TouchableOpacity onPress={() => {
+                                setSelectedDate(item.date);
+                                setModalDateVisible(true);
+                            }}>
+                                <Text style={styles.notestxt}>
+                                    Fecha
                                 </Text>
                             </TouchableOpacity>
                             </View>
@@ -193,7 +233,7 @@ const styles = StyleSheet.create ({
     },
     details:{
         paddingVertical:10,
-        flexDirection:'row',
+        flexDirection:'row'
     },
     amount:{
         fontSize:20,
@@ -228,7 +268,17 @@ const styles = StyleSheet.create ({
         textAlignVertical:'center',
         fontSize:25,
         color:'#f5f5fa',
-        borderBottomWidth:2,
+        borderBottomWidth:1.5,
+        borderColor:'#d39f00',
+        width:250,
+        paddingVertical:10
+    },
+    dateInput: {
+        textAlign:'center',
+        textAlignVertical:'center',
+        fontSize:25,
+        color:'#f5f5fa',
+        borderBottomWidth:1.5,
         borderColor:'#d39f00',
         width:250,
         paddingVertical:10
@@ -238,9 +288,7 @@ const styles = StyleSheet.create ({
         backgroundColor: "#2C2520",
         paddingVertical:5,
         paddingHorizontal:5,
-        elevation:30,
         fontSize:15,
-        fontWeight:'bold',
         borderRadius:5
     },
     centeredView: {
@@ -270,7 +318,7 @@ const styles = StyleSheet.create ({
     btnHide:{
         textAlign:'center',
         textAlignVertical:'center',
-        color:'#2f2f2f',
+        color:'#0f0c0c',
         backgroundColor:'#d39f00',
         borderRadius:10,
         paddingVertical:5,

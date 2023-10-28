@@ -1,20 +1,46 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView} from 'react-native';
-import { useState } from 'react';
-import { useEffect } from "react";
+import { useState, useEffect } from 'react';
+import { useNavigation } from "@react-navigation/native";
 
-export default Login = ({navigation}) =>{
+export default Register = () =>{
     const [user,setUser] = useState("");
-    const [password, setPassword] = useState("");
     const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("");
+    const navigation = useNavigation();
 
-    const handleRegister = () => {
-        navigation.navigate('HomeScreen', {
-            email : email,
-            name : user,
-            password : password
-        });
-    };
+    const newUserDB = async () => {
+        try {
+            const data = {
+                user,
+                email,
+                password
+            }
+
+            const response = await fetch("http://192.168.16.247:3000/api/newUser", {
+                method: "POST",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+    
+            const result = await response.json();
+            console.log("result", result)
+            navigation.navigate(result.navigation, {
+                name: result.user,
+                email: result.email,
+                password: result.password
+            })
+            
+        } catch (error) {
+            console.error("Error in newUserDB (/api/newUser)", error.message);
+        }
+    }
 
     useEffect(()=>{
         navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
@@ -61,7 +87,7 @@ export default Login = ({navigation}) =>{
                 }}
                 secureTextEntry={true}
             ></TextInput>
-            <TouchableOpacity onPress={handleRegister}>
+            <TouchableOpacity onPress={() => newUserDB()}>
                 <Text style={styles.btnRegister}>
                     Registrarse
                 </Text>

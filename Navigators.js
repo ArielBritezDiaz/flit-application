@@ -117,7 +117,7 @@ const TabNavigation = () =>{
     return(
         <Tab.Navigator
             screenOptions={{
-                initialRouteName: 'Home',
+                initialRouteName: 'Register',
                 tabBarActiveTintColor: '#f5f5fa', 
                 tabBarInactiveTintColor: '#0f0c0c',
                 headerShown: false,
