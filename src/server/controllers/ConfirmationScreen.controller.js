@@ -1,4 +1,5 @@
 import { pool } from '../../../db.js'
+import nodemailer from 'nodemailer';
 
 export const getHome = async (req, res) => {
     try {
@@ -80,14 +81,39 @@ export const postNewUser = async (req, res) => {
     try {
         console.log(req.body)
 
-        const {user, email, password} = req.body
+        const {user, email, password, token} = req.body
 
-        res.status(200).send({
-            user,
-            email,
-            password,
-            navigation: "HomeScreen"
-        })
+        const transporter = nodemailer.createTransport({
+            host: '192.168.1.50',
+            port: 25,
+            secure: false,
+            auth: {
+              user: 'Administrator@192.168.1.50',
+              pass: 'TomyTomaco2013',
+            },
+          });
+
+        const mailOptions = {
+            from: "arielbritezdiaz@gmail.com",
+            to: "arielbritex@gmail.com",
+            subject: "Validación de correo electrónico",
+            text: "Tu token de validación es " + token
+        }
+
+        try {
+            await transporter.sendMail(mailOptions);
+            res.status(200).send({
+                user,
+                email,
+                password,
+                navigation: "HomeScreen"
+            })
+        } catch(error) {
+            console.error("Error al enviar el correo electrónico", error)
+            res.status(500).json({error})
+        }
+
+        
     } catch(error) {
         return res.status(500).json({
             "message": "Internal server error"

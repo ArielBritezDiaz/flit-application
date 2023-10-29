@@ -16,8 +16,7 @@ export default Home = ({route}) => {
 
     const [showAmount, setShowAmount] = useState(true);
 
-    const user = route.params?.name || "";
-    const password = route.params?.password || "";
+    const user = route.params?.user || "";
 
     const navigation = useNavigation();
 
@@ -41,7 +40,7 @@ export default Home = ({route}) => {
 
     const getDataDB = async () => {
         try {
-            const response = await fetch("http://192.168.16.247:3000/api/Home", {
+            const response = await fetch("http://192.168.1.50:3000/api/Home", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -83,7 +82,7 @@ export default Home = ({route}) => {
                 </View>
                 <View style={styles.informationProfileSection}>
                     <Text style={styles.nameProfileSection}>
-                        Ariel Díaz
+                        {user}
                     </Text>
                 </View>
                 <View>
@@ -138,7 +137,7 @@ const styles = StyleSheet.create ({
     profileSection: {
         height: 45,
         width: "90%",
-        marginTop: 20,
+        marginTop: 30,
         backgroundColor: "#D39F00",
         flexDirection: "row",
         borderTopStartRadius: 5,
@@ -182,7 +181,7 @@ const styles = StyleSheet.create ({
         borderBottomRightRadius: 25,
     },
     totalTxt:{
-        color: '#2F2F2F',
+        color: '#0f0c0c',
         fontWeight: "bold",
         fontSize: 20,
         textTransform: 'uppercase'

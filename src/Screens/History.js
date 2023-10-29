@@ -21,7 +21,7 @@ export default History = ({route}) => {
 
     const getDataHistoryDB = async () => {
         try {
-            const response = await fetch("http://192.168.16.247:3000/api/History", {
+            const response = await fetch("http://192.168.1.50:3000/api/History", {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'

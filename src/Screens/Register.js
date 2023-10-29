@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView} from 'react-native';
 import { useState, useEffect } from 'react';
 import { useNavigation } from "@react-navigation/native";
+import { API_KEY, API_URL, EXPO_IP_HOST, EXPO_PORT } from "@env";
+import hat from 'hat';
 
 export default Register = () =>{
     const [user,setUser] = useState("");
@@ -9,33 +11,57 @@ export default Register = () =>{
     const [password, setPassword] = useState("");
     const navigation = useNavigation();
 
-    const newUserDB = async () => {
+    const apiKey = API_KEY;
+    const apiUrl = API_URL;
+
+    const newUserDB = async (email) => {
         try {
-            const data = {
-                user,
-                email,
-                password
-            }
+            const validationEmail = async (email) => {
+                try {
+                    const token = hat()
+                    console.log("token", token)
 
-            const response = await fetch("http://192.168.16.247:3000/api/newUser", {
-                method: "POST",
-                headers: {
-                    'Content-Type': "application/json"
-                },
-                body: JSON.stringify(data)
-            })
+                    const data = {
+                        user,
+                        email,
+                        password,
+                        token
+                    }
 
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
+                    // const response = await fetch(apiUrl + "?api_key=" + apiKey + "&email=" + email, {
+                    //     method: "GET"
+                    // })
+                    // const dataValidation = await response.json()
+                    // console.log("dataValidation", dataValidation)
+                    
+                    // if (dataValidation && dataValidation.is_valid_format.value === true && dataValidation.is_smtp_valid.value === true) {
+                        const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/newUser`, {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': "application/json"
+                            },
+                            body: JSON.stringify(data)
+                        })
+
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                
+                        const result = await response.json();
+                        // console.log("result", result)
+                        navigation.navigate(result.navigation, {
+                            user: result.user,
+                            email: result.email,
+                            password: result.password
+                        })
+                    // } else {
+                    //     throw new Error("Error en dataValidation")
+                    // }
+                } catch(error) {
+                    console.log(error)
+                }
             }
-    
-            const result = await response.json();
-            console.log("result", result)
-            navigation.navigate(result.navigation, {
-                name: result.user,
-                email: result.email,
-                password: result.password
-            })
+            validationEmail(email)
             
         } catch (error) {
             console.error("Error in newUserDB (/api/newUser)", error.message);
@@ -87,7 +113,9 @@ export default Register = () =>{
                 }}
                 secureTextEntry={true}
             ></TextInput>
-            <TouchableOpacity onPress={() => newUserDB()}>
+            <TouchableOpacity onPress={() => {
+                newUserDB(email)
+            }}>
                 <Text style={styles.btnRegister}>
                     Registrarse
                 </Text>

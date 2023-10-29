@@ -57,7 +57,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             imageValues
         }
 
-        fetch("http://192.168.16.247:3000/api/ConfirmationScreen", {
+        fetch("http://192.168.1.50:3000/api/ConfirmationScreen", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
