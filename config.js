@@ -13,3 +13,6 @@ export const EXPO_PORT = process.env.EXPO_PORT;
 
 export const API_KEY = process.env.API_KEY;
 export const API_URL = process.env.API_URL;
+
+export const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY;
+export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;

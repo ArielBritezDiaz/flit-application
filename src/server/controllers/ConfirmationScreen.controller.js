@@ -1,5 +1,7 @@
 import { pool } from '../../../db.js'
 import nodemailer from 'nodemailer';
+import aws from 'aws-sdk';
+import { AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY } from '../../../config.js';
 
 export const getHome = async (req, res) => {
     try {
@@ -83,35 +85,82 @@ export const postNewUser = async (req, res) => {
 
         const {user, email, password, token} = req.body
 
-        const transporter = nodemailer.createTransport({
-            host: '192.168.1.50',
-            port: 25,
-            secure: false,
-            auth: {
-              user: 'Administrator@192.168.1.50',
-              pass: 'TomyTomaco2013',
+        
+        const { config, SES } = aws;
+
+        console.log(AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY)
+
+        config.update({
+            credentials: {
+                accessKeyId: AWS_ACCESS_KEY,
+                secretAccessKey: AWS_SECRET_ACCESS_KEY,
             },
-          });
+            region: 'sa-east-1',
+        });
 
-        const mailOptions = {
-            from: "arielbritezdiaz@gmail.com",
-            to: "arielbritex@gmail.com",
-            subject: "Validación de correo electrónico",
-            text: "Tu token de validación es " + token
+        const ses = new SES({ apiVersion: '2010-12-01' });
+
+        const params = {
+            Destination: {
+                ToAddresses: ["arielbritezdiaz@gmail.com"]
+            },
+            Message: {
+                Body: {
+                    Text: {
+                        Data: "Cuerpo del mensaje de ejemplo"
+                    }
+                },
+                Subject: {
+                    Data: "Asunto de ejemplo"
+                }
+            },
+            Source: "arielbritezdiaz@gmail.com"
         }
 
-        try {
-            await transporter.sendMail(mailOptions);
-            res.status(200).send({
-                user,
-                email,
-                password,
-                navigation: "HomeScreen"
-            })
-        } catch(error) {
-            console.error("Error al enviar el correo electrónico", error)
-            res.status(500).json({error})
-        }
+        ses.sendEmail(params, (error, data) => {
+            if(error) {
+                console.log("Error al enviar mail", error)
+            } else {
+                console.log("Correo enviado con éxito", data)
+            }
+        })
+
+        res.status(200).send({
+            user,
+            email,
+            password,
+            navigation: "HomeScreen"
+        })
+
+        // const transporter = nodemailer.createTransport({
+        //     host: '192.168.1.50',
+        //     port: 25,
+        //     secure: false,
+        //     auth: {
+        //       user: 'Administrator@192.168.1.50',
+        //       pass: 'TomyTomaco2013',
+        //     },
+        //   });
+
+        // const mailOptions = {
+        //     from: "arielbritezdiaz@gmail.com",
+        //     to: "arielbritex@gmail.com",
+        //     subject: "Validación de correo electrónico",
+        //     text: "Tu token de validación es " + token
+        // }
+
+        // try {
+        //     await transporter.sendMail(mailOptions);
+        //     res.status(200).send({
+        //         user,
+        //         email,
+        //         password,
+        //         navigation: "HomeScreen"
+        //     })
+        // } catch(error) {
+        //     console.error("Error al enviar el correo electrónico", error)
+        //     res.status(500).json({error})
+        // }
 
         
     } catch(error) {

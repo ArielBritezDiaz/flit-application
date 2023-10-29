@@ -35,25 +35,24 @@ export default Register = () =>{
                     // console.log("dataValidation", dataValidation)
                     
                     // if (dataValidation && dataValidation.is_valid_format.value === true && dataValidation.is_smtp_valid.value === true) {
-                        const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/newUser`, {
+                        const response = await fetch(`http://192.168.16.247:3000/api/newUser`, {
                             method: "POST",
                             headers: {
-                                'Content-Type': "application/json"
+                            'Content-Type': "application/json"
                             },
                             body: JSON.stringify(data)
-                        })
+                        });
 
                         if (!response.ok) {
-                            throw new Error("Network response was not ok");
+                            throw new Error("La respuesta de la red no fue satisfactoria");
                         }
                 
                         const result = await response.json();
-                        // console.log("result", result)
-                        navigation.navigate(result.navigation, {
-                            user: result.user,
-                            email: result.email,
-                            password: result.password
-                        })
+                                navigation.navigate(result.navigation, {
+                                user: result.user,
+                                email: result.email,
+                                password: result.password
+                            });
                     // } else {
                     //     throw new Error("Error en dataValidation")
                     // }

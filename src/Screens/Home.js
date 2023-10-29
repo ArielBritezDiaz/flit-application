@@ -11,6 +11,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import AutralianSymbol from '../resources/icons/norfolk-island-australian-dolar-svgrepo-com.svg';
 import ConfigurationSymbol from '../resources/icons/data-explorationenvironment-configuration-svgrepo-com.svg';
 
+import { EXPO_IP_HOST, EXPO_PORT } from '@env';
+
 export default Home = ({route}) => {
     const [amountValue, setAmountValue] = useState (null);
 
@@ -40,7 +42,7 @@ export default Home = ({route}) => {
 
     const getDataDB = async () => {
         try {
-            const response = await fetch("http://192.168.1.50:3000/api/Home", {
+            const response = await fetch(`http://192.168.16.247:3000/api/Home`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
