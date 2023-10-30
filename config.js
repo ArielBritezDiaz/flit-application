@@ -16,3 +16,6 @@ export const API_URL = process.env.API_URL;
 
 export const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY;
 export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+
+export const GMAIL_APPS_USER = process.env.GMAIL_APPS_USER;
+export const GMAIL_APPS_PASSW = process.env.GMAIL_APPS_PASSW;

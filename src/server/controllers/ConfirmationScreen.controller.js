@@ -1,9 +1,6 @@
 import { pool } from '../../../db.js'
 import nodemailer from 'nodemailer';
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-import { AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY } from '../../../config.js';
-import 'aws-sdk/lib/maintenance_mode_message.js';
-import aws from 'aws-sdk'
+import { GMAIL_APPS_PASSW, GMAIL_APPS_USER } from '../../../config.js'
 
 export const getHome = async (req, res) => {
     try {
@@ -85,51 +82,35 @@ export const postNewUser = async (req, res) => {
     try {
 
         const { user, email, password, token } = req.body
-        console.log(req.body)
-
-        console.log("Hi")
-        const { config, SES } = aws;
-       
-        config.update({
-            credentials: {
-                accessKeyId: AWS_ACCESS_KEY,
-                secretAccessKey: AWS_SECRET_ACCESS_KEY,
-            },
-            region: 'us-east-1'
+        
+        let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: GMAIL_APPS_USER,
+                pass: GMAIL_APPS_PASSW
+            }
         });
 
-        const ses = new SES({ apiVersion: '2010-12-01' });
-
-        const params = {
-            Destination: {
-                ToAddresses: ["arielbritezdiazworkeven@gmail.com"]
-            },
-            Message: {
-                Body: {
-                    Html: {
-                        Data: `
-                            <div style="padding: 15px; border: 1px solid #f5f5fa; border-radius: 5px; background-color: #0f0c0c;">
-                                <p style="font-size: 16px; color: #f5f5fa;">Su token de verificación para <span style="color: #D39F00">Flit</span> es:</p>
-                                <div style="margin-top: 10px; padding: 10px; background-color: #2f2f2f; border-radius: 5px;">
-                                    <p style="font-size: 18px; color: #D39F00; margin: 0;">${token}</p>
-                                </div>
-                            </div>
-                        `
-                    }
-                },
-                Subject: {
-                    Data: "Código de verificación de correo electrónico en Flit"
-                }
-            },
-            Source: "arielbritezdiaz@gmail.com"
+        let mailOptions = {
+            from: GMAIL_APPS_USER,
+            to: email,
+            subject: 'Código de verificación de correo electrónico en Flit',
+            html: `
+                    <div style="padding: 15px; border: 1px solid #f5f5fa;border-radius: 5px; background-color: #0f0c0c;">
+                        <p style="font-size: 16px; color: #f5f5fa;">Su token de verificación para <span style="color: #D39F00">Flit</span> es:</p>
+                        <div style="margin-top: 10px; padding: 10px; background-color: #2f2f2f; border-radius: 5px;">
+                            <p style="font-size: 18px; color: #D39F00; margin: 0;">${token}</p>
+                        </div>
+                    </div>
+                `
         };
-        
-        ses.sendEmail(params, (error, data) => {
-            if(error) {
-                console.log("Error al enviar el correo electrónico", error);
-                return res.status(500).json({ message: "Error al enviar el correo electrónico" });
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log("Error en el envío del correo electrónico", error);
+                return res.status(500).json({ message: "Error en el envío del correo electrónico" });
             } else {
-                console.log("Correo electrónico enviado con éxito", data);
+                console.log('Correo electrónico enviado: ' + info.response);
                 return res.status(200).send({
                     user,
                     email,
