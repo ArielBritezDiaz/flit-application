@@ -42,7 +42,7 @@ export default Home = ({route}) => {
 
     const getDataDB = async () => {
         try {
-            const response = await fetch(`http://192.168.16.247:3000/api/Home`, {
+            const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/Home`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
