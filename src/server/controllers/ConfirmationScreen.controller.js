@@ -3,6 +3,7 @@ import nodemailer from 'nodemailer';
 import { GMAIL_APPS_PASSW, GMAIL_APPS_USER } from '../../../config.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
+import bcrypt from 'bcrypt'
 
 export const getHome = async (req, res) => {
     try {
@@ -89,6 +90,19 @@ export const postSendEmail = async (req, res) => {
         const __dirname = path.dirname(__filename);
 
         const assetsPath = path.join(__dirname, '../../assets/');
+
+        const saltTimes = 10
+
+        const hashedPassword = await new Promise((resolve, reject) => {
+            bcrypt.genSalt(saltTimes, (err, salt) => {
+                bcrypt.hash(password, salt, (err, hash) => {
+                    if (err) reject(err);
+                    resolve(hash);
+                })
+            })
+        })
+
+        // console.log("Hashing password", hashedPassword);
         
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -129,17 +143,24 @@ export const postSendEmail = async (req, res) => {
                   }]
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
+        transporter.sendMail(mailOptions, async (error, info) => {
             if (error) {
                 console.log("Error en el envío del correo electrónico", error);
                 return res.status(500).json({ message: "Error en el envío del correo electrónico" });
             } else {
+
+                const isValidToken = false
+
+                const [ rows ] = await pool.query("INSERT INTO User(user, email, passw, token, isValidToken) VALUES (?, ?, ?, ?, ?)", [user, email, hashedPassword, token, isValidToken])
+
+                console.log("rows", rows)
+
                 console.log('Correo electrónico enviado: ' + info.response);
                 res.send({
                     data: {
                         user,
                         email,
-                        password,
+                        hashedPassword,
                         token
                     }
                 })
@@ -154,8 +175,16 @@ export const postSendEmail = async (req, res) => {
 
 export const postNewUser = async (req, res) => {
     try {
+        const { user, email, password, token, hashedPassword } = req.body
+        console.log("postNewUser", req.body)
 
-        const { user, email, password, token } = req.body
+        const [ validationUser ] = await pool.query("SELECT user, email, passw, token FROM User WHERE email = ?", [email])
+
+        console.log(validationUser)
+
+        const isValidToken = true
+
+        const [ rows ] = await pool.query("UPDATE User SET user = ?, email = ?, passw = ?, token = ?, isValidToken = ? WHERE email = ?", [user, email, hashedPassword, token, isValidToken, email])
 
         console.log(req.body)
         console.log("Llega a postNewUser")
@@ -164,6 +193,7 @@ export const postNewUser = async (req, res) => {
             user,
             email,
             password,
+            isValidToken,
             navigation: "HomeScreen"
         });
         

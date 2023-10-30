@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView} from 'react-native';
 import { useState, useEffect } from 'react';
 import { useNavigation } from "@react-navigation/native";
-import { API_KEY, API_URL, EXPO_IP_HOST, EXPO_PORT } from "@env";
+import { EXPO_IP_HOST, EXPO_PORT } from "@env";
 import hat from 'hat';
 
 export default Register = () =>{
@@ -71,6 +71,8 @@ export default Register = () =>{
                 
                     const result = await response.json();
                     setDataComplete(true);
+                    const hashedPassword = result.hashedPassword
+                    setPassword(hashedPassword)
                     console.log("result of sendEmail", result);
                 } catch (error) {
                     console.error("Error in sendData", error.message);
@@ -89,11 +91,13 @@ export default Register = () =>{
             const validationEmail = async (user, email, password, token) => {
                 try {
                     
+                    console.log(password)
+
                     const validationEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-                    console.log("dataUseState", { user, email, password, token });
-
-                    console.log("dataUseState", data)
+                    console.log("data", data)
+                    console.log("tokenInput", tokenInput)
+                    console.log("token", token)
 
                     if (data.user.length >= 4 && validationEmail.test(data.email) && data.password.length >= 8 && tokenInput === data.token) {
                         const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/newUser`, {
@@ -101,7 +105,7 @@ export default Register = () =>{
                             headers: {
                                 'Content-Type': "application/json"
                             },
-                            body: JSON.stringify(data)
+                            body: JSON.stringify({ user, email, password: password, token })
                         });
     
                         if (!response.ok) {
@@ -109,6 +113,7 @@ export default Register = () =>{
                         }
     
                         const result = await response.json();
+                        console.log("result de newUserDB", result)
     
                         navigation.navigate(result.navigation, {
                             user: result.user,
@@ -262,7 +267,9 @@ const styles = StyleSheet.create ({
         paddingVertical:5,
         fontSize:15,
         color:"#f5f5fa",
-        marginTop: 15
+        marginTop: 15,
+        paddingVertical: 7,
+        paddingHorizontal: 10
     },
     btnRegister:{
         marginTop:40,

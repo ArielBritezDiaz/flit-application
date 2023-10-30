@@ -14,6 +14,7 @@ import ConfigurationSymbol from '../resources/icons/data-explorationenvironment-
 import { EXPO_IP_HOST, EXPO_PORT } from '@env';
 
 export default Home = ({route}) => {
+    console.log(route.params)
     const [amountValue, setAmountValue] = useState (null);
 
     const [showAmount, setShowAmount] = useState(true);

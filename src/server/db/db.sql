@@ -134,10 +134,11 @@ USE flit_db;
 /* Creation tables */
 CREATE TABLE User(
     id_user INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(20) NOT NULL,
+    user VARCHAR(20) NOT NULL,
     email VARCHAR(100) NOT NULL,
     passw VARCHAR(255) NOT NULL,
-    profile_picture VARCHAR(255) NOT NULL
+    token VARCHAR(255) NOT NULL,
+    isValidToken BOOLEAN NOT NULL
 );
 
 CREATE TABLE MoneyRegistry(

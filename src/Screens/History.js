@@ -132,24 +132,24 @@ export default History = ({route}) => {
                                     visible={modalDateVisible}
                                     onRequestClose={() => setModalDateVisible(!modalDateVisible)}
                                 >
-                                <View style={styles.centeredView}>
-                                    <View style={styles.modalView}>
-                                        <Text style={styles.dateInput}>
-                                        {
-                                            `${selectedDate
-                                            .replaceAll('-', '/')
-                                            .replaceAll('T', ' ')
-                                            .slice(0, -8)}`
-                                        }
-                                        </Text>
-                                        <TouchableOpacity onPress={() => setModalDateVisible(false)}>
-                                            <Text style={styles.btnHide}>
-                                                Salir
+                                    <View style={styles.centeredView}>
+                                        <View style={styles.modalView}>
+                                            <Text style={styles.dateInput}>
+                                            {
+                                                `${selectedDate
+                                                .replaceAll('-', '/')
+                                                .replaceAll('T', ' ')
+                                                .slice(0, -8)}`
+                                            }
                                             </Text>
-                                        </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => setModalDateVisible(false)}>
+                                                <Text style={styles.btnHide}>
+                                                    Salir
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                </View>
-                            </Modal>
+                                </Modal>
                             <TouchableOpacity onPress={() => {
                                 setSelectedDate(item.date);
                                 setModalDateVisible(true);
