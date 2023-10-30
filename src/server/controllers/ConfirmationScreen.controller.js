@@ -1,6 +1,8 @@
 import { pool } from '../../../db.js'
 import nodemailer from 'nodemailer';
 import { GMAIL_APPS_PASSW, GMAIL_APPS_USER } from '../../../config.js'
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 export const getHome = async (req, res) => {
     try {
@@ -78,12 +80,17 @@ export const getHistory = async (req, res) => {
     }
 }
 
-export const postNewUser = async (req, res) => {
+export const postSendEmail = async (req, res) => {
     try {
-
         const { user, email, password, token } = req.body
+        console.log(req.body)
+
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+
+        const assetsPath = path.join(__dirname, '../../assets/');
         
-        let transporter = nodemailer.createTransport({
+        const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: GMAIL_APPS_USER,
@@ -91,18 +98,35 @@ export const postNewUser = async (req, res) => {
             }
         });
 
-        let mailOptions = {
+        const mailOptions = {
             from: GMAIL_APPS_USER,
             to: email,
-            subject: 'Código de verificación de correo electrónico en Flit',
+            subject: 'Flit - Código de verificación',
             html: `
-                    <div style="padding: 15px; border: 1px solid #f5f5fa;border-radius: 5px; background-color: #0f0c0c;">
-                        <p style="font-size: 16px; color: #f5f5fa;">Su token de verificación para <span style="color: #D39F00">Flit</span> es:</p>
-                        <div style="margin-top: 10px; padding: 10px; background-color: #2f2f2f; border-radius: 5px;">
-                            <p style="font-size: 18px; color: #D39F00; margin: 0;">${token}</p>
-                        </div>
-                    </div>
-                `
+                    <table style="width:100%; max-width:600px; margin:auto; font-family: Arial, sans-serif; background-color: #2f2f2f;border: 1px solid #f5f5fa; border-radius: 5px; margin-top: 20px;">
+                        <tr>
+                            <td style="text-align:center; padding: 20px 0;">
+                                <img src="cid:logo" style="width: 100px; height: 100px;" alt="Logo">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center; padding: 20px;">
+                                <div style="padding: 15px; border: 1px solid #f5f5fa;border-radius: 5px; background-color: #0f0c0c;">
+                                    <p style="font-size: 16px; color: #f5f5fa;">Su código de verificación para <span style="color: #D39F00">Flit</span> es:</p>
+                                    
+                                    <div style="margin-top: 10px; padding: 10px; background-color: #2f2f2f; border-radius: 5px;">
+                                        <p style="font-size: 18px; color: #D39F00; margin: 0;">${token}</p>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                `,
+                attachments: [{
+                    filename: 'logo.png',
+                    path: `${assetsPath}logo.png`,
+                    cid: 'logo'
+                  }]
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
@@ -111,14 +135,38 @@ export const postNewUser = async (req, res) => {
                 return res.status(500).json({ message: "Error en el envío del correo electrónico" });
             } else {
                 console.log('Correo electrónico enviado: ' + info.response);
-                return res.status(200).send({
-                    user,
-                    email,
-                    password,
-                    navigation: "HomeScreen"
-                });
+                res.send({
+                    data: {
+                        user,
+                        email,
+                        password,
+                        token
+                    }
+                })
             }
         });
+    } catch(error) {
+        res.status(500).json({
+            "message": "Internal server error: " + error
+        })
+    }
+}
+
+export const postNewUser = async (req, res) => {
+    try {
+
+        const { user, email, password, token } = req.body
+
+        console.log(req.body)
+        console.log("Llega a postNewUser")
+
+        return res.status(200).send({
+            user,
+            email,
+            password,
+            navigation: "HomeScreen"
+        });
+        
         
     } catch(error) {
         console.error("Error en el envío del correo electrónico", error);

@@ -9,31 +9,93 @@ export default Register = () =>{
     const [user,setUser] = useState("");
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("");
+    const [token, setToken] = useState("");
+
+    //Block fields
+    const [userBlock, setUserBlock] = useState("");
+    const [emailBlock, setEmailBlock] = useState("");
+    const [passwordBlock, setPasswordBlock] = useState("");
+
+    const [data, setData] = useState({ user: "", email: "", password: "", token: "" });
+
+    const [editableFields, setEditableFields] = useState(true);
+
+    const [tokenInput, setTokenInput] = useState("")
 
     const [tokenFocus, setTokenFocus] = useState(false);
 
+    const [dataComplete, setDataComplete] = useState(false);
+
     const navigation = useNavigation();
 
-    const newUserDB = async (email) => {
+    const sendDataComplete = async (user, email, password) => {
         try {
-            const validationEmail = async (email) => {
+            const validationEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+            const isEmailValid = (email) => {
+                return validationEmail.test(email);
+              };
+
+            const isValid = isEmailValid(email);
+            console.log("isValid", isValid);
+
+            const temporalToken = hat();
+
+            console.log(user, email, password)
+
+            if(user.length >= 4 && isValid === true && password.length >= 8) {
+
+                const newData = {
+                    user,
+                    email,
+                    password,
+                    token: temporalToken
+                };
+
+                setData(newData);
+                setEditableFields(false);
+                
+                console.log("newData", newData)
                 try {
-                    const token = hat()
-
-                    const data = {
-                        user,
-                        email,
-                        password,
-                        token
+                    const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/sendEmail`, {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newData)
+                    });
+                
+                    if (!response.ok) {
+                        throw new Error("La respuesta de la red no fue satisfactoria");
                     }
+                
+                    const result = await response.json();
+                    setDataComplete(true);
+                    console.log("result of sendEmail", result);
+                } catch (error) {
+                    console.error("Error in sendData", error.message);
+                }
+                
+            } else{
+                console.log("Datos faltantes")
+            }
+        } catch(error) {
+            console.error("error", error)
+        }
+    }
 
-                    // const response = await fetch(apiUrl + "?api_key=" + apiKey + "&email=" + email, {
-                    //     method: "GET"
-                    // })
-                    // const dataValidation = await response.json()
-                    // console.log("dataValidation", dataValidation)
+    const newUserDB = async (user, email, password, token) => {
+        try {
+            const validationEmail = async (user, email, password, token) => {
+                try {
                     
-                    // if (dataValidation && dataValidation.is_valid_format.value === true && dataValidation.is_smtp_valid.value === true) {
+                    const validationEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+                    console.log("dataUseState", { user, email, password, token });
+
+                    console.log("dataUseState", data)
+
+                    if (data.user.length >= 4 && validationEmail.test(data.email) && data.password.length >= 8 && tokenInput === data.token) {
                         const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/newUser`, {
                             method: "POST",
                             headers: {
@@ -41,26 +103,26 @@ export default Register = () =>{
                             },
                             body: JSON.stringify(data)
                         });
-
+    
                         if (!response.ok) {
                             throw new Error("La respuesta de la red no fue satisfactoria");
                         }
-                        
+    
                         const result = await response.json();
-
+    
                         navigation.navigate(result.navigation, {
                             user: result.user,
                             email: result.email,
                             password: result.password
                         });
-                    // } else {
-                    //     throw new Error("Error en dataValidation")
-                    // }
+                    } else {
+                        console.log("Datos faltantes");
+                    }
                 } catch(error) {
                     console.log(error)
                 }
             }
-            validationEmail(email)
+            validationEmail(user, email, password, token)
             
         } catch (error) {
             console.error("Error in newUserDB (/api/newUser)", error.message);
@@ -68,72 +130,100 @@ export default Register = () =>{
     }
 
     useEffect(()=>{
-        navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
-        return ()=>{
-            navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
+        if (navigation && navigation.getParent()) {
+            navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}});
+            return () => {
+                navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}});
+            };
         }
-    }, [])
+    }, [navigation]);
 
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <Image source={require('../assets/logo.png')} style={styles.img}></Image>
             <TextInput
-                style={styles.input}
+                style={[styles.input, !editableFields && styles.disabledInput]}
                 placeholder="Usuario"
                 name="user"
                 keyboardType="default"
                 cursorColor={'#D39F00'}
                 placeholderTextColor={"#D39F00"}
+                value={userBlock}
                 onChangeText={user => {
                     setUser(user)
+                    setUserBlock(user)
                 }}
+                editable={editableFields}
             ></TextInput>
             <TextInput
-                style={styles.input}
+                style={[styles.input, !editableFields && styles.disabledInput]}
                 placeholder="Correo electrónico"
                 name="email"
                 keyboardType="email-address"
                 cursorColor={'#D39F00'}
                 placeholderTextColor={"#D39F00"}
+                value={emailBlock}
                 onChangeText={email => {
                     setEmail(email)
+                    setEmailBlock(email)
                 }}
+                editable={editableFields}
             ></TextInput>
             <TextInput
-                style={styles.input}
+                style={[styles.input, !editableFields && styles.disabledInput]}
                 name="password"
                 placeholder="Contraseña"
                 keyboardType="default"
                 cursorColor={'#D39F00'}
                 placeholderTextColor={"#D39F00"}
+                value={passwordBlock}
                 onChangeText={password => {
                     setPassword(password)
+                    setPasswordBlock(password)
                 }}
                 secureTextEntry={true}
+                editable={editableFields}
             ></TextInput>
 
-            <TextInput
-                style={styles.token}
-                name="token"
-                placeholder={tokenFocus ? "" : "Token de verificación"}
-                keyboardType="ascii-capable"
-                cursorColor={"#D39F00"}
-                placeholderTextColor={"#f5f5fa"}
-                textAlign="center"
-                textAlignVertical="center"
-                onFocus={() => setTokenFocus(true)}
-                onBlur={() => setTokenFocus(false)}
-            >
-            </TextInput>
+            {
+                dataComplete === true
+                ?
+                    <TextInput
+                        style={styles.token}
+                        name="token"
+                        placeholder={tokenFocus ? "" : "Token de verificación"}
+                        keyboardType="ascii-capable"
+                        cursorColor={"#D39F00"}
+                        placeholderTextColor={"#f5f5fa"}
+                        textAlign="center"
+                        textAlignVertical="center"
+                        onFocus={() => setTokenFocus(true)}
+                        onBlur={() => setTokenFocus(false)}
+                        onChangeText={token => {
+                            setTokenInput(token);
+                        }}
+                    >
+                    </TextInput>
+                :
+                    console.log()
+            }
 
-            <TouchableOpacity onPress={() => {
-                newUserDB(email)
-            }}>
-                <Text style={styles.btnRegister}>
-                    Registrarse
-                </Text>
-            </TouchableOpacity>
+            {
+                dataComplete === false
+                ?
+                    <TouchableOpacity onPress={() => { sendDataComplete(user, email, password) }}>
+                        <Text style={styles.btnRegister}>
+                            Enviar
+                        </Text>
+                    </TouchableOpacity>
+                :
+                <TouchableOpacity onPress={() => { newUserDB(user, email, password, token) }}>
+                    <Text style={styles.btnRegister}>
+                        Registrarse
+                    </Text>
+                </TouchableOpacity>
+            }
         </ScrollView>
     )
 }
@@ -159,6 +249,10 @@ const styles = StyleSheet.create ({
         paddingHorizontal: 20,
         fontSize:18,
         color:"#f5f5fa"
+    },
+    disabledInput: {
+        backgroundColor: '#5C5C5C',
+        color: '#9B9B9B'
     },
     token: {
         backgroundColor: "#212121",
