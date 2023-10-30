@@ -9,6 +9,9 @@ export default Register = () =>{
     const [user,setUser] = useState("");
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("");
+
+    const [tokenFocus, setTokenFocus] = useState(false);
+
     const navigation = useNavigation();
 
     const newUserDB = async (email) => {
@@ -16,7 +19,6 @@ export default Register = () =>{
             const validationEmail = async (email) => {
                 try {
                     const token = hat()
-                    console.log("token", token)
 
                     const data = {
                         user,
@@ -32,21 +34,19 @@ export default Register = () =>{
                     // console.log("dataValidation", dataValidation)
                     
                     // if (dataValidation && dataValidation.is_valid_format.value === true && dataValidation.is_smtp_valid.value === true) {
-                        const response = await fetch(`http://192.168.1.50:3000/api/newUser`, {
+                        const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/newUser`, {
                             method: "POST",
                             headers: {
                                 'Content-Type': "application/json"
                             },
                             body: JSON.stringify(data)
                         });
-                        console.log(response)
 
                         if (!response.ok) {
                             throw new Error("La respuesta de la red no fue satisfactoria");
                         }
                         
                         const result = await response.json();
-                        console.log(result)
 
                         navigation.navigate(result.navigation, {
                             user: result.user,
@@ -85,19 +85,19 @@ export default Register = () =>{
                 keyboardType="default"
                 cursorColor={'#D39F00'}
                 placeholderTextColor={"#D39F00"}
-                onChangeText={txt => {
-                    setUser(txt)
+                onChangeText={user => {
+                    setUser(user)
                 }}
             ></TextInput>
             <TextInput
                 style={styles.input}
                 placeholder="Correo electrónico"
                 name="email"
-                keyboardType="default"
+                keyboardType="email-address"
                 cursorColor={'#D39F00'}
                 placeholderTextColor={"#D39F00"}
-                onChangeText={txt => {
-                    setEmail(txt)
+                onChangeText={email => {
+                    setEmail(email)
                 }}
             ></TextInput>
             <TextInput
@@ -107,11 +107,26 @@ export default Register = () =>{
                 keyboardType="default"
                 cursorColor={'#D39F00'}
                 placeholderTextColor={"#D39F00"}
-                onChangeText={txt => {
-                    setPassword(txt)
+                onChangeText={password => {
+                    setPassword(password)
                 }}
                 secureTextEntry={true}
             ></TextInput>
+
+            <TextInput
+                style={styles.token}
+                name="token"
+                placeholder={tokenFocus ? "" : "Token de verificación"}
+                keyboardType="ascii-capable"
+                cursorColor={"#D39F00"}
+                placeholderTextColor={"#f5f5fa"}
+                textAlign="center"
+                textAlignVertical="center"
+                onFocus={() => setTokenFocus(true)}
+                onBlur={() => setTokenFocus(false)}
+            >
+            </TextInput>
+
             <TouchableOpacity onPress={() => {
                 newUserDB(email)
             }}>
@@ -135,7 +150,7 @@ const styles = StyleSheet.create ({
         marginVertical: 70
     },
     input:{
-        marginVertical: 23,
+        marginVertical: 17,
         width:"70%",
         borderWidth: 3,
         borderRadius: 10,
@@ -144,6 +159,16 @@ const styles = StyleSheet.create ({
         paddingHorizontal: 20,
         fontSize:18,
         color:"#f5f5fa"
+    },
+    token: {
+        backgroundColor: "#212121",
+        width: "60%",
+        borderWidth: 3,
+        borderColor: '#D39F00',
+        paddingVertical:5,
+        fontSize:15,
+        color:"#f5f5fa",
+        marginTop: 15
     },
     btnRegister:{
         marginTop:40,
