@@ -18,9 +18,9 @@ console.log(assetsPath)
 app.use(json());
 app.use(express.static(path.join(__dirname, '/../../assets')));
 
-app.get('/api/Home', getHome)
+app.get('/api/Home/:id_user', getHome)
 
-app.post('/api/ConfirmationScreen', postConfirmationScreen);
+app.post('/api/ConfirmationScreen/:id_user', postConfirmationScreen);
 
 app.get('/api/History', getHistory);
 

@@ -12,6 +12,8 @@ export default Expense = ({route, navigation}) => {
 
     const initialPrice = route.params.amountValue;
     const updatePrice = route.params.updatePrice;
+    const id_user = route.params.id_user;
+    console.log("id_user from Expense.js", id_user)
 
     const [selectedAmount, setSelectedAmount] = useState('')
 
@@ -22,7 +24,7 @@ export default Expense = ({route, navigation}) => {
         if(amount == 0) {
             console.log("error")
         } else {
-            navigation.navigate('SelectCategories', {price : newValue, amo : amount, gain_expense: "expense"})
+            navigation.navigate('SelectCategories', {price : newValue, amo : amount, gain_expense: "expense", id_user})
         }
     }
 

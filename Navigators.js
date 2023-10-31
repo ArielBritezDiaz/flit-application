@@ -23,6 +23,7 @@ import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
 import Profile from "./src/Screens/Profile";
 import Register from "./src/Screens/Register";
+import LogIn from './src/Screens/LogIn';
 
 const loadFonts = async () => {
     await Font.loadAsync({
@@ -36,7 +37,7 @@ const Stacks = () =>{
     return(
         <Stack.Navigator
             screenOptions={{
-                initialRouteName: 'Register',
+                initialRouteName: 'LogIn',
                 headerStyle:{
                     backgroundColor:'#2F2F2F',
                 }
@@ -45,6 +46,14 @@ const Stacks = () =>{
             <Stack.Screen
                 name="Register"
                 component={Register}
+                options={{
+                    headerShown:false,
+                }}
+            />
+
+            <Stack.Screen
+                name="LogIn"
+                component={LogIn}
                 options={{
                     headerShown:false,
                 }}
