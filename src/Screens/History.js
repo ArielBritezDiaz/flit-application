@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, View, FlatList, Text, StatusBar, Settings, Modal, TouchableOpacity } from 'react-native';
 import { SvgXml } from "react-native-svg";
+import { EXPO_IP_HOST, EXPO_PORT } from "@env";
 
 import Up from '../resources/icons/up.svg'
 import Down from '../resources/icons/down.svg'
@@ -21,7 +22,7 @@ export default History = ({route}) => {
 
     const getDataHistoryDB = async () => {
         try {
-            const response = await fetch("http://192.168.1.50:3000/api/History", {
+            const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/History`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'

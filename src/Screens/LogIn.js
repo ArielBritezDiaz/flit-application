@@ -2,26 +2,62 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView} from 'react-native';
 import { useState } from 'react';
 import { useEffect } from "react";
+import { EXPO_IP_HOST, EXPO_PORT } from '@env'
 
-export default LogIn = ({navigation}) =>{
-    const [user,setUser] = useState("");
+export default LogIn = ({navigation}) => {
+    const [emailUser, setEmailUser] = useState("")
     const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("")
 
-    const handleLogin = () => {
-        navigation.navigate('HomeScreen', {
-            email : email,
-            name : user,
-            password : password
-        });
+    const handleLogIn = async () => {
+        try {
+            const validationEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            
+            if(validationEmail.test(emailUser)) {
+
+                const data = {
+                    emailUser,
+                    password
+                }
+                
+                const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/searchUser`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+    
+                if(!response.ok) {
+                    throw new Error("Response !ok in handleLogIn")
+                }
+    
+                const result = await response.json()
+                console.log("resultLogIn", result)
+    
+                if(result.data[0].isValidToken === 1) {
+                    navigation.navigate(result.navigation, {
+                        id_user: result.data[0].id_user
+                    })
+                } else {
+                    return console.log("Usuario inexistente")
+                }
+            } else {
+                console.log("Usuario inexistente 2")
+            }
+
+        } catch(error) {
+            console.log("Error in handleLogIn", error)
+        }
+
+        // navigation.navigate('HomeScreen', {
+        //     email : email,
+        //     name : user,
+        //     password : password
+        // });
     };
 
     const handleRegister = () => {
-        navigation.navigate('Register', {
-            email : email,
-            name : user,
-            password : password
-        });
+        navigation.navigate('Register');
     };
 
     useEffect(()=>{
@@ -37,24 +73,13 @@ export default LogIn = ({navigation}) =>{
             <Image source={require('../assets/logo.png')} style={styles.img}></Image>
             <TextInput
                 style={styles.input}
-                placeholder="Usuario"
-                name="user"
-                keyboardType="default"
-                cursorColor={'#D39F00'}
-                placeholderTextColor={"#D39F00"}
-                onChangeText={txt => {
-                    setUser(txt)
-                }}
-            ></TextInput>
-            <TextInput
-                style={styles.input}
                 placeholder="Correo electrónico"
                 name="email"
-                keyboardType="default"
+                keyboardType="email-address"
                 cursorColor={'#D39F00'}
                 placeholderTextColor={"#D39F00"}
                 onChangeText={txt => {
-                    setEmail(txt)
+                    setEmailUser(txt)
                 }}
             ></TextInput>
             <TextInput
@@ -69,7 +94,7 @@ export default LogIn = ({navigation}) =>{
                 }}
                 secureTextEntry={true}
             ></TextInput>
-            <TouchableOpacity onPress={handleLogin}>
+            <TouchableOpacity onPress={handleLogIn}>
                 <Text style={styles.btnRegister}>
                     Iniciar sesión
                 </Text>

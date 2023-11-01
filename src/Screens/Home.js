@@ -14,12 +14,14 @@ import ConfigurationSymbol from '../resources/icons/data-explorationenvironment-
 import { EXPO_IP_HOST, EXPO_PORT } from '@env';
 
 export default Home = ({route}) => {
-    console.log(route.params)
+    console.log("route.params", route.params)
+
+    const id_user = route.params.id_user;
+    console.log("id_user from Home.js", id_user)
+
     const [amountValue, setAmountValue] = useState (null);
 
     const [showAmount, setShowAmount] = useState(true);
-
-    const user = route.params?.user || "";
 
     const navigation = useNavigation();
 
@@ -43,7 +45,7 @@ export default Home = ({route}) => {
 
     const getDataDB = async () => {
         try {
-            const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/Home`, {
+            const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/Home/${id_user}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -85,7 +87,7 @@ export default Home = ({route}) => {
                 </View>
                 <View style={styles.informationProfileSection}>
                     <Text style={styles.nameProfileSection}>
-                        {user}
+                        {`Ariel`}
                     </Text>
                 </View>
                 <View>
@@ -114,14 +116,14 @@ export default Home = ({route}) => {
                     <View style={styles.gain}>
                         <TouchableOpacity
                             onPress={() =>{
-                                navigation.navigate("Gain", {amountValue, updatePrice});
+                                navigation.navigate("Gain", {amountValue, updatePrice, id_user});
                             }}
                         >
                             <MaterialCommunityIcons name="cash-plus" size={40} color="#f5f5fa" />
                         </TouchableOpacity>
                     </View>
                     <View style={styles.expense}>
-                        <TouchableOpacity onPress={() => navigation.navigate("Expense", {amountValue, updatePrice})}>
+                        <TouchableOpacity onPress={() => navigation.navigate("Expense", {amountValue, updatePrice, id_user})}>
                             <MaterialCommunityIcons name="cash-minus" size={40} color="#f5f5fa" />
                         </TouchableOpacity>
                     </View>

@@ -1,20 +1,23 @@
 import { useNavigationState } from "@react-navigation/native";
 import React, { useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
+import { EXPO_IP_HOST, EXPO_PORT } from "@env";
 
 export default ConfirmationScreen = ( { route, navigation } ) => {
+    const id_user = route.params.id_user;
     const amount = route.params.amount;
     const note = route.params.note;
     const totalAmount = route.params.price;
     const image = route.params.image;
-    const hexColor = route.params.hexColor.backgroundColor
-    const nameCategory = route.params.nameCategory
-    const gain_expense = route.params.gain_expense
-    const iconNumberPosition = route.params.iconNumberPosition
+    const hexColor = route.params.hexColor.backgroundColor;
+    const nameCategory = route.params.nameCategory;
+    const gain_expense = route.params.gain_expense;
+    const iconNumberPosition = route.params.iconNumberPosition;
 
     const amountFormatted = Number(parseFloat(amount / 1).toFixed(4))
 
     console.log(`Data to BackEnd:
+        id_user: ${id_user}
         amountFormatted: ${amountFormatted}
         note: ${note}
         totalAmount: ${totalAmount}
@@ -57,7 +60,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             imageValues
         }
 
-        fetch("http://192.168.1.50:3000/api/ConfirmationScreen", {
+        fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/ConfirmationScreen/${id_user}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -65,7 +68,9 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             body: JSON.stringify(data)
         }).then(response => {
             if(response.ok) {
-                navigation.navigate("HomeScreen")
+                navigation.navigate("HomeScreen", {
+                    id_user
+                })
             } else {
                 throw new Error("Solicitud no exitosa")
             }

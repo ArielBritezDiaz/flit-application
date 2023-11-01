@@ -28,6 +28,12 @@ export default Register = () =>{
 
     const navigation = useNavigation();
 
+    const [resultSendDataComplete, setResultSendDataComplete] = useState([])
+
+    const logInOnPress = () => {
+        navigation.navigate("LogIn")
+    }
+
     const sendDataComplete = async (user, email, password) => {
         try {
             const validationEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -44,7 +50,6 @@ export default Register = () =>{
             console.log(user, email, password)
 
             if(user.length >= 4 && isValid === true && password.length >= 8) {
-
                 const newData = {
                     user,
                     email,
@@ -70,10 +75,12 @@ export default Register = () =>{
                     }
                 
                     const result = await response.json();
+                    console.log("result", result)
                     setDataComplete(true);
                     const hashedPassword = result.hashedPassword
                     setPassword(hashedPassword)
                     console.log("result of sendEmail", result);
+                    setResultSendDataComplete(result)
                 } catch (error) {
                     console.error("Error in sendData", error.message);
                 }
@@ -90,14 +97,14 @@ export default Register = () =>{
         try {
             const validationEmail = async (user, email, password, token) => {
                 try {
-                    
-                    console.log(password)
+                    console.log("resultSendDataComplete", resultSendDataComplete)
+                    console.log("password", password)
 
                     const validationEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
                     console.log("data", data)
-                    console.log("tokenInput", tokenInput)
-                    console.log("token", token)
+                    // console.log("tokenInput", tokenInput)
+                    // console.log("token", token)
 
                     if (data.user.length >= 4 && validationEmail.test(data.email) && data.password.length >= 8 && tokenInput === data.token) {
                         const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/newUser`, {
@@ -105,20 +112,18 @@ export default Register = () =>{
                             headers: {
                                 'Content-Type': "application/json"
                             },
-                            body: JSON.stringify({ user, email, password: password, token })
+                            body: JSON.stringify({ resultSendDataComplete })
                         });
     
                         if (!response.ok) {
-                            throw new Error("La respuesta de la red no fue satisfactoria");
+                            throw new Error("Response !ok in newUserDB");
                         }
     
                         const result = await response.json();
                         console.log("result de newUserDB", result)
     
                         navigation.navigate(result.navigation, {
-                            user: result.user,
-                            email: result.email,
-                            password: result.password
+                            id_user: result.id_user
                         });
                     } else {
                         console.log("Datos faltantes");
@@ -147,6 +152,12 @@ export default Register = () =>{
         <ScrollView contentContainerStyle={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <Image source={require('../assets/logo.png')} style={styles.img}></Image>
+            <View>
+                <Text style={styles.title}>
+                    Registro de <Text style={styles.nameCompany}>Flit</Text>
+                </Text>
+                
+            </View>
             <TextInput
                 style={[styles.input, !editableFields && styles.disabledInput]}
                 placeholder="Usuario"
@@ -200,7 +211,7 @@ export default Register = () =>{
                         placeholder={tokenFocus ? "" : "Token de verificación"}
                         keyboardType="ascii-capable"
                         cursorColor={"#D39F00"}
-                        placeholderTextColor={"#f5f5fa"}
+                        placeholderTextColor={"rgba(245, 245, 250, .8)"}
                         textAlign="center"
                         textAlignVertical="center"
                         onFocus={() => setTokenFocus(true)}
@@ -217,18 +228,33 @@ export default Register = () =>{
             {
                 dataComplete === false
                 ?
-                    <TouchableOpacity onPress={() => { sendDataComplete(user, email, password) }}>
+                    <>
+                        <TouchableOpacity onPress={() => { sendDataComplete(user, email, password) }}>
+                            <Text style={styles.btnRegister}>
+                                Enviar
+                            </Text>
+                        </TouchableOpacity>
+                        
+                    </>
+                :
+                <>
+                    <TouchableOpacity onPress={() => { newUserDB(user, email, password, token) }}>
                         <Text style={styles.btnRegister}>
-                            Enviar
+                            Registrarse
                         </Text>
                     </TouchableOpacity>
-                :
-                <TouchableOpacity onPress={() => { newUserDB(user, email, password, token) }}>
-                    <Text style={styles.btnRegister}>
-                        Registrarse
+                </>
+            }
+            <View style={styles.questionAccount}>
+                <Text style={styles.alreadyAccount}>
+                    ¿Ya tienes cuenta?
+                </Text>
+                <TouchableOpacity onPress={logInOnPress}>
+                    <Text style={styles.logIn}>
+                        Iniciar sesión
                     </Text>
                 </TouchableOpacity>
-            }
+            </View>
         </ScrollView>
     )
 }
@@ -242,9 +268,19 @@ const styles = StyleSheet.create ({
     img:{
         width:200,
         height: 200,
-        marginVertical: 70
+        marginTop: 50,
+        marginBottom: 30
+    },
+    title: {
+        color: "#f5f5fa",
+        fontSize: 30,
+        marginBottom: 15
+    },
+    nameCompany: {
+        color: "#D39F00",
     },
     input:{
+        backgroundColor: "#1F1B18",
         marginVertical: 17,
         width:"70%",
         borderWidth: 3,
@@ -267,12 +303,12 @@ const styles = StyleSheet.create ({
         paddingVertical:5,
         fontSize:15,
         color:"#f5f5fa",
-        marginTop: 15,
+        marginTop: 13,
         paddingVertical: 7,
         paddingHorizontal: 10
     },
     btnRegister:{
-        marginTop:40,
+        marginTop:25,
         color:'#2f2f2f',
         backgroundColor:'#D39F00',
         borderRadius: 12,
@@ -282,11 +318,16 @@ const styles = StyleSheet.create ({
         elevation:30,
         fontWeight:'bold'
     },
-    btnLogin: {
-        marginTop: 20,
+    questionAccount: {
+        alignItems: "center",
+        marginVertical: 20
+    },
+    alreadyAccount: {
+        color: "#f5f5fa",
+        fontSize: 15
+    },
+    logIn: {
         color: "#D39F00",
-        fontWeight: "bold",
-        borderBottomWidth: 1.5,
-        borderColor: "#D39F00"
+        fontSize: 15
     }
 })

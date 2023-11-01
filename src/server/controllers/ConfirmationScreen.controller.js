@@ -7,7 +7,10 @@ import bcrypt from 'bcrypt'
 
 export const getHome = async (req, res) => {
     try {
-        const [rows] = await pool.query("SELECT (total_amount) FROM MoneyRegistry ORDER BY (id_moneyregistry) DESC LIMIT 1")
+        console.log("req.params", req.params)
+        const id_user = req.params.id_user
+        const [rows] = await pool.query("SELECT (total_amount) FROM MoneyRegistry WHERE id_user = ?", [id_user])
+        console.log(rows)
         res.status(200).send(rows)
     } catch(error) {
         return res.status(500).json({
@@ -19,10 +22,14 @@ export const getHome = async (req, res) => {
 export const postConfirmationScreen = async (req, res) => {
     try {
         console.log(req.body)
+        console.log("req.params", req.params)
+
+        const id_user = Number(req.params.id_user)
+        console.log("id_user", id_user)
 
         const {amountFormatted, totalAmount, gain_expense, note, imageValues} = req.body
         const categoryPosition = imageValues.iconNumberPosition
-        console.log(categoryPosition)
+        console.log("categoryPosition", categoryPosition)
 
         const date = new Date();
         let dateFormatted = date.toISOString().slice(0, 19).replace("T", " ")
@@ -46,7 +53,9 @@ export const postConfirmationScreen = async (req, res) => {
         
         let dateFull = `${dateFormatted.slice(0, 11)} ${hourFull}`
 
-        const [rows] = await pool.query("INSERT INTO MoneyRegistry(total_amount, entered_amount, gain_expense, note, id_user, id_category, date) VALUES(?, ?, ?, ?, ?, ?, ?)", [totalAmount, amountFormatted, gain_expense, note, 1, categoryPosition, dateFull])
+        const [rows] = await pool.query("INSERT INTO MoneyRegistry(total_amount, entered_amount, gain_expense, id_user, note, id_category, date) VALUES(?, ?, ?, ?, ?, ?, ?)", [totalAmount, amountFormatted, gain_expense, id_user, note, categoryPosition, dateFull])
+
+        console.log("rowspCS", rows)
 
         res.status(200).send({
             navigation: req.body.navigation,
@@ -102,7 +111,7 @@ export const postSendEmail = async (req, res) => {
             })
         })
 
-        // console.log("Hashing password", hashedPassword);
+        console.log("Hashing password", hashedPassword);
         
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -153,7 +162,7 @@ export const postSendEmail = async (req, res) => {
 
                 const [ rows ] = await pool.query("INSERT INTO User(user, email, passw, token, isValidToken) VALUES (?, ?, ?, ?, ?)", [user, email, hashedPassword, token, isValidToken])
 
-                console.log("rows", rows)
+                // console.log("rows", rows)
 
                 console.log('Correo electrónico enviado: ' + info.response);
                 res.send({
@@ -175,31 +184,79 @@ export const postSendEmail = async (req, res) => {
 
 export const postNewUser = async (req, res) => {
     try {
-        const { user, email, password, token, hashedPassword } = req.body
-        console.log("postNewUser", req.body)
-
-        const [ validationUser ] = await pool.query("SELECT user, email, passw, token FROM User WHERE email = ?", [email])
-
-        console.log(validationUser)
+        const { user, email, hashedPassword, token } = req.body.resultSendDataComplete.data
+        console.log("req.body", req.body)
 
         const isValidToken = true
 
         const [ rows ] = await pool.query("UPDATE User SET user = ?, email = ?, passw = ?, token = ?, isValidToken = ? WHERE email = ?", [user, email, hashedPassword, token, isValidToken, email])
 
-        console.log(req.body)
+        const [ validationUser ] = await pool.query("SELECT * FROM User WHERE email = ?", [email])
+
+        console.log("validationUser", validationUser)
+        console.log(validationUser[0].id_user)
+
         console.log("Llega a postNewUser")
 
         return res.status(200).send({
-            user,
-            email,
-            password,
-            isValidToken,
+            id_user: validationUser[0].id_user,
             navigation: "HomeScreen"
         });
         
         
     } catch(error) {
         console.error("Error en el envío del correo electrónico", error);
-        return res.status(500).json({ message: "Error en el envío del correo electrónico" });
+        return res.status(500).json({ "message": "Error en el envío del correo electrónico" });
+    }
+}
+
+export const postSearchUser = async (req, res) => {
+    try {
+        console.log(req.body)
+        const { emailUser, password } = req.body
+
+        const [ rows ] = await pool.query("SELECT passw FROM User WHERE email = ?", [emailUser])
+        console.log(rows)
+
+        bcrypt.compare(password, rows[0].passw, async (err, res) => {
+            if(err) {
+                console.log(err)
+            }
+            if(res === true) {
+                const [ data ] = await pool.query("SELECT id_user FROM User WHERE email = ?", [emailUser])
+                return res.send({
+                    id_user: data[0].id_user,
+                    navigation: "HomeScreen"
+                })
+            }
+        })
+
+        // bcrypt.compare(password, )
+
+        // const [ rows ] = await pool.query("SELECT id_user, isValidToken FROM User WHERE email = ?", [emailUser])
+        // console.log(rows)
+
+        // return res.status(200).send({
+        //     data: rows,
+        //     navigation: "HomeScreen"
+        // })
+
+
+
+        // bcrypt.compare(req.body.password, user.password, function(err, res) {
+        //     if (err){
+        //       // handle error
+        //     }
+        //     if (res) {
+        //       // Send JWT
+        //     } else {
+        //       // response is OutgoingMessage object that server response http request
+        //       return response.json({success: false, message: 'passwords do not match'});
+        //     }
+        // });
+
+    } catch(error) {
+        console.log("Error en la búsqueda de usuario en LogIn", error)
+        return res.status(500).json({ "message": "Internal server error" })
     }
 }
