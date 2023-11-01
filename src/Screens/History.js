@@ -3,11 +3,32 @@ import { useFocusEffect } from '@react-navigation/native';
 import { StyleSheet, View, FlatList, Text, StatusBar, Settings, Modal, TouchableOpacity } from 'react-native';
 import { SvgXml } from "react-native-svg";
 import { EXPO_IP_HOST, EXPO_PORT } from "@env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import moment from 'moment';
 
 import Up from '../resources/icons/up.svg'
 import Down from '../resources/icons/down.svg'
 
 export default History = ({route}) => {
+    
+    const [id_user_return, setId_user_return] = useState(null)
+
+    useEffect(() => {
+        const saveData = async () => {
+            try {
+                const id_user_save = await AsyncStorage.getItem('id_user_save');
+                const parse_id_user_save = JSON.parse(id_user_save)
+                setId_user_return(parse_id_user_save);
+            } catch(error) {
+                console.error("error in saveData", error)
+            }
+        }
+        saveData();
+    }, [])
+
+    console.log(id_user_return)
+
     const [dataList, setDataList] = useState([]);
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -22,7 +43,7 @@ export default History = ({route}) => {
 
     const getDataHistoryDB = async () => {
         try {
-            const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/History`, {
+            const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/History/${id_user_return}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -35,13 +56,15 @@ export default History = ({route}) => {
                     const correspondingCategory = result.combinedRows.rowsCategory.find(
                         (category) => category.id_category === dato.id_category
                     );
+                    const dateFormatted = moment(dato.date).format('YYYY/MM/DD HH:mm');
+                    console.log("dato.date", dato.date)
 
                     return {
                         id_moneyregistry: dato.id_moneyregistry,
                         entered_amount: dato.entered_amount,
                         gain_expense: dato.gain_expense,
                         note: dato.note,
-                        date: dato.date,
+                        date: dateFormatted,
                         hexColor: correspondingCategory.hexColor,
                         id_category: correspondingCategory.id_category,
                         image: correspondingCategory.svg,
@@ -137,10 +160,7 @@ export default History = ({route}) => {
                                         <View style={styles.modalView}>
                                             <Text style={styles.dateInput}>
                                             {
-                                                `${selectedDate
-                                                .replaceAll('-', '/')
-                                                .replaceAll('T', ' ')
-                                                .slice(0, -8)}`
+                                                `${selectedDate}`
                                             }
                                             </Text>
                                             <TouchableOpacity onPress={() => setModalDateVisible(false)}>

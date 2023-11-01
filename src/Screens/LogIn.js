@@ -1,8 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView } from 'react-native';
 import { useState } from 'react';
 import { useEffect } from "react";
 import { EXPO_IP_HOST, EXPO_PORT } from '@env'
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import saveIdUser from "../components/saveIdUser";
 
 export default LogIn = ({navigation}) => {
     const [emailUser, setEmailUser] = useState("")
@@ -35,6 +39,12 @@ export default LogIn = ({navigation}) => {
                 console.log("resultLogIn", result)
     
                 if(result.data[0].isValidToken === 1) {
+
+                    // saveIdUser(result.data[0].id_user)
+                    // console.log("saveIdUser", saveIdUser())
+
+                    AsyncStorage.setItem('id_user_save',JSON.stringify(result.data[0].id_user));
+
                     navigation.navigate(result.navigation, {
                         id_user: result.data[0].id_user
                     })
@@ -99,11 +109,14 @@ export default LogIn = ({navigation}) => {
                     Iniciar sesión
                 </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleRegister}>
-                <Text style={styles.btnLogin}>
-                    Registarse
-                </Text>
-            </TouchableOpacity>
+            <View style={styles.questionAccount}>
+                <Text style={styles.alreadyAccount}>¿Ya tienes una cuenta?</Text>
+                <TouchableOpacity onPress={handleRegister}>
+                    <Text style={styles.register}>
+                        Registarse
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </ScrollView>
     )
 }
@@ -120,6 +133,7 @@ const styles = StyleSheet.create ({
         marginVertical: 70
     },
     input:{
+        backgroundColor: "#1F1B18",
         marginVertical: 23,
         width:"70%",
         borderWidth: 3,
@@ -141,11 +155,16 @@ const styles = StyleSheet.create ({
         elevation:30,
         fontWeight:'bold'
     },
-    btnLogin: {
-        marginTop: 20,
+    questionAccount: {
+        alignItems: "center",
+        marginVertical: 20
+    },
+    alreadyAccount: {
+        color: "#f5f5fa",
+        fontSize: 15
+    },
+    register: {
         color: "#D39F00",
-        fontWeight: "bold",
-        borderBottomWidth: 1.5,
-        borderColor: "#D39F00"
+        fontSize: 15
     }
 })

@@ -12,8 +12,6 @@ export default Gain = ({route, navigation}) => {
 
     const initialPrice = route.params.amountValue;
     const updatePrice = route.params.updatePrice;
-    const id_user = route.params.id_user;
-    console.log("id_user from Gain.js", id_user)
 
     const [selectedAmount, setSelectedAmount] = useState('')
 
@@ -24,7 +22,7 @@ export default Gain = ({route, navigation}) => {
         if(amount == 0) {
             console.log("error")
         } else {
-            navigation.navigate('SelectCategories', {price : newValue, amo : amount, gain_expense: "gain", id_user})
+            navigation.navigate('SelectCategories', {price : newValue, amo : amount, gain_expense: "gain"})
         }
     }
 

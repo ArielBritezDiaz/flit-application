@@ -9,7 +9,7 @@ export const getHome = async (req, res) => {
     try {
         console.log("req.params", req.params)
         const id_user = req.params.id_user
-        const [rows] = await pool.query("SELECT (total_amount) FROM MoneyRegistry WHERE id_user = ?", [id_user])
+        const [rows] = await pool.query("SELECT (total_amount) FROM MoneyRegistry WHERE id_user = ? ORDER BY id_moneyregistry DESC LIMIT 1", [id_user])
         console.log(rows)
         res.status(200).send(rows)
     } catch(error) {
@@ -38,9 +38,8 @@ export const postConfirmationScreen = async (req, res) => {
         // Formateo de tiempo MX
         // Calculamos la diferencia horaria entre UTC y MX
         let numberTime = hour.slice(0, 2)
-        let utcDifferenceWithMX = numberTime - 6
+        let utcDifferenceWithMX = numberTime - 3
         let timeARGHours = 0 + utcDifferenceWithMX
-        console.log("hour", hour)
         let timeARGMinutes = hour.slice(3)
 
         if(timeARGHours == 0) timeARGHours = 0
@@ -49,7 +48,6 @@ export const postConfirmationScreen = async (req, res) => {
         if(timeARGMinutes < 10) timeARGMinutes = `0${timeARGMinutes}`
 
         let hourFull = `${timeARGHours}:${timeARGMinutes}`
-        console.log("hourFull", hourFull)
         
         let dateFull = `${dateFormatted.slice(0, 11)} ${hourFull}`
 
@@ -71,7 +69,9 @@ export const postConfirmationScreen = async (req, res) => {
 
 export const getHistory = async (req, res) => {
     try {
-        const [rows] = await pool.query("SELECT id_moneyregistry, entered_amount, gain_expense, note, id_category, date FROM MoneyRegistry")
+        const id_user = Number(req.params.id_user)
+
+        const [rows] = await pool.query("SELECT id_moneyregistry, entered_amount, gain_expense, note, id_category, date FROM MoneyRegistry WHERE id_user = ?", [id_user])
         
         const [rowsCategory] = await pool.query(`SELECT * FROM Category`)
 
@@ -184,7 +184,11 @@ export const postSendEmail = async (req, res) => {
 
 export const postNewUser = async (req, res) => {
     try {
-        const { user, email, hashedPassword, token } = req.body.resultSendDataComplete.data
+        const { user, email, hashedPassword, token } = req.body.resultSendDataComplete.data;
+        const id_user = req.body.id_user; // Agrega esto
+
+        newUserDB(user, email, hashedPassword, token, id_user); // Llama a la función newUserDB con el id_user
+
         console.log("req.body", req.body)
 
         const isValidToken = true
@@ -216,32 +220,38 @@ export const postSearchUser = async (req, res) => {
         const { emailUser, password } = req.body
 
         const [ rows ] = await pool.query("SELECT passw FROM User WHERE email = ?", [emailUser])
-        console.log(rows)
+        console.log("rows", rows)
 
-        bcrypt.compare(password, rows[0].passw, async (err, res) => {
-            if(err) {
-                console.log(err)
-            }
-            if(res === true) {
-                const [ data ] = await pool.query("SELECT id_user FROM User WHERE email = ?", [emailUser])
-                return res.send({
-                    id_user: data[0].id_user,
-                    navigation: "HomeScreen"
-                })
-            }
+        const data = await new Promise((resP, rej) => {
+            bcrypt.compare(password, rows[0].passw, async (err, res) => {
+                if(err) {
+                    console.log(err)
+                    rej(err)
+                }
+                if(res === true) {
+                    const [ data ] = await pool.query("SELECT id_user FROM User WHERE email = ?", [emailUser])
+                    resP(data)
+                } else if(res === false) {
+                    console.log("Contraseña incorrecta")
+                    resP(null)
+                }
+            })
         })
+        console.log(data)
 
-        // bcrypt.compare(password, )
-
-        // const [ rows ] = await pool.query("SELECT id_user, isValidToken FROM User WHERE email = ?", [emailUser])
-        // console.log(rows)
-
-        // return res.status(200).send({
-        //     data: rows,
-        //     navigation: "HomeScreen"
-        // })
-
-
+        if(data !== null) {
+            const [ rows ] = await pool.query("SELECT id_user, isValidToken FROM User WHERE email = ?", [emailUser])
+            console.log(rows)
+    
+            return res.status(200).send({
+                data: rows,
+                navigation: "HomeScreen"
+            })
+        } else {
+            return res.status(404).send({
+                "message": "user not found"
+            })
+        }
 
         // bcrypt.compare(req.body.password, user.password, function(err, res) {
         //     if (err){

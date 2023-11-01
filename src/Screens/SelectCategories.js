@@ -19,8 +19,6 @@ export default SelectCategories = ( { route, navigation } ) => {
     const newValue = route.params.price;
     const amount = route.params.amo;
     const gain_expense = route.params.gain_expense;
-    const id_user = route.params.id_user;
-    console.log("id_user from SelectCategories.js", id_user)
     
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -212,7 +210,6 @@ export default SelectCategories = ( { route, navigation } ) => {
                 </View>
                 <View style={styles.continue}>
                     <TouchableOpacity onPress={()=>navigation.navigate("ConfirmationScreen", {
-                        id_user,
                         amount,
                         note: valueNote,
                         price: newValue,

@@ -22,7 +22,7 @@ app.get('/api/Home/:id_user', getHome)
 
 app.post('/api/ConfirmationScreen/:id_user', postConfirmationScreen);
 
-app.get('/api/History', getHistory);
+app.get('/api/History/:id_user', getHistory);
 
 app.post('/api/sendEmail', postSendEmail);
 

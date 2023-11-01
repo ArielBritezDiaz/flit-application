@@ -1,10 +1,10 @@
 import { useNavigationState } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { EXPO_IP_HOST, EXPO_PORT } from "@env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default ConfirmationScreen = ( { route, navigation } ) => {
-    const id_user = route.params.id_user;
     const amount = route.params.amount;
     const note = route.params.note;
     const totalAmount = route.params.price;
@@ -14,10 +14,27 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
     const gain_expense = route.params.gain_expense;
     const iconNumberPosition = route.params.iconNumberPosition;
 
+    const [id_user_return, setId_user_return] = useState(null)
+
+    useEffect(() => {
+        const saveData = async () => {
+            try {
+                const id_user_save = await AsyncStorage.getItem('id_user_save');
+                const parse_id_user_save = JSON.parse(id_user_save)
+                setId_user_return(parse_id_user_save);
+            } catch(error) {
+                console.error("error in saveData", error)
+            }
+        }
+        saveData();
+    }, [])
+
+    console.log(id_user_return)
+
     const amountFormatted = Number(parseFloat(amount / 1).toFixed(4))
 
     console.log(`Data to BackEnd:
-        id_user: ${id_user}
+        id_user: ${id_user_return}
         amountFormatted: ${amountFormatted}
         note: ${note}
         totalAmount: ${totalAmount}
@@ -60,7 +77,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             imageValues
         }
 
-        fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/ConfirmationScreen/${id_user}`, {
+        fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/ConfirmationScreen/${id_user_return}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -69,7 +86,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
         }).then(response => {
             if(response.ok) {
                 navigation.navigate("HomeScreen", {
-                    id_user
+                    id_user_return
                 })
             } else {
                 throw new Error("Solicitud no exitosa")

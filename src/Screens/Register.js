@@ -1,9 +1,10 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useNavigation } from "@react-navigation/native";
 import { EXPO_IP_HOST, EXPO_PORT } from "@env";
 import hat from 'hat';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default Register = () =>{
     const [user,setUser] = useState("");
@@ -121,7 +122,8 @@ export default Register = () =>{
     
                         const result = await response.json();
                         console.log("result de newUserDB", result)
-    
+
+
                         navigation.navigate(result.navigation, {
                             id_user: result.id_user
                         });

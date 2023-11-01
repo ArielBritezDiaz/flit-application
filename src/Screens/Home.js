@@ -123,7 +123,7 @@ export default Home = ({route}) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.expense}>
-                        <TouchableOpacity onPress={() => navigation.navigate("Expense", {amountValue, updatePrice, id_user})}>
+                        <TouchableOpacity onPress={() => navigation.navigate("Expense", {amountValue, updatePrice})}>
                             <MaterialCommunityIcons name="cash-minus" size={40} color="#f5f5fa" />
                         </TouchableOpacity>
                     </View>
