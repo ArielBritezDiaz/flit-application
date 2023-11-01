@@ -19,6 +19,7 @@ export default Home = ({route}) => {
     const id_user = route.params.id_user;
     console.log("id_user from Home.js", id_user)
 
+    const [nameUser, setNameUser] = useState(null)
     const [amountValue, setAmountValue] = useState (null);
 
     const [showAmount, setShowAmount] = useState(true);
@@ -32,8 +33,6 @@ export default Home = ({route}) => {
     if(isNaN(amountValue)) {
         setAmountValue(0)
     }
-
-    const [data, setData] = useState(null)
 
     useEffect(()=>{
         navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00'}})
@@ -59,11 +58,12 @@ export default Home = ({route}) => {
             }
     
             const result = await response.json();
-    
-            if (result && result.length > 0 && result[0]["total_amount"]) {
-                setData(result[0]);
-                setAmountValue(result[0]["total_amount"]);
+            console.log("result at Home.js", result)
+            if (result && result.rowsNameUser[0]["user"].length > 0 && result.rowsTotalAmount.length > 0 && result.rowsTotalAmount[0]["total_amount"]) {
+                setNameUser(result.rowsNameUser[0]["user"])
+                setAmountValue(result.rowsTotalAmount[0]["total_amount"]);
             } else {
+                setNameUser('')
                 setAmountValue(0);
             }
         } catch (error) {
@@ -87,7 +87,7 @@ export default Home = ({route}) => {
                 </View>
                 <View style={styles.informationProfileSection}>
                     <Text style={styles.nameProfileSection}>
-                        {`Ariel`}
+                        {`${nameUser}`}
                     </Text>
                 </View>
                 <View>

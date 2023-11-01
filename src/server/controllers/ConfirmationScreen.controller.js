@@ -7,11 +7,19 @@ import bcrypt from 'bcrypt'
 
 export const getHome = async (req, res) => {
     try {
-        console.log("req.params", req.params)
+        // console.log("req.params", req.params)
         const id_user = req.params.id_user
-        const [rows] = await pool.query("SELECT (total_amount) FROM MoneyRegistry WHERE id_user = ? ORDER BY id_moneyregistry DESC LIMIT 1", [id_user])
-        console.log(rows)
-        res.status(200).send(rows)
+        const [ rowsTotalAmount ] = await pool.query("SELECT (total_amount) FROM MoneyRegistry WHERE id_user = ? ORDER BY id_moneyregistry DESC LIMIT 1", [id_user])
+        const [ rowsNameUser ] = await pool.query("SELECT (user) FROM User WHERE id_user = ?", [id_user])
+        // console.log("rowsTotalAmount", rowsTotalAmount)
+        // console.log("rowsNameUser", rowsNameUser)
+
+        const combinedRows = {
+            rowsTotalAmount,
+            rowsNameUser
+        }
+
+        res.status(200).send(combinedRows)
     } catch(error) {
         return res.status(500).json({
             "message": "Internal server error"
@@ -216,11 +224,11 @@ export const postNewUser = async (req, res) => {
 
 export const postSearchUser = async (req, res) => {
     try {
-        console.log(req.body)
+        console.log("req.body from postSearchUser:", req.body)
         const { emailUser, password } = req.body
 
         const [ rows ] = await pool.query("SELECT passw FROM User WHERE email = ?", [emailUser])
-        console.log("rows", rows)
+        console.log("rows from postSearchUser:", rows)
 
         const data = await new Promise((resP, rej) => {
             bcrypt.compare(password, rows[0].passw, async (err, res) => {
@@ -230,10 +238,11 @@ export const postSearchUser = async (req, res) => {
                 }
                 if(res === true) {
                     const [ data ] = await pool.query("SELECT id_user FROM User WHERE email = ?", [emailUser])
-                    resP(data)
+                    resP("data from postSearchUser:", data)
                 } else if(res === false) {
-                    console.log("Contraseña incorrecta")
-                    resP(null)
+                    const data = null
+                    console.log("data is null", data)
+                    resP(data)
                 }
             })
         })
@@ -249,7 +258,7 @@ export const postSearchUser = async (req, res) => {
             })
         } else {
             return res.status(404).send({
-                "message": "user not found"
+                passwordIncorrect: "Contraseña incorrecta"
             })
         }
 

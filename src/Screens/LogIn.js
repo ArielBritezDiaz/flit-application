@@ -1,69 +1,93 @@
-import React from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView } from 'react-native';
-import { useState } from 'react';
-import { useEffect } from "react";
 import { EXPO_IP_HOST, EXPO_PORT } from '@env'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import saveIdUser from "../components/saveIdUser";
+// import saveIdUser from "../components/saveIdUser";
 
 export default LogIn = ({navigation}) => {
     const [emailUser, setEmailUser] = useState("")
     const [password, setPassword] = useState("");
 
+    const [emailValid, setEmailValid] = useState(true);
+    const [passwordValid, setPasswordValid] = useState(true);
+    const [lengthPasswordValid, setLengthPasswordValid] = useState(true)
+    const [userDoesntExist, setUserDoesntExist] = useState(false);
+    const [userIsValid, setUserIsValid] = useState(true);
+    const [emailErrorMessage, setEmailErrorMessage] = useState('');
+
+    const [logInPressed, setLogInPressed] = useState(false)
+    
+    const [attemptedSubmit, setAttemptedSubmit] = useState(false);
+
+
+    const validationEmail = useMemo(
+        () => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        []
+    );
+    
     const handleLogIn = async () => {
         try {
-            const validationEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            
-            if(validationEmail.test(emailUser)) {
-
-                const data = {
-                    emailUser,
-                    password
-                }
-                
-                const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/searchUser`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-    
-                if(!response.ok) {
-                    throw new Error("Response !ok in handleLogIn")
-                }
-    
-                const result = await response.json()
-                console.log("resultLogIn", result)
-    
-                if(result.data[0].isValidToken === 1) {
-
-                    // saveIdUser(result.data[0].id_user)
-                    // console.log("saveIdUser", saveIdUser())
-
-                    AsyncStorage.setItem('id_user_save',JSON.stringify(result.data[0].id_user));
-
-                    navigation.navigate(result.navigation, {
-                        id_user: result.data[0].id_user
+            setLogInPressed(true)
+            setAttemptedSubmit(true);
+            if(validationEmail.test(emailUser) && (emailUser.length >= 5 && emailUser.length <= 100) || passwordValid === false) {
+                setEmailValid(true)
+                setPasswordValid(true)
+                if(password.length >= 8) {
+                    setPasswordValid(true)
+                    setLengthPasswordValid(true)
+                    const data = {
+                        emailUser,
+                        password
+                    }
+                    
+                    const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/searchUser`, {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
                     })
+        
+                    if(!response.ok) {
+                        setUserDoesntExist(true)
+                        setPasswordValid(false)
+                        throw new Error("Response !ok in handleLogIn")
+                    } else {
+                        setUserDoesntExist(false)
+                    }
+        
+                    const result = await response.json()
+                    console.log("resultLogIn", result)
+        
+                    if(result.data[0].isValidToken === 1) {
+                        setUserIsValid(true)
+
+                        // saveIdUser(result.data[0].id_user)
+                        // console.log("saveIdUser", saveIdUser())
+    
+                        AsyncStorage.setItem('id_user_save',JSON.stringify(result.data[0].id_user));
+    
+                        navigation.navigate(result.navigation, {
+                            id_user: result.data[0].id_user
+                        })
+                    } else {
+                        setUserIsValid(false)
+                    }
                 } else {
-                    return console.log("Usuario inexistente")
+                    setEmailValid(false);
+                    setEmailErrorMessage('Email inválido');
+                    setLengthPasswordValid(false);
                 }
             } else {
-                console.log("Usuario inexistente 2")
+                setLengthPasswordValid(false)
+                setEmailValid(false)
             }
-
         } catch(error) {
+            setUserDoesntExist(true)
             console.log("Error in handleLogIn", error)
         }
-
-        // navigation.navigate('HomeScreen', {
-        //     email : email,
-        //     name : user,
-        //     password : password
-        // });
     };
 
     const handleRegister = () => {
@@ -89,9 +113,27 @@ export default LogIn = ({navigation}) => {
                 cursorColor={'#D39F00'}
                 placeholderTextColor={"#D39F00"}
                 onChangeText={txt => {
-                    setEmailUser(txt)
+                    setEmailUser(txt);
+                    if (!txt || !validationEmail.test(txt)) {
+                        setEmailErrorMessage(logInPressed ? 'Correo electrónico inválido' : 'Correo electrónico inválido');
+                    } else {
+                        setEmailErrorMessage('');
+                    }
                 }}
-            ></TextInput>
+            />
+
+            {
+                attemptedSubmit && !emailUser
+                &&
+                <Text>Correo electrónico requerido</Text>
+            }
+            
+            {
+                logInPressed && !emailValid && emailUser.length > 0 && !validationEmail.test(emailUser)
+                &&
+                <Text>Correo electrónico inválido</Text>
+            }
+
             <TextInput
                 style={styles.input}
                 name="password"
@@ -100,10 +142,36 @@ export default LogIn = ({navigation}) => {
                 cursorColor={'#D39F00'}
                 placeholderTextColor={"#D39F00"}
                 onChangeText={txt => {
-                    setPassword(txt)
+                    setPassword(txt);
+                    if (!txt && !emailUser) {
+                        setLengthPasswordValid(false);
+                    } else {
+                        setLengthPasswordValid(true);
+                    }
                 }}
                 secureTextEntry={true}
-            ></TextInput>
+            />
+
+            {
+                attemptedSubmit && !password
+                && 
+                <Text>Por favor, rellene el campo de contraseña</Text>
+            }
+
+            {
+                attemptedSubmit && password && password.length < 8
+                &&
+                <Text>La contraseña debe tener al menos 8 caracteres</Text>
+            }
+
+            {
+                passwordValid === false && password
+                ?
+                <Text>Contraseña incorrecta</Text>
+                :
+                null
+            }
+            
             <TouchableOpacity onPress={handleLogIn}>
                 <Text style={styles.btnRegister}>
                     Iniciar sesión

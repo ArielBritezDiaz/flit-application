@@ -27,8 +27,6 @@ export default History = ({route}) => {
         saveData();
     }, [])
 
-    console.log(id_user_return)
-
     const [dataList, setDataList] = useState([]);
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -41,6 +39,8 @@ export default History = ({route}) => {
 
     const [iconUpDown, setIconUpDown] = useState(null);
 
+    const [counterIdRegistry, setCounterIdRegistry] = useState(0);
+
     const getDataHistoryDB = async () => {
         try {
             const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/History/${id_user_return}`, {
@@ -52,15 +52,14 @@ export default History = ({route}) => {
             const result = await response.json();
     
             if (result && result.combinedRows && result.combinedRows.rows && result.combinedRows.rowsCategory) {
-                const organizedData = result.combinedRows.rows.map((dato) => {
+                const organizedData = result.combinedRows.rows.map((dato, index) => {
                     const correspondingCategory = result.combinedRows.rowsCategory.find(
                         (category) => category.id_category === dato.id_category
                     );
                     const dateFormatted = moment(dato.date).format('YYYY/MM/DD HH:mm');
-                    console.log("dato.date", dato.date)
 
                     return {
-                        id_moneyregistry: dato.id_moneyregistry,
+                        id_moneyregistry: (counterIdRegistry + index) + 1,
                         entered_amount: dato.entered_amount,
                         gain_expense: dato.gain_expense,
                         note: dato.note,
