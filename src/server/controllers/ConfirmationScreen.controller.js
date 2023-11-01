@@ -206,6 +206,57 @@ export const postNewUser = async (req, res) => {
         
     } catch(error) {
         console.error("Error en el envío del correo electrónico", error);
-        return res.status(500).json({ message: "Error en el envío del correo electrónico" });
+        return res.status(500).json({ "message": "Error en el envío del correo electrónico" });
+    }
+}
+
+export const postSearchUser = async (req, res) => {
+    try {
+        console.log(req.body)
+        const { emailUser, password } = req.body
+
+        const [ rows ] = await pool.query("SELECT passw FROM User WHERE email = ?", [emailUser])
+        console.log(rows)
+
+        bcrypt.compare(password, rows[0].passw, async (err, res) => {
+            if(err) {
+                console.log(err)
+            }
+            if(res === true) {
+                const [ data ] = await pool.query("SELECT id_user FROM User WHERE email = ?", [emailUser])
+                return res.send({
+                    id_user: data[0].id_user,
+                    navigation: "HomeScreen"
+                })
+            }
+        })
+
+        // bcrypt.compare(password, )
+
+        // const [ rows ] = await pool.query("SELECT id_user, isValidToken FROM User WHERE email = ?", [emailUser])
+        // console.log(rows)
+
+        // return res.status(200).send({
+        //     data: rows,
+        //     navigation: "HomeScreen"
+        // })
+
+
+
+        // bcrypt.compare(req.body.password, user.password, function(err, res) {
+        //     if (err){
+        //       // handle error
+        //     }
+        //     if (res) {
+        //       // Send JWT
+        //     } else {
+        //       // response is OutgoingMessage object that server response http request
+        //       return response.json({success: false, message: 'passwords do not match'});
+        //     }
+        // });
+
+    } catch(error) {
+        console.log("Error en la búsqueda de usuario en LogIn", error)
+        return res.status(500).json({ "message": "Internal server error" })
     }
 }

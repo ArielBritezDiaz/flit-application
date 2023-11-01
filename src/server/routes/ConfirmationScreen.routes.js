@@ -3,7 +3,7 @@ import { PORT } from '../../../config.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { getHome, postConfirmationScreen, getHistory, postSendEmail, postNewUser } from '../controllers/ConfirmationScreen.controller.js'
+import { getHome, postConfirmationScreen, getHistory, postSendEmail, postNewUser, postSearchUser } from '../controllers/ConfirmationScreen.controller.js'
 
 const app = express();
 const port = PORT;
@@ -27,6 +27,8 @@ app.get('/api/History', getHistory);
 app.post('/api/sendEmail', postSendEmail);
 
 app.post('/api/newUser', postNewUser);
+
+app.post('/api/searchUser', postSearchUser)
 
 app.listen(port, () => {
     console.log(`Server on port ${PORT} listen`);

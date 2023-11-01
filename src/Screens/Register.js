@@ -50,7 +50,6 @@ export default Register = () =>{
             console.log(user, email, password)
 
             if(user.length >= 4 && isValid === true && password.length >= 8) {
-
                 const newData = {
                     user,
                     email,
@@ -76,6 +75,7 @@ export default Register = () =>{
                     }
                 
                     const result = await response.json();
+                    console.log("result", result)
                     setDataComplete(true);
                     const hashedPassword = result.hashedPassword
                     setPassword(hashedPassword)
@@ -116,7 +116,7 @@ export default Register = () =>{
                         });
     
                         if (!response.ok) {
-                            throw new Error("La respuesta de la red no fue satisfactoria");
+                            throw new Error("Response !ok in newUserDB");
                         }
     
                         const result = await response.json();

@@ -1,6 +1,7 @@
 import { useNavigationState } from "@react-navigation/native";
 import React, { useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
+import { EXPO_IP_HOST, EXPO_PORT } from "@env";
 
 export default ConfirmationScreen = ( { route, navigation } ) => {
     const id_user = route.params.id_user;
@@ -59,7 +60,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             imageValues
         }
 
-        fetch(`http://192.168.1.50:3000/api/ConfirmationScreen/${id_user}`, {
+        fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/ConfirmationScreen/${id_user}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
