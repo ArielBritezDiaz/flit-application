@@ -153,7 +153,7 @@ export default Home = ({route}) => {
                     <View style={styles.gain}>
                         <TouchableOpacity
                             onPress={() =>{
-                                navigation.navigate("Gain", {amountValue, updatePrice, id_user});
+                                navigation.navigate("Gain", {amountValue, updatePrice});
                             }}
                         >
                             <MaterialCommunityIcons name="cash-plus" size={40} color="#f5f5fa" />

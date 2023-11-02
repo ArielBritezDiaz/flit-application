@@ -193,7 +193,6 @@ export const postSendEmail = async (req, res) => {
 export const postNewUser = async (req, res) => {
     try {
         const { user, email, hashedPassword, token } = req.body.resultSendDataComplete.data;
-        const id_user = req.body.id_user; // Agrega esto
 
         console.log("req.body", req.body)
 

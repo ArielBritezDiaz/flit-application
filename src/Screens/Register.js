@@ -40,7 +40,11 @@ export default Register = () => {
 
     const navigation = useNavigation();
 
-    const [resultSendDataComplete, setResultSendDataComplete] = useState([])
+    const [resultSendDataComplete, setResultSendDataComplete] = useState([]);
+
+    const [isCompleteUserInput, setIsCompleteUserInput] = useState(null);
+    const [isCompleteEmailInput, setIsCompleteEmailInput] = useState(null);
+    const [isCompletePasswordInput, setIsCompletePasswordInput] = useState(null);
 
     const logInOnPress = () => {
         navigation.navigate("LogIn")
@@ -61,44 +65,51 @@ export default Register = () => {
 
             console.log(user, email, password)
 
-            if(user.length >= 4 && user.length <= 20 && isValid === true && password.length >= 8) {
-                const newData = {
-                    user,
-                    email,
-                    password,
-                    token: temporalToken
-                };
-
-                setData(newData);
-                setEditableFields(false);
-                
-                console.log("newData", newData)
-                try {
-                    const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/sendEmail`, {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(newData)
-                    });
-                
-                    if (!response.ok) {
-                        throw new Error("La respuesta de la red no fue satisfactoria");
+            if(user.length >= 4 && user.length <= 20) {
+                if(isValid === true) {
+                    if(password.length >= 8) {
+                        const newData = {
+                            user,
+                            email,
+                            password,
+                            token: temporalToken
+                        };
+        
+                        setData(newData);
+                        setEditableFields(false);
+                        
+                        console.log("newData", newData)
+                        try {
+                            const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/sendEmail`, {
+                                method: "POST",
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(newData)
+                            });
+                        
+                            if (!response.ok) {
+                                throw new Error("La respuesta de la red no fue satisfactoria");
+                            }
+                        
+                            const result = await response.json();
+                            console.log("result", result)
+                            setDataComplete(true);
+                            const hashedPassword = result.hashedPassword
+                            setPassword(hashedPassword)
+                            console.log("result of sendEmail", result);
+                            setResultSendDataComplete(result)
+                        } catch (error) {
+                            console.error("Error in sendData", error.message);
+                        }
+                    } else {
+                        setIsCompletePasswordInput(false)
                     }
-                
-                    const result = await response.json();
-                    console.log("result", result)
-                    setDataComplete(true);
-                    const hashedPassword = result.hashedPassword
-                    setPassword(hashedPassword)
-                    console.log("result of sendEmail", result);
-                    setResultSendDataComplete(result)
-                } catch (error) {
-                    console.error("Error in sendData", error.message);
+                } else {
+                    setIsCompleteEmailInput(false)
                 }
-                
-            } else{
-                console.log("Datos faltantes")
+            } else {
+                setIsCompleteUserInput(false)
             }
         } catch(error) {
             console.error("error", error)
@@ -183,9 +194,21 @@ export default Register = () => {
                 onChangeText={user => {
                     setUser(user)
                     setUserBlock(user)
+                    setIsCompleteUserInput(true)
                 }}
                 editable={editableFields}
             ></TextInput>
+
+            {
+                isCompleteUserInput === false
+                ?
+                <Text>
+                    Ingrese un usuario válido (Min. 4 caracteres)
+                </Text>
+                :
+                null
+            }
+
             <TextInput
                 style={[styles.input, !editableFields && styles.disabledInput]}
                 placeholder="Correo electrónico"
@@ -197,9 +220,21 @@ export default Register = () => {
                 onChangeText={email => {
                     setEmail(email)
                     setEmailBlock(email)
+                    setIsCompleteEmailInput(true)
                 }}
                 editable={editableFields}
             ></TextInput>
+
+            {
+                isCompleteEmailInput === false
+                ?
+                <Text>
+                    Ingrese un correo electónico válido
+                </Text>
+                :
+                null
+            }
+
             <TextInput
                 style={[styles.input, !editableFields && styles.disabledInput]}
                 name="password"
@@ -211,10 +246,21 @@ export default Register = () => {
                 onChangeText={password => {
                     setPassword(password)
                     setPasswordBlock(password)
+                    setIsCompletePasswordInput(true)
                 }}
                 secureTextEntry={true}
                 editable={editableFields}
             ></TextInput>
+            
+            {
+                isCompletePasswordInput === false
+                ?
+                <Text>
+                    Ingrese una contraseña válida (Min. 8 caracteres)
+                </Text>
+                :
+                null
+            }
 
             {
                 dataComplete === true

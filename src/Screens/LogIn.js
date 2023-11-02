@@ -8,23 +8,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default LogIn = ({navigation}) => {
 
-    const [showTabBar, setShowTabBar] = useState(true);
-
     const [emailUser, setEmailUser] = useState("")
     const [password, setPassword] = useState("");
 
-    const [emailValid, setEmailValid] = useState(true);
-    const [passwordValid, setPasswordValid] = useState(true);
-    const [lengthPasswordValid, setLengthPasswordValid] = useState(true)
-    const [userDoesntExist, setUserDoesntExist] = useState(false);
-    const [userIsValid, setUserIsValid] = useState(true);
-    const [emailErrorMessage, setEmailErrorMessage] = useState('');
+    const [isCompleteEmailInput, setIsCompleteEmailInput] = useState(null);
+    const [isCompletePasswordInput, setIsCompletePasswordInput] = useState(null);
+    const [isPasswordValidInput, setIsPasswordValidInput] = useState(null);
 
-    const [logInPressed, setLogInPressed] = useState(false)
-    
-    const [attemptedSubmit, setAttemptedSubmit] = useState(false);
-
-    const [id_user_save, setIdUserSave] = useState(null); // Nuevo estado para id_user_save
+    const [id_user_save, setIdUserSave] = useState(null);
 
     const validationEmail = useMemo(
         () => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -33,14 +24,8 @@ export default LogIn = ({navigation}) => {
     
     const handleLogIn = async () => {
         try {
-            setLogInPressed(true)
-            setAttemptedSubmit(true);
-            if(validationEmail.test(emailUser) && (emailUser.length >= 5 && emailUser.length <= 100) || passwordValid === false) {
-                setEmailValid(true)
-                setPasswordValid(true)
+            if(validationEmail.test(emailUser) && (emailUser.length >= 5 && emailUser.length <= 100)) {
                 if(password.length >= 8) {
-                    setPasswordValid(true)
-                    setLengthPasswordValid(true)
                     const data = {
                         emailUser,
                         password
@@ -55,38 +40,28 @@ export default LogIn = ({navigation}) => {
                     })
         
                     if(!response.ok) {
-                        setUserDoesntExist(true)
-                        setPasswordValid(false)
+                        setIsPasswordValidInput(false)
                         throw new Error("Response !ok in handleLogIn")
-                    } else {
-                        setUserDoesntExist(false)
                     }
         
                     const result = await response.json()
                     console.log("resultLogIn", result)
         
                     if (result.data[0].isValidToken === 1) {
-                        setUserIsValid(true);
                         setIdUserSave(result.data[0].id_user);
                         AsyncStorage.removeItem('id_user_save');
                         AsyncStorage.setItem('id_user_save', JSON.stringify(result.data[0].id_user));
                         navigation.navigate('TabNavigationScreen', {
                             id_user: result.data[0].id_user
                         });
-                    } else {
-                        setUserIsValid(false);
                     }
                 } else {
-                    setEmailValid(false);
-                    setEmailErrorMessage('Email inválido');
-                    setLengthPasswordValid(false);
+                    setIsCompletePasswordInput(false)
                 }
             } else {
-                setLengthPasswordValid(false)
-                setEmailValid(false)
+                setIsCompleteEmailInput(false)
             }
         } catch(error) {
-            setUserDoesntExist(true)
             console.log("Error in handleLogIn", error)
         }
     };
@@ -94,19 +69,6 @@ export default LogIn = ({navigation}) => {
     const handleRegister = () => {
         navigation.navigate('Register');
     };
-
-    useEffect(() => {
-        // Usa el estado para mostrar u ocultar la barra de pestañas
-        if (showTabBar) {
-            navigation.setOptions({
-                tabBarStyle: { display: 'none' }
-            });
-        } else {
-            navigation.setOptions({
-                tabBarStyle: { display: 'flex', backgroundColor: '#D39F00' }
-            });
-        }
-    }, [showTabBar, navigation]);
 
     useEffect(() => {
         const saveData = async () => {
@@ -119,77 +81,75 @@ export default LogIn = ({navigation}) => {
         saveData();
     }, [id_user_save]);
 
+    useEffect(() => {
+        if (isCompletePasswordInput === false) {
+          setIsPasswordValidInput(true);
+        }
+      }, [isCompletePasswordInput]);
+
     return(
         <ScrollView contentContainerStyle={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <Image source={require('../assets/logo.png')} style={styles.img}></Image>
-            <TextInput
-                style={styles.input}
-                placeholder="Correo electrónico"
-                name="email"
-                keyboardType="email-address"
-                cursorColor={'#D39F00'}
-                placeholderTextColor={"#D39F00"}
-                onChangeText={txt => {
-                    setEmailUser(txt);
-                    if (!txt || !validationEmail.test(txt)) {
-                        setEmailErrorMessage(logInPressed ? 'Correo electrónico inválido' : 'Correo electrónico inválido');
-                    } else {
-                        setEmailErrorMessage('');
-                    }
-                }}
-            />
+            <View style={styles.viewInputs}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Correo electrónico"
+                    name="email"
+                    keyboardType="email-address"
+                    cursorColor={'#D39F00'}
+                    placeholderTextColor={"#D39F00"}
+                    onChangeText={txt => {
+                        setEmailUser(txt);
+                        setIsCompleteEmailInput(true)
+                        setIsCompletePasswordInput(true)
+                    }}
+                />
 
-            {
-                attemptedSubmit && !emailUser
-                &&
-                <Text>Correo electrónico requerido</Text>
-            }
-            
-            {
-                logInPressed && !emailValid && emailUser.length > 0 && !validationEmail.test(emailUser)
-                &&
-                <Text>Correo electrónico inválido</Text>
-            }
+                {
+                    isCompleteEmailInput === false
+                    ?
+                        <Text>Ingrese un correo electrónico válido</Text>
+                    :
+                        null
+                }
+            </View>
 
-            <TextInput
-                style={styles.input}
-                name="password"
-                placeholder="Contraseña"
-                keyboardType="default"
-                cursorColor={'#D39F00'}
-                placeholderTextColor={"#D39F00"}
-                onChangeText={txt => {
-                    setPassword(txt);
-                    if (!txt && !emailUser) {
-                        setLengthPasswordValid(false);
-                    } else {
-                        setLengthPasswordValid(true);
-                    }
-                }}
-                secureTextEntry={true}
-            />
+            <View style={styles.viewInputs}>
+                <TextInput
+                    style={styles.input}
+                    name="password"
+                    placeholder="Contraseña"
+                    keyboardType="default"
+                    cursorColor={'#D39F00'}
+                    placeholderTextColor={"#D39F00"}
+                    onChangeText={txt => {
+                        setPassword(txt);
+                        setIsCompleteEmailInput(true)
+                        setIsCompletePasswordInput(true)
+                        setIsPasswordValidInput(true)
+                    }}
+                    secureTextEntry={true}
+                />
 
-            {
-                attemptedSubmit && !password
-                && 
-                <Text>Por favor, rellene el campo de contraseña</Text>
-            }
+                {
+                    isCompletePasswordInput === false
+                    ?
+                        <Text>
+                            Ingrese una contraseña válida (Min. 8 caracteres)
+                        </Text>
+                    :
+                        null
+                }
 
-            {
-                attemptedSubmit && password && password.length < 8
-                &&
-                <Text>La contraseña debe tener al menos 8 caracteres</Text>
-            }
-
-            {
-                passwordValid === false && password
-                ?
-                <Text>Contraseña incorrecta</Text>
-                :
-                null
-            }
-            
+                {
+                    isPasswordValidInput === false
+                    ?
+                        <Text>Contraseña incorrecta</Text>
+                    :
+                        null
+                }
+            </View>
             <TouchableOpacity onPress={handleLogIn}>
                 <Text style={styles.btnRegister}>
                     Iniciar sesión
@@ -218,15 +178,17 @@ const styles = StyleSheet.create ({
         height: 200,
         marginVertical: 70
     },
+    viewInputs: {
+        marginVertical: 23,
+        paddingVertical:10,
+        paddingHorizontal: 20,
+    },
     input:{
         backgroundColor: "#1F1B18",
-        marginVertical: 23,
         width:"70%",
         borderWidth: 3,
         borderRadius: 10,
         borderColor: '#D39F00',
-        paddingVertical:10,
-        paddingHorizontal: 20,
         fontSize:18,
         color:"#f5f5fa"
     },
