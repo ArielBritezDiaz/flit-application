@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //Icons libraries
 import { Entypo } from '@expo/vector-icons';
@@ -14,15 +15,17 @@ import ConfigurationSymbol from '../resources/icons/data-explorationenvironment-
 import { EXPO_IP_HOST, EXPO_PORT } from '@env';
 
 export default Home = ({route}) => {
-    console.log("route.params", route.params)
+    
+    const [id_user_return, setId_user_return] = useState(null)
 
-    const id_user = route.params.id_user;
-    console.log("id_user from Home.js", id_user)
+    const [result, setResult] = useState(null);
 
-    const [nameUser, setNameUser] = useState(null)
+    const [nameUser, setNameUser] = useState("Flit")
     const [amountValue, setAmountValue] = useState(null);
 
     const [showAmount, setShowAmount] = useState(true);
+
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
 
     const navigation = useNavigation();
 
@@ -41,9 +44,11 @@ export default Home = ({route}) => {
         }
     }, [])
 
-
+    
     const getDataDB = async () => {
         try {
+            const id_user = await AsyncStorage.getItem('id_user_save');
+            console.log("id_user in Home.js", id_user);
             const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/Home/${id_user}`, {
                 method: "GET",
                 headers: {
@@ -57,21 +62,23 @@ export default Home = ({route}) => {
                 return;
             }
     
-            const result = await response.json();
-            console.log("result at Home.js", result)
+            const result = await response.json(); // Definir 'result' aquí
+            console.log("result at Home.js", result);
             if (result && result.rowsTotalAmount.length > 0 && result.rowsTotalAmount[0]["total_amount"]) {
                 setAmountValue(result.rowsTotalAmount[0]["total_amount"]);
             } else {
                 setAmountValue(0);
             }
-
-            if(result && result.rowsNameUser[0]["user"].length > 0) {
-                console.log("nameUser form Home.js", nameUser)
-                setNameUser(result.rowsNameUser[0]["user"])
+    
+            if (result && result.rowsNameUser.length > 0 && result.rowsNameUser[0]["user"]) {
+                setNameUser(result.rowsNameUser[0]["user"]);
+                console.log("nameUser from Home.js", nameUser);
             } else {
-                setNameUser('')
+                setNameUser('Flit');
             }
-
+    
+            setIsDataLoaded(true);
+    
         } catch (error) {
             console.error("Error en /api/Home", error);
         }
@@ -84,12 +91,25 @@ export default Home = ({route}) => {
         navigation.navigate('Register', { reset: true });
     }
     
-
     useEffect(() => {
         if (amountValue === null) {
           getDataDB();
         }
       }, []);
+
+    useEffect(() => {
+        if (isDataLoaded) {
+            if (result && result.rowsNameUser && result.rowsNameUser.length > 0 && result.rowsNameUser[0]["user"]) {
+                if (nameUser === "Flit") {
+                    setNameUser(result.rowsNameUser[0]["user"]);
+                }
+            } else {
+                if (nameUser === "Flit") {
+                    setNameUser('Flit');
+                }
+            }
+        }
+    }, [isDataLoaded, result, nameUser]);
 
     return(
         <View style={styles.container}>

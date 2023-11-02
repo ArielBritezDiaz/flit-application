@@ -7,6 +7,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import saveIdUser from "../components/saveIdUser";
 
 export default LogIn = ({navigation}) => {
+
+    const [showTabBar, setShowTabBar] = useState(true);
+
     const [emailUser, setEmailUser] = useState("")
     const [password, setPassword] = useState("");
 
@@ -64,10 +67,10 @@ export default LogIn = ({navigation}) => {
         
                     if (result.data[0].isValidToken === 1) {
                         setUserIsValid(true);
-                        setIdUserSave(result.data[0].id_user); // Actualizar id_user_save
+                        setIdUserSave(result.data[0].id_user);
                         AsyncStorage.removeItem('id_user_save');
                         AsyncStorage.setItem('id_user_save', JSON.stringify(result.data[0].id_user));
-                        navigation.navigate(result.navigation, {
+                        navigation.navigate('TabNavigationScreen', {
                             id_user: result.data[0].id_user
                         });
                     } else {
@@ -93,13 +96,17 @@ export default LogIn = ({navigation}) => {
     };
 
     useEffect(() => {
-        navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
-        return () => {
-            navigation.getParent().setOptions({
+        // Usa el estado para mostrar u ocultar la barra de pestañas
+        if (showTabBar) {
+            navigation.setOptions({
+                tabBarStyle: { display: 'none' }
+            });
+        } else {
+            navigation.setOptions({
                 tabBarStyle: { display: 'flex', backgroundColor: '#D39F00' }
             });
-        };
-    }, []);
+        }
+    }, [showTabBar, navigation]);
 
     useEffect(() => {
         const saveData = async () => {

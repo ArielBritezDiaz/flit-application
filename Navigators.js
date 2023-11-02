@@ -31,33 +31,58 @@ const loadFonts = async () => {
     });
 };
 
-const Stack = createNativeStackNavigator();
+const StackRegisterLogIn = createNativeStackNavigator();
 
-const Stacks = () =>{
-    return(
-        <Stack.Navigator
-            screenOptions={{
-                initialRouteName: 'Register',
-                headerStyle:{
-                    backgroundColor:'#2F2F2F',
-                }
-            }}>
-
-            <Stack.Screen
+const StackRegisterLogIns = () => {
+    return (
+        <StackRegisterLogIn.Navigator>
+            <StackRegisterLogIn.Screen
                 name="Register"
                 component={Register}
                 options={{
-                    headerShown:false,
+                    headerShown: false,
                 }}
             />
-
-            <Stack.Screen
+            <StackRegisterLogIn.Screen
                 name="LogIn"
                 component={LogIn}
                 options={{
-                    headerShown:false,
+                    headerShown: false,
                 }}
             />
+            <StackRegisterLogIn.Screen
+                name="TabNavigationScreen"
+                component={TabNavigation}
+                options={{
+                    headerShown: false,
+                }}
+            />
+        </StackRegisterLogIn.Navigator>
+    )
+}
+
+const Navigations = () => {
+    return (
+        <NavigationContainer>
+            <StackRegisterLogIns />
+        </NavigationContainer>
+    );
+};
+
+export default Navigations;
+
+const Stack = createNativeStackNavigator();
+
+const Stacks = () => {
+    return(
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle:{
+                    backgroundColor:'#2F2F2F',
+                },
+                headerShown: true,
+            }}
+        >
 
             <Stack.Screen
                 name="HomeScreen"
@@ -126,15 +151,16 @@ const TabNavigation = () =>{
     return(
         <Tab.Navigator
             screenOptions={{
-                initialRouteName: 'HomeScreen',
-                tabBarActiveTintColor: '#f5f5fa', 
+                initialRouteName: 'Inicio',
+                tabBarActiveTintColor: '#f5f5fa',
                 tabBarInactiveTintColor: '#0f0c0c',
                 headerShown: false,
-                tabBarStyle:{ 
-                    backgroundColor: '#D39F00',
+                tabBarStyle: {
+                    backgroundColor: '#D39F00'
                 },
             }}
         >
+
             <Tab.Screen
                 name="Inicio"
                 component={Stacks}
@@ -166,15 +192,4 @@ const TabNavigation = () =>{
             />
         </Tab.Navigator>
     );
-}
-
-export default Navigations = () =>{
-    useEffect(() => {
-        loadFonts();
-      }, []);
-    return(
-        <NavigationContainer>
-            <TabNavigation/>
-        </NavigationContainer>
-    )
 }

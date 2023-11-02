@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, View} from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Navigators from "./Navigators";
 
-export default App = () =>{
+const App = () => {
     return(
         <View style={styles.container}>
           <Navigators/>
@@ -16,3 +16,5 @@ const styles = StyleSheet.create ({
         backgroundColor: '#2f2f2f'
     }
 })
+
+export default App;

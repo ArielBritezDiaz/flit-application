@@ -1,12 +1,23 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, TextInput, Image, ScrollView } from 'react-native';
-import { useState, useEffect } from 'react';
-import { useNavigation } from "@react-navigation/native";
+import { useState, useEffect, useLayoutEffect } from 'react';
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import { EXPO_IP_HOST, EXPO_PORT } from "@env";
 import hat from 'hat';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default Register = () =>{
+export default Register = () => {
+
+    const isFocused = useIsFocused();
+
+    useLayoutEffect(() => {
+        if (isFocused) {
+            navigation.setOptions({ tabBarStyle: { display: 'none' } });
+        } else {
+            navigation.setOptions({ tabBarStyle: { display: 'flex', backgroundColor: '#D39F00' } });
+        }
+    }, [isFocused, navigation]);
+
     const [user,setUser] = useState("");
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("");

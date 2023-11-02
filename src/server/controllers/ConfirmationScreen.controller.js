@@ -7,12 +7,12 @@ import bcrypt from 'bcrypt'
 
 export const getHome = async (req, res) => {
     try {
-        // console.log("req.params", req.params)
+        console.log("req.params", req.params)
         const id_user = req.params.id_user
         const [ rowsTotalAmount ] = await pool.query("SELECT (total_amount) FROM MoneyRegistry WHERE id_user = ? ORDER BY id_moneyregistry DESC LIMIT 1", [id_user])
         const [ rowsNameUser ] = await pool.query("SELECT (user) FROM User WHERE id_user = ?", [id_user])
-        // console.log("rowsTotalAmount", rowsTotalAmount)
-        // console.log("rowsNameUser", rowsNameUser)
+        console.log("rowsTotalAmount", rowsTotalAmount)
+        console.log("rowsNameUser", rowsNameUser)
 
         const combinedRows = {
             rowsTotalAmount,
@@ -210,7 +210,7 @@ export const postNewUser = async (req, res) => {
 
         return res.status(200).send({
             id_user: validationUser[0].id_user,
-            navigation: "HomeScreen"
+            navigation: "TabNavigationScreen"
         });
         
         
@@ -252,7 +252,7 @@ export const postSearchUser = async (req, res) => {
     
             return res.status(200).send({
                 data: rows,
-                navigation: "HomeScreen"
+                navigation: "TabNavigationScreen"
             })
         } else {
             return res.status(404).send({
