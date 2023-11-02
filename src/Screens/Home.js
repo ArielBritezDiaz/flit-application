@@ -11,6 +11,7 @@ import { FontAwesome } from '@expo/vector-icons';
 //SVG Icons
 import AutralianSymbol from '../resources/icons/norfolk-island-australian-dolar-svgrepo-com.svg';
 import ConfigurationSymbol from '../resources/icons/data-explorationenvironment-configuration-svgrepo-com.svg';
+import ExitSymbol from '../resources/icons/exit.svg'
 
 import { EXPO_IP_HOST, EXPO_PORT } from '@env';
 
@@ -125,9 +126,7 @@ export default Home = ({route}) => {
                 </View>
                 <View style={styles.exitView}>
                     <TouchableOpacity onPress={exitAccount} style={styles.exit}>
-                        <Text style={styles.exitText}>
-                            Salir
-                        </Text>
+                        <ExitSymbol height={"100%"} width={35} style={styles.svgSymbol} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -184,7 +183,7 @@ const styles = StyleSheet.create ({
         flexDirection: "row",
         borderTopStartRadius: 5,
         borderTopEndRadius: 5,
-        alignItems: "center", // Agregar esta línea para centrar verticalmente
+        alignItems: "center",
         justifyContent: "center"
     },
     svgProfileSection: {
@@ -200,15 +199,11 @@ const styles = StyleSheet.create ({
         justifyContent: "center"
     },
     exit: {
-        backgroundColor: "#262220",
+        backgroundColor: "#CF9C00",
         borderRadius: 5,
-        height: "70%",
-        justifyContent: "center"
-    },
-    exitText: {
-        textAlign: "center",
-        textAlignVertical: "center",
-        color: "#f5f5fa"
+        height: "80%",
+        justifyContent: "center",
+        alignItems: "center"
     },
     informationProfileSection: {
         height: "100%",

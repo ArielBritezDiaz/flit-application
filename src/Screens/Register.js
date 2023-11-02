@@ -45,6 +45,7 @@ export default Register = () => {
     const [isCompleteUserInput, setIsCompleteUserInput] = useState(null);
     const [isCompleteEmailInput, setIsCompleteEmailInput] = useState(null);
     const [isCompletePasswordInput, setIsCompletePasswordInput] = useState(null);
+    const [noDataInputEmail, setNoDataInputEmail] = useState(null)
 
     const logInOnPress = () => {
         navigation.navigate("LogIn")
@@ -56,7 +57,7 @@ export default Register = () => {
 
             const isEmailValid = (email) => {
                 return validationEmail.test(email);
-              };
+            };
 
             const isValid = isEmailValid(email);
             console.log("isValid", isValid);
@@ -106,7 +107,13 @@ export default Register = () => {
                         setIsCompletePasswordInput(false)
                     }
                 } else {
-                    setIsCompleteEmailInput(false)
+                    if(email === "") {
+                        setNoDataInputEmail(false)
+                        setIsCompleteEmailInput(true)
+                    } else {
+                        setNoDataInputEmail(true)
+                        setIsCompleteEmailInput(false)
+                    }
                 }
             } else {
                 setIsCompleteUserInput(false)
@@ -203,8 +210,8 @@ export default Register = () => {
                 {
                     isCompleteUserInput === false
                     ?
-                    <Text>
-                        Ingrese un usuario válido (Min. 4 caracteres)
+                    <Text style={styles.textUserInputAdvice}>
+                        <Text style={styles.asterisk}>*</Text> Ingrese un usuario válido (Min. 4 caracteres)
                     </Text>
                     :
                     null
@@ -229,10 +236,20 @@ export default Register = () => {
                 ></TextInput>
 
                 {
+                    noDataInputEmail === false
+                    ?
+                    <Text style={styles.textUserInputAdvice}>
+                        <Text style={styles.asterisk}>*</Text> Ingrese un correo electónico
+                    </Text>
+                    :
+                    null
+                }
+
+                {
                     isCompleteEmailInput === false
                     ?
-                    <Text>
-                        Ingrese un correo electónico válido
+                    <Text style={styles.textUserInputAdvice}>
+                        <Text style={styles.asterisk}>*</Text> Ingrese un correo electónico válido
                     </Text>
                     :
                     null
@@ -260,8 +277,8 @@ export default Register = () => {
                 {
                     isCompletePasswordInput === false
                     ?
-                    <Text>
-                        Ingrese una contraseña válida (Min. 8 caracteres)
+                    <Text style={styles.textUserInputAdvice}>
+                        <Text style={styles.asterisk}>*</Text> Ingrese una contraseña válida (Min. 8 caracteres)
                     </Text>
                     :
                     null
@@ -270,22 +287,27 @@ export default Register = () => {
             {
                 dataComplete === true
                 ?
-                    <TextInput
-                        style={styles.token}
-                        name="token"
-                        placeholder={tokenFocus ? "" : "Token de verificación"}
-                        keyboardType="ascii-capable"
-                        cursorColor={"#D39F00"}
-                        placeholderTextColor={"rgba(245, 245, 250, .8)"}
-                        textAlign="center"
-                        textAlignVertical="center"
-                        onFocus={() => setTokenFocus(true)}
-                        onBlur={() => setTokenFocus(false)}
-                        onChangeText={token => {
-                            setTokenInput(token);
-                        }}
-                    >
-                    </TextInput>
+                    <>
+                        <Text style={styles.textTokenInputAdvice}>
+                            <Text style={styles.textTokenMessage}>Código de verificación enviado a tu correo electrónico</Text>
+                        </Text>
+                        <TextInput
+                            style={styles.token}
+                            name="token"
+                            placeholder={tokenFocus ? "" : "Código de verificación"}
+                            keyboardType="ascii-capable"
+                            cursorColor={"#D39F00"}
+                            placeholderTextColor={"rgba(245, 245, 250, .5)"}
+                            textAlign="center"
+                            textAlignVertical="center"
+                            onFocus={() => setTokenFocus(true)}
+                            onBlur={() => setTokenFocus(false)}
+                            onChangeText={token => {
+                                setTokenInput(token);
+                            }}
+                        >
+                        </TextInput>
+                    </>
                 :
                     null
             }
@@ -302,13 +324,13 @@ export default Register = () => {
                         
                     </>
                 :
-                <>
-                    <TouchableOpacity onPress={() => { newUserDB(user, email, password, token) }}>
-                        <Text style={styles.btnRegister}>
-                            Registrarse
-                        </Text>
-                    </TouchableOpacity>
-                </>
+                    <>
+                        <TouchableOpacity onPress={() => { newUserDB(user, email, password, token) }}>
+                            <Text style={styles.btnRegister}>
+                                Registrarse
+                            </Text>
+                        </TouchableOpacity>
+                    </>
             }
             <View style={styles.questionAccount}>
                 <Text style={styles.alreadyAccount}>
@@ -345,7 +367,7 @@ const styles = StyleSheet.create ({
         color: "#D39F00",
     },
     viewInputs: {
-        marginVertical: 20,
+        marginVertical: 13,
         width:"70%",
     },
     input:{
@@ -359,9 +381,27 @@ const styles = StyleSheet.create ({
         fontSize:18,
         color:"#f5f5fa"
     },
+    asterisk: {
+        color: "#D39F00"
+    },
+    textUserInputAdvice: {
+        marginLeft: 13,
+        marginTop: 3,
+        color: "rgba(245, 245, 250, .8)",
+        fontSize: 12
+    },
+    textTokenInputAdvice: {
+        marginLeft: 13,
+        marginTop: 10,
+        fontSize: 14
+    },
+    textTokenMessage: {
+        color: "rgba(35, 228, 29, .9)"
+    },
     disabledInput: {
-        backgroundColor: '#5C5C5C',
-        color: '#9B9B9B'
+        backgroundColor: '#535353',
+        color: '#9B9B9B',
+        borderColor: '#725901'
     },
     token: {
         backgroundColor: "#212121",

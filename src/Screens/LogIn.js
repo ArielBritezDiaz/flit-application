@@ -114,7 +114,9 @@ export default LogIn = ({navigation}) => {
                 {
                     isCompleteEmailInput === false
                     ?
-                        <Text>Ingrese un correo electrónico válido</Text>
+                        <Text style={styles.textUserInputAdvice}>
+                            <Text style={styles.asterisk}>*</Text> Ingrese un correo electrónico válido
+                        </Text>
                     :
                         null
                 }
@@ -140,8 +142,8 @@ export default LogIn = ({navigation}) => {
                 {
                     isCompletePasswordInput === false
                     ?
-                        <Text>
-                            Ingrese una contraseña válida (Min. 8 caracteres)
+                        <Text style={styles.textUserInputAdvice}>
+                            <Text style={styles.asterisk}>*</Text> Ingrese una contraseña válida (Min. 8 caracteres)
                         </Text>
                     :
                         null
@@ -151,7 +153,9 @@ export default LogIn = ({navigation}) => {
             {
                 isPasswordValidInput === false
                 ?
-                    <Text>Contraseña incorrecta</Text>
+                    <Text style={styles.textUserInputAdvice}>
+                        <Text style={styles.asterisk}>*</Text> Contraseña incorrecta
+                    </Text>
                 :
                     null
             }
@@ -162,7 +166,7 @@ export default LogIn = ({navigation}) => {
                 </Text>
             </TouchableOpacity>
             <View style={styles.questionAccount}>
-                <Text style={styles.alreadyAccount}>¿Ya tienes una cuenta?</Text>
+                <Text style={styles.alreadyAccount}>¿Aún no tienes una cuenta?</Text>
                 <TouchableOpacity onPress={handleRegister}>
                     <Text style={styles.register}>
                         Registarse
@@ -208,6 +212,15 @@ const styles = StyleSheet.create ({
         borderColor: '#D39F00',
         fontSize:18,
         color:"#f5f5fa"
+    },
+    asterisk: {
+        color: "#D39F00"
+    },
+    textUserInputAdvice: {
+        marginLeft: 13,
+        marginTop: 3,
+        color: "rgba(245, 245, 250, .8)",
+        fontSize: 12
     },
     btnRegister:{
         marginTop:40,
