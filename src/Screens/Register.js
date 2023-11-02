@@ -181,87 +181,92 @@ export default Register = () => {
                 <Text style={styles.title}>
                     Registro de <Text style={styles.nameCompany}>Flit</Text>
                 </Text>
-                
             </View>
-            <TextInput
-                style={[styles.input, !editableFields && styles.disabledInput]}
-                placeholder="Usuario"
-                name="user"
-                keyboardType="default"
-                cursorColor={'#D39F00'}
-                placeholderTextColor={"#D39F00"}
-                value={userBlock}
-                onChangeText={user => {
-                    setUser(user)
-                    setUserBlock(user)
-                    setIsCompleteUserInput(true)
-                }}
-                editable={editableFields}
-            ></TextInput>
 
-            {
-                isCompleteUserInput === false
-                ?
-                <Text>
-                    Ingrese un usuario válido (Min. 4 caracteres)
-                </Text>
-                :
-                null
-            }
+            <View style={styles.viewInputs}>
+                <TextInput
+                    style={[styles.input, !editableFields && styles.disabledInput]}
+                    placeholder="Usuario"
+                    name="user"
+                    keyboardType="default"
+                    cursorColor={'#D39F00'}
+                    placeholderTextColor={"#D39F00"}
+                    value={userBlock}
+                    onChangeText={user => {
+                        setUser(user)
+                        setUserBlock(user)
+                        setIsCompleteUserInput(true)
+                    }}
+                    editable={editableFields}
+                ></TextInput>
 
-            <TextInput
-                style={[styles.input, !editableFields && styles.disabledInput]}
-                placeholder="Correo electrónico"
-                name="email"
-                keyboardType="email-address"
-                cursorColor={'#D39F00'}
-                placeholderTextColor={"#D39F00"}
-                value={emailBlock}
-                onChangeText={email => {
-                    setEmail(email)
-                    setEmailBlock(email)
-                    setIsCompleteEmailInput(true)
-                }}
-                editable={editableFields}
-            ></TextInput>
+                {
+                    isCompleteUserInput === false
+                    ?
+                    <Text>
+                        Ingrese un usuario válido (Min. 4 caracteres)
+                    </Text>
+                    :
+                    null
+                }
+            </View>
 
-            {
-                isCompleteEmailInput === false
-                ?
-                <Text>
-                    Ingrese un correo electónico válido
-                </Text>
-                :
-                null
-            }
+            <View style={styles.viewInputs}>
+                <TextInput
+                    style={[styles.input, !editableFields && styles.disabledInput]}
+                    placeholder="Correo electrónico"
+                    name="email"
+                    keyboardType="email-address"
+                    cursorColor={'#D39F00'}
+                    placeholderTextColor={"#D39F00"}
+                    value={emailBlock}
+                    onChangeText={email => {
+                        setEmail(email)
+                        setEmailBlock(email)
+                        setIsCompleteEmailInput(true)
+                    }}
+                    editable={editableFields}
+                ></TextInput>
 
-            <TextInput
-                style={[styles.input, !editableFields && styles.disabledInput]}
-                name="password"
-                placeholder="Contraseña"
-                keyboardType="default"
-                cursorColor={'#D39F00'}
-                placeholderTextColor={"#D39F00"}
-                value={passwordBlock}
-                onChangeText={password => {
-                    setPassword(password)
-                    setPasswordBlock(password)
-                    setIsCompletePasswordInput(true)
-                }}
-                secureTextEntry={true}
-                editable={editableFields}
-            ></TextInput>
-            
-            {
-                isCompletePasswordInput === false
-                ?
-                <Text>
-                    Ingrese una contraseña válida (Min. 8 caracteres)
-                </Text>
-                :
-                null
-            }
+                {
+                    isCompleteEmailInput === false
+                    ?
+                    <Text>
+                        Ingrese un correo electónico válido
+                    </Text>
+                    :
+                    null
+                }
+            </View>
 
+            <View style={styles.viewInputs}>
+                <TextInput
+                    style={[styles.input, !editableFields && styles.disabledInput]}
+                    name="password"
+                    placeholder="Contraseña"
+                    keyboardType="default"
+                    cursorColor={'#D39F00'}
+                    placeholderTextColor={"#D39F00"}
+                    value={passwordBlock}
+                    onChangeText={password => {
+                        setPassword(password)
+                        setPasswordBlock(password)
+                        setIsCompletePasswordInput(true)
+                    }}
+                    secureTextEntry={true}
+                    editable={editableFields}
+                ></TextInput>
+                
+                {
+                    isCompletePasswordInput === false
+                    ?
+                    <Text>
+                        Ingrese una contraseña válida (Min. 8 caracteres)
+                    </Text>
+                    :
+                    null
+                }
+            </View>
             {
                 dataComplete === true
                 ?
@@ -282,7 +287,7 @@ export default Register = () => {
                     >
                     </TextInput>
                 :
-                    console.log()
+                    null
             }
 
             {
@@ -339,15 +344,18 @@ const styles = StyleSheet.create ({
     nameCompany: {
         color: "#D39F00",
     },
+    viewInputs: {
+        marginVertical: 20,
+        width:"70%",
+    },
     input:{
         backgroundColor: "#1F1B18",
-        marginVertical: 17,
-        width:"70%",
+        width:"100%",
         borderWidth: 3,
-        borderRadius: 10,
-        borderColor: '#D39F00',
         paddingVertical:10,
         paddingHorizontal: 20,
+        borderRadius: 10,
+        borderColor: '#D39F00',
         fontSize:18,
         color:"#f5f5fa"
     },

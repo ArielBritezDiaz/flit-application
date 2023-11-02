@@ -91,6 +91,11 @@ export default LogIn = ({navigation}) => {
         <ScrollView contentContainerStyle={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             <Image source={require('../assets/logo.png')} style={styles.img}></Image>
+            <View>
+                <Text style={styles.title}>
+                    Inicio de sesión de <Text style={styles.nameCompany}>Flit</Text>
+                </Text>
+            </View>
             <View style={styles.viewInputs}>
                 <TextInput
                     style={styles.input}
@@ -141,15 +146,16 @@ export default LogIn = ({navigation}) => {
                     :
                         null
                 }
-
-                {
-                    isPasswordValidInput === false
-                    ?
-                        <Text>Contraseña incorrecta</Text>
-                    :
-                        null
-                }
             </View>
+
+            {
+                isPasswordValidInput === false
+                ?
+                    <Text>Contraseña incorrecta</Text>
+                :
+                    null
+            }
+            
             <TouchableOpacity onPress={handleLogIn}>
                 <Text style={styles.btnRegister}>
                     Iniciar sesión
@@ -176,17 +182,28 @@ const styles = StyleSheet.create ({
     img:{
         width:200,
         height: 200,
-        marginVertical: 70
+        marginTop: 50,
+        marginBottom: 30
+    },
+    title: {
+        color: "#f5f5fa",
+        fontSize: 30,
+        marginBottom: 15
+    },
+    nameCompany: {
+        color: "#D39F00",
     },
     viewInputs: {
         marginVertical: 23,
-        paddingVertical:10,
-        paddingHorizontal: 20,
+        
+        width:"70%",
     },
     input:{
         backgroundColor: "#1F1B18",
-        width:"70%",
+        width:"100%",
         borderWidth: 3,
+        paddingVertical:10,
+        paddingHorizontal: 20,
         borderRadius: 10,
         borderColor: '#D39F00',
         fontSize:18,
