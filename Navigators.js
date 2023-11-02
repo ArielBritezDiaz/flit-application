@@ -37,7 +37,7 @@ const Stacks = () =>{
     return(
         <Stack.Navigator
             screenOptions={{
-                initialRouteName: 'LogIn',
+                initialRouteName: 'Register',
                 headerStyle:{
                     backgroundColor:'#2F2F2F',
                 }
@@ -126,7 +126,7 @@ const TabNavigation = () =>{
     return(
         <Tab.Navigator
             screenOptions={{
-                initialRouteName: 'Register',
+                initialRouteName: 'HomeScreen',
                 tabBarActiveTintColor: '#f5f5fa', 
                 tabBarInactiveTintColor: '#0f0c0c',
                 headerShown: false,

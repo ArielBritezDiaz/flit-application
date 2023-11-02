@@ -123,6 +123,7 @@ export default Register = () =>{
                         const result = await response.json();
                         console.log("result de newUserDB", result)
 
+                        AsyncStorage.setItem('id_user_save',JSON.stringify(result.id_user));
 
                         navigation.navigate(result.navigation, {
                             id_user: result.id_user

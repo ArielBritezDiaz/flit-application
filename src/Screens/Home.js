@@ -59,13 +59,19 @@ export default Home = ({route}) => {
     
             const result = await response.json();
             console.log("result at Home.js", result)
-            if (result && result.rowsNameUser[0]["user"].length > 0 && result.rowsTotalAmount.length > 0 && result.rowsTotalAmount[0]["total_amount"]) {
-                setNameUser(result.rowsNameUser[0]["user"])
+            if (result && result.rowsTotalAmount.length > 0 && result.rowsTotalAmount[0]["total_amount"]) {
                 setAmountValue(result.rowsTotalAmount[0]["total_amount"]);
             } else {
-                setNameUser('')
                 setAmountValue(0);
             }
+
+            if(result && result.rowsNameUser[0]["user"].length > 0) {
+                console.log("nameUser form Home.js", nameUser)
+                setNameUser(result.rowsNameUser[0]["user"])
+            } else {
+                setNameUser('')
+            }
+
         } catch (error) {
             console.error("Error en /api/Home", error);
         }
@@ -142,7 +148,7 @@ const styles = StyleSheet.create ({
     profileSection: {
         height: 45,
         width: "90%",
-        marginTop: 30,
+        marginTop: 60,
         backgroundColor: "#D39F00",
         flexDirection: "row",
         borderTopStartRadius: 5,

@@ -195,8 +195,6 @@ export const postNewUser = async (req, res) => {
         const { user, email, hashedPassword, token } = req.body.resultSendDataComplete.data;
         const id_user = req.body.id_user; // Agrega esto
 
-        newUserDB(user, email, hashedPassword, token, id_user); // Llama a la función newUserDB con el id_user
-
         console.log("req.body", req.body)
 
         const isValidToken = true

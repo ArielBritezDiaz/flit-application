@@ -29,7 +29,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
         saveData();
     }, [])
 
-    console.log(id_user_return)
+    console.log("id_user_return", id_user_return)
 
     const amountFormatted = Number(parseFloat(amount / 1).toFixed(4))
 

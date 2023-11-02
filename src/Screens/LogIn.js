@@ -68,7 +68,7 @@ export default LogIn = ({navigation}) => {
                         // console.log("saveIdUser", saveIdUser())
     
                         AsyncStorage.setItem('id_user_save',JSON.stringify(result.data[0].id_user));
-    
+
                         navigation.navigate(result.navigation, {
                             id_user: result.data[0].id_user
                         })
