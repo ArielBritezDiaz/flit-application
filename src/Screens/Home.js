@@ -12,6 +12,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import AutralianSymbol from '../resources/icons/norfolk-island-australian-dolar-svgrepo-com.svg';
 import ConfigurationSymbol from '../resources/icons/data-explorationenvironment-configuration-svgrepo-com.svg';
 import ExitSymbol from '../resources/icons/exit.svg'
+import Chart from '../resources/icons/chart.svg'
 
 import { EXPO_IP_HOST, EXPO_PORT } from '@env';
 
@@ -165,6 +166,11 @@ export default Home = ({route}) => {
                     </View>
                 </View>
             </View>
+            <View style={{height: 200, width: "90%", backgroundColor: "#0f0c0c"}}>
+                <TouchableOpacity onPress={() => navigation.navigate("Chart")}>
+                    <Chart height={"100%"} width={35} style={styles.svgSymbol} />
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -199,7 +205,6 @@ const styles = StyleSheet.create ({
         justifyContent: "center"
     },
     exit: {
-        backgroundColor: "#CF9C00",
         borderRadius: 5,
         height: "80%",
         justifyContent: "center",

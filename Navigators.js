@@ -21,6 +21,7 @@ import Gain from "./src/Screens/Gain";
 import Expense from "./src/Screens/Expense";
 import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
+import Chart from './src/Screens/Chart';
 import Profile from "./src/Screens/Profile";
 import Register from "./src/Screens/Register";
 import LogIn from './src/Screens/LogIn';
@@ -139,6 +140,16 @@ const Stacks = () => {
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
                     headerTitle: "Confirme su seleccion"
+                }}
+            />
+
+            <Stack.Screen
+                name="Chart"
+                component={Chart}
+                options={{
+                    headerBackTitleVisible:false,
+                    headerTintColor:'#D39F00',
+                    headerTitle: "Estadísticas"
                 }}
             />
         </Stack.Navigator>
