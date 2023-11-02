@@ -21,6 +21,7 @@ export default LogIn = ({navigation}) => {
     
     const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
+    const [id_user_save, setIdUserSave] = useState(null); // Nuevo estado para id_user_save
 
     const validationEmail = useMemo(
         () => /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -61,19 +62,16 @@ export default LogIn = ({navigation}) => {
                     const result = await response.json()
                     console.log("resultLogIn", result)
         
-                    if(result.data[0].isValidToken === 1) {
-                        setUserIsValid(true)
-
-                        // saveIdUser(result.data[0].id_user)
-                        // console.log("saveIdUser", saveIdUser())
-    
-                        AsyncStorage.setItem('id_user_save',JSON.stringify(result.data[0].id_user));
-
+                    if (result.data[0].isValidToken === 1) {
+                        setUserIsValid(true);
+                        setIdUserSave(result.data[0].id_user); // Actualizar id_user_save
+                        AsyncStorage.removeItem('id_user_save');
+                        AsyncStorage.setItem('id_user_save', JSON.stringify(result.data[0].id_user));
                         navigation.navigate(result.navigation, {
                             id_user: result.data[0].id_user
-                        })
+                        });
                     } else {
-                        setUserIsValid(false)
+                        setUserIsValid(false);
                     }
                 } else {
                     setEmailValid(false);
@@ -94,12 +92,25 @@ export default LogIn = ({navigation}) => {
         navigation.navigate('Register');
     };
 
-    useEffect(()=>{
-        navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
-        return ()=>{
-            navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
-        }
-    }, [])
+    useEffect(() => {
+        navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
+        return () => {
+            navigation.getParent().setOptions({
+                tabBarStyle: { display: 'flex', backgroundColor: '#D39F00' }
+            });
+        };
+    }, []);
+
+    useEffect(() => {
+        const saveData = async () => {
+            try {
+                await AsyncStorage.setItem('id_user_save', JSON.stringify(id_user_save));
+            } catch (error) {
+                console.error("Error al guardar los datos:", error);
+            }
+        };
+        saveData();
+    }, [id_user_save]);
 
     return(
         <ScrollView contentContainerStyle={styles.container}>

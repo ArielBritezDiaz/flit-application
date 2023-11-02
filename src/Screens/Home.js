@@ -20,7 +20,7 @@ export default Home = ({route}) => {
     console.log("id_user from Home.js", id_user)
 
     const [nameUser, setNameUser] = useState(null)
-    const [amountValue, setAmountValue] = useState (null);
+    const [amountValue, setAmountValue] = useState(null);
 
     const [showAmount, setShowAmount] = useState(true);
 
@@ -76,6 +76,13 @@ export default Home = ({route}) => {
             console.error("Error en /api/Home", error);
         }
     };
+
+    const exitAccount = () => {
+        getDataDB();
+        setNameUser('Flit');
+        setAmountValue(0);
+        navigation.navigate('Register', { reset: true });
+    }
     
 
     useEffect(() => {
@@ -96,8 +103,12 @@ export default Home = ({route}) => {
                         {`${nameUser}`}
                     </Text>
                 </View>
-                <View>
-                    <ConfigurationSymbol height={"100%"} width={35} style={styles.svgSymbol} />
+                <View style={styles.exitView}>
+                    <TouchableOpacity onPress={exitAccount} style={styles.exit}>
+                        <Text style={styles.exitText}>
+                            Salir
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.balance}>
@@ -152,19 +163,36 @@ const styles = StyleSheet.create ({
         backgroundColor: "#D39F00",
         flexDirection: "row",
         borderTopStartRadius: 5,
-        borderTopEndRadius: 5
+        borderTopEndRadius: 5,
+        alignItems: "center", // Agregar esta línea para centrar verticalmente
+        justifyContent: "center"
     },
     svgProfileSection: {
         height: "100%",
-        width:"13%",
-        marginLeft: 5
+        width:"13%"
     },
     svgSymbol: {
-        marginLeft: 4
+        marginLeft: 3
+    },
+    exitView: {
+        height: "100%",
+        width: "17%",
+        justifyContent: "center"
+    },
+    exit: {
+        backgroundColor: "#262220",
+        borderRadius: 5,
+        height: "70%",
+        justifyContent: "center"
+    },
+    exitText: {
+        textAlign: "center",
+        textAlignVertical: "center",
+        color: "#f5f5fa"
     },
     informationProfileSection: {
         height: "100%",
-        width: "72%",
+        width: "65%",
         justifyContent: "center"
     },
     nameProfileSection: {

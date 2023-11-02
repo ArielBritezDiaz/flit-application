@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { StyleSheet, View, FlatList, Text, StatusBar, Settings, Modal, TouchableOpacity } from 'react-native';
 import { SvgXml } from "react-native-svg";
 import { EXPO_IP_HOST, EXPO_PORT } from "@env";
@@ -12,20 +12,23 @@ import Down from '../resources/icons/down.svg'
 
 export default History = ({route}) => {
     
-    const [id_user_return, setId_user_return] = useState(null)
+    const [id_user_return, setId_user_return] = useState(null);
+
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         const saveData = async () => {
             try {
                 const id_user_save = await AsyncStorage.getItem('id_user_save');
-                const parse_id_user_save = JSON.parse(id_user_save)
+                const parse_id_user_save = JSON.parse(id_user_save);
                 setId_user_return(parse_id_user_save);
-            } catch(error) {
-                console.error("error in saveData", error)
+            } catch (error) {
+                console.error("Error in saveData", error);
             }
-        }
+        };
         saveData();
-    }, [])
+    }, [isFocused]);
+
 
     const [dataList, setDataList] = useState([]);
 

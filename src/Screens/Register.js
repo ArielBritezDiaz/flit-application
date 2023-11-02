@@ -50,7 +50,7 @@ export default Register = () =>{
 
             console.log(user, email, password)
 
-            if(user.length >= 4 && isValid === true && password.length >= 8) {
+            if(user.length >= 4 && user.length <= 20 && isValid === true && password.length >= 8) {
                 const newData = {
                     user,
                     email,
