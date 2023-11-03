@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { StyleSheet, View, TextInput, TouchableOpacity, Text, ScrollView, StatusBar } from 'react-native';
-import { LogBox } from 'react-native';//Component used to ignore warnings//
+import { LogBox } from 'react-native'; //Component used to ignore warnings//
 
 export default Gain = ({route, navigation}) => {
     const [amount, setAmount] = useState ('')

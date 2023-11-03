@@ -5,99 +5,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt'
 
-export const getHome = async (req, res) => {
-    try {
-        console.log("req.params", req.params)
-        const id_user = req.params.id_user
-        const [ rowsTotalAmount ] = await pool.query("SELECT (total_amount) FROM MoneyRegistry WHERE id_user = ? ORDER BY id_moneyregistry DESC LIMIT 1", [id_user])
-        const [ rowsNameUser ] = await pool.query("SELECT (user) FROM User WHERE id_user = ?", [id_user])
-        console.log("rowsTotalAmount", rowsTotalAmount)
-        console.log("rowsNameUser", rowsNameUser)
-
-        const combinedRows = {
-            rowsTotalAmount,
-            rowsNameUser
-        }
-
-        res.status(200).send(combinedRows)
-    } catch(error) {
-        return res.status(500).json({
-            "message": "Internal server error"
-        })
-    }
-}
-
-export const postConfirmationScreen = async (req, res) => {
-    try {
-        console.log(req.body)
-        console.log("req.params", req.params)
-
-        const id_user = Number(req.params.id_user)
-        console.log("id_user", id_user)
-
-        const {amountFormatted, totalAmount, gain_expense, note, imageValues} = req.body
-        const categoryPosition = imageValues.iconNumberPosition
-        console.log("categoryPosition", categoryPosition)
-
-        const date = new Date();
-        let dateFormatted = date.toISOString().slice(0, 19).replace("T", " ")
-        let hour = dateFormatted.slice(11)
-
-        // Formateo de tiempo MX
-        // Calculamos la diferencia horaria entre UTC y MX
-        let numberTime = hour.slice(0, 2)
-        let utcDifferenceWithMX = numberTime - 3
-        let timeARGHours = 0 + utcDifferenceWithMX
-        let timeARGMinutes = hour.slice(3)
-
-        if(timeARGHours == 0) timeARGHours = 0
-        if(timeARGHours < 0) timeARGHours = 1
-        if(timeARGHours < 10 && timeARGHours >= 0) timeARGHours = `0${timeARGHours}`
-        if(timeARGMinutes < 10) timeARGMinutes = `0${timeARGMinutes}`
-
-        let hourFull = `${timeARGHours}:${timeARGMinutes}`
-        
-        let dateFull = `${dateFormatted.slice(0, 11)} ${hourFull}`
-
-        const [rows] = await pool.query("INSERT INTO MoneyRegistry(total_amount, entered_amount, gain_expense, id_user, note, id_category, date) VALUES(?, ?, ?, ?, ?, ?, ?)", [totalAmount, amountFormatted, gain_expense, id_user, note, categoryPosition, dateFull])
-
-        console.log("rowspCS", rows)
-
-        res.status(200).send({
-            navigation: req.body.navigation,
-            totalAmount: totalAmount 
-        })
-    } catch(error) {
-        console.error("Error de inserción:", error);
-        return res.status(500).json({
-            "message": "Internal server error"
-        })
-    }
-}
-
-export const getHistory = async (req, res) => {
-    try {
-        const id_user = Number(req.params.id_user)
-
-        const [rows] = await pool.query("SELECT id_moneyregistry, entered_amount, gain_expense, note, id_category, date FROM MoneyRegistry WHERE id_user = ?", [id_user])
-        
-        const [rowsCategory] = await pool.query(`SELECT * FROM Category`)
-
-        const combinedRows = {
-            rows,
-            rowsCategory
-        };
-        
-        res.status(200).send({
-            combinedRows
-        })
-    } catch(error) {
-        return res.status(500).json({
-            "message": "Internal server error"
-        })
-    }
-}
-
 export const postSendEmail = async (req, res) => {
     try {
         const { user, email, password, token } = req.body
@@ -258,21 +165,116 @@ export const postSearchUser = async (req, res) => {
                 passwordIncorrect: "Contraseña incorrecta"
             })
         }
-
-        // bcrypt.compare(req.body.password, user.password, function(err, res) {
-        //     if (err){
-        //       // handle error
-        //     }
-        //     if (res) {
-        //       // Send JWT
-        //     } else {
-        //       // response is OutgoingMessage object that server response http request
-        //       return response.json({success: false, message: 'passwords do not match'});
-        //     }
-        // });
-
     } catch(error) {
         console.log("Error en la búsqueda de usuario en LogIn", error)
         return res.status(500).json({ "message": "Internal server error" })
+    }
+}
+
+export const getHome = async (req, res) => {
+    try {
+        console.log("req.params", req.params)
+        const id_user = req.params.id_user
+        const [ rowsTotalAmount ] = await pool.query("SELECT (total_amount) FROM MoneyRegistry WHERE id_user = ? ORDER BY id_moneyregistry DESC LIMIT 1", [id_user])
+        const [ rowsNameUser ] = await pool.query("SELECT (user) FROM User WHERE id_user = ?", [id_user])
+        console.log("rowsTotalAmount", rowsTotalAmount)
+        console.log("rowsNameUser", rowsNameUser)
+
+        const combinedRows = {
+            rowsTotalAmount,
+            rowsNameUser
+        }
+
+        res.status(200).send(combinedRows)
+    } catch(error) {
+        return res.status(500).json({
+            "message": "Internal server error"
+        })
+    }
+}
+
+export const postConfirmationScreen = async (req, res) => {
+    try {
+        console.log(req.body)
+        console.log("req.params", req.params)
+
+        const id_user = Number(req.params.id_user)
+        console.log("id_user", id_user)
+
+        const {amountFormatted, totalAmount, gain_expense, note, imageValues} = req.body
+        const categoryPosition = imageValues.iconNumberPosition
+        console.log("categoryPosition", categoryPosition)
+
+        const date = new Date();
+        let dateFormatted = date.toISOString().slice(0, 19).replace("T", " ")
+        let hour = dateFormatted.slice(11)
+
+        // Formateo de tiempo MX
+        // Calculamos la diferencia horaria entre UTC y MX
+        let numberTime = hour.slice(0, 2)
+        let utcDifferenceWithMX = numberTime - 3
+        let timeARGHours = 0 + utcDifferenceWithMX
+        let timeARGMinutes = hour.slice(3)
+
+        if(timeARGHours == 0) timeARGHours = 0
+        if(timeARGHours < 0) timeARGHours = 1
+        if(timeARGHours < 10 && timeARGHours >= 0) timeARGHours = `0${timeARGHours}`
+        if(timeARGMinutes < 10) timeARGMinutes = `0${timeARGMinutes}`
+
+        let hourFull = `${timeARGHours}:${timeARGMinutes}`
+        
+        let dateFull = `${dateFormatted.slice(0, 11)} ${hourFull}`
+
+        const [rows] = await pool.query("INSERT INTO MoneyRegistry(total_amount, entered_amount, gain_expense, id_user, note, id_category, date) VALUES(?, ?, ?, ?, ?, ?, ?)", [totalAmount, amountFormatted, gain_expense, id_user, note, categoryPosition, dateFull])
+
+        console.log("rowspCS", rows)
+
+        res.status(200).send({
+            navigation: req.body.navigation,
+            totalAmount: totalAmount 
+        })
+    } catch(error) {
+        console.error("Error de inserción:", error);
+        return res.status(500).json({
+            "message": "Internal server error"
+        })
+    }
+}
+
+export const getHistory = async (req, res) => {
+    try {
+        const id_user = Number(req.params.id_user)
+
+        const [rows] = await pool.query("SELECT id_moneyregistry, entered_amount, gain_expense, note, id_category, date FROM MoneyRegistry WHERE id_user = ?", [id_user])
+        
+        const [rowsCategory] = await pool.query(`SELECT * FROM Category`)
+
+        const combinedRows = {
+            rows,
+            rowsCategory
+        };
+        
+        res.status(200).send({
+            combinedRows
+        })
+    } catch(error) {
+        return res.status(500).json({
+            "message": "Internal server error"
+        })
+    }
+}
+
+export const getChart = async (req, res) => {
+    try {
+        const id_user = req.params.id_user;
+        console.log("id_user", id_user)
+        const [ rows ] = await pool.query("SELECT * FROM MoneyRegistry WHERE id_user = ?", [id_user])
+        return res.status(200).json({
+            rows
+        })
+    } catch(error) {
+        return res.status(500).json({
+            "message": "Internal server error"
+        })
     }
 }

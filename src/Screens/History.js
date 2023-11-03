@@ -19,15 +19,15 @@ export default History = ({route}) => {
     useEffect(() => {
         const saveData = async () => {
             try {
-                const id_user_save = await AsyncStorage.getItem('id_user_save');
-                const parse_id_user_save = JSON.parse(id_user_save);
-                setId_user_return(parse_id_user_save);
+                const id_user_save = await AsyncStorage.getItem('id_user_save')
+                const parse_id_user_save = JSON.parse(id_user_save)
+                setId_user_return(parse_id_user_save)
             } catch (error) {
-                console.error("Error in saveData", error);
+                console.error("Error in saveData", error)
             }
         };
-        saveData();
-    }, [isFocused]);
+        saveData()
+    }, [isFocused])
 
 
     const [dataList, setDataList] = useState([]);
@@ -52,14 +52,14 @@ export default History = ({route}) => {
                     'Content-Type': 'application/json'
                 }
             });
-            const result = await response.json();
+            const result = await response.json()
     
             if (result && result.combinedRows && result.combinedRows.rows && result.combinedRows.rowsCategory) {
                 const organizedData = result.combinedRows.rows.map((dato, index) => {
                     const correspondingCategory = result.combinedRows.rowsCategory.find(
                         (category) => category.id_category === dato.id_category
-                    );
-                    const dateFormatted = moment(dato.date).format('YYYY/MM/DD HH:mm');
+                    )
+                    const dateFormatted = moment(dato.date).format('YYYY/MM/DD HH:mm')
 
                     return {
                         id_moneyregistry: (counterIdRegistry + index) + 1,
@@ -72,9 +72,9 @@ export default History = ({route}) => {
                         image: correspondingCategory.svg,
                         nameCategory: correspondingCategory.nameCategory,
                         styles_icon: correspondingCategory.styles_icon
-                    };
-                });
-                setDataList(organizedData.reverse());
+                    }
+                })
+                setDataList(organizedData.reverse())
             }
     
             if (result && result.rowsCategory) {
@@ -195,7 +195,7 @@ export default History = ({route}) => {
     )
 }
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
     container:{
         flex:1,
         justifyContent: 'center',

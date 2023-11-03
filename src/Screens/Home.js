@@ -17,9 +17,6 @@ import Chart from '../resources/icons/chart.svg'
 import { EXPO_IP_HOST, EXPO_PORT } from '@env';
 
 export default Home = ({route}) => {
-    
-    const [id_user_return, setId_user_return] = useState(null)
-
     const [result, setResult] = useState(null);
 
     const [nameUser, setNameUser] = useState("Flit")
@@ -50,7 +47,7 @@ export default Home = ({route}) => {
     const getDataDB = async () => {
         try {
             const id_user = await AsyncStorage.getItem('id_user_save');
-            console.log("id_user in Home.js", id_user);
+            // console.log("id_user in Home.js", id_user);
             const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/Home/${id_user}`, {
                 method: "GET",
                 headers: {
@@ -65,7 +62,7 @@ export default Home = ({route}) => {
             }
     
             const result = await response.json(); // Definir 'result' aquí
-            console.log("result at Home.js", result);
+            // console.log("result at Home.js", result);
             if (result && result.rowsTotalAmount.length > 0 && result.rowsTotalAmount[0]["total_amount"]) {
                 setAmountValue(result.rowsTotalAmount[0]["total_amount"]);
             } else {
@@ -74,7 +71,7 @@ export default Home = ({route}) => {
     
             if (result && result.rowsNameUser.length > 0 && result.rowsNameUser[0]["user"]) {
                 setNameUser(result.rowsNameUser[0]["user"]);
-                console.log("nameUser from Home.js", nameUser);
+                // console.log("nameUser from Home.js", nameUser);
             } else {
                 setNameUser('Flit');
             }
