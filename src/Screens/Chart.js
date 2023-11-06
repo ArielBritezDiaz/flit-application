@@ -45,7 +45,7 @@ export default Chart = ({ navigation }) => {
                 if (id_user_return) {
                     console.log("id_user_return", id_user_return);
                     const response = await fetch(
-                        `http://${EXPO_IP_HOST}:${EXPO_PORT}/api/ChartData/${id_user_return}/oneMonth`,
+                        `http://${EXPO_IP_HOST}:${EXPO_PORT}/api/ChartDataUser/${id_user_return}/oneMonth`,
                         {
                             method: "GET",
                             headers: {
@@ -130,7 +130,6 @@ export default Chart = ({ navigation }) => {
                         labels={({ datum }) => `$${datum.amount}k`}
                         labelComponent={
                             <VictoryTooltip
-
                                 centerOffset={{x: 0}}
                                 constrainToVisibleArea
                                 cornerRadius={5}

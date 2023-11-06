@@ -264,7 +264,7 @@ export const getHistory = async (req, res) => {
     }
 }
 
-export const getChartOneMonth = async (req, res) => {
+export const getChartDataUserOneMonth = async (req, res) => {
     try {
         const id_user = req.params.id_user;
         console.log("id_user", id_user)
@@ -272,6 +272,7 @@ export const getChartOneMonth = async (req, res) => {
         const date = new Date()
         const thisMonth = date.getUTCMonth() + 1
         console.log(thisMonth)
+
         const [rows] = await pool.query(
             `SELECT 
                 SUM(entered_amount) as total_amount,
@@ -298,6 +299,41 @@ export const getChartOneMonth = async (req, res) => {
 
         return res.status(200).json({
             rows
+        })
+    } catch(error) {
+        return res.status(500).json({
+            "message": "Internal server error"
+        })
+    }
+}
+
+export const getChartDataCategoriesOneMonth = async (req, res) => {
+    try {
+        const id_user = req.params.id_user;
+        console.log(id_user)
+        
+        const date = new Date()
+        const thisMonth = date.getUTCMonth() + 1
+        console.log(thisMonth)
+
+        const [rows] = await pool.query(
+            `SELECT 
+            id_category, 
+            SUM(entered_amount) as total_amount, 
+            ROUND(SUM(entered_amount) * 100 / (SELECT SUM(entered_amount) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) as percentage_usage
+        FROM MoneyRegistry
+        WHERE id_user = ? AND MONTH(date) = ?
+        GROUP BY id_category`, [id_user, thisMonth, id_user, thisMonth]
+        )
+        console.log("rows", rows)
+        const [rowsCategory] = await pool.query("SELECT * FROM Category")
+        console.log("rowsCategory", rowsCategory)
+        const combinedRows = {
+            rows,
+            rowsCategory
+        }
+        return res.status(200).json({
+            combinedRows
         })
     } catch(error) {
         return res.status(500).json({

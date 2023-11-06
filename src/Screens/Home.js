@@ -165,7 +165,11 @@ export default Home = ({route}) => {
             </View>
             <View style={{height: 200, width: "90%", backgroundColor: "#0f0c0c"}}>
                 <TouchableOpacity onPress={() => navigation.navigate("Chart")}>
-                    <Chart height={"100%"} width={35} style={styles.svgSymbol} />
+                    <Chart height={"50%"} width={35} style={styles.svgSymbol} />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => navigation.navigate("ChartPastel")}>
+                    <Chart height={"50%"} width={35} style={styles.svgSymbol} />
                 </TouchableOpacity>
             </View>
         </View>

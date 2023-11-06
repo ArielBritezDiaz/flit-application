@@ -22,6 +22,7 @@ import Expense from "./src/Screens/Expense";
 import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
 import Chart from './src/Screens/Chart';
+import ChartPastel from './src/Screens/ChartPastel';
 import Profile from "./src/Screens/Profile";
 import Register from "./src/Screens/Register";
 import LogIn from './src/Screens/LogIn';
@@ -146,6 +147,16 @@ const Stacks = () => {
             <Stack.Screen
                 name="Chart"
                 component={Chart}
+                options={{
+                    headerBackTitleVisible:false,
+                    headerTintColor:'#D39F00',
+                    headerTitle: "Estadísticas"
+                }}
+            />
+
+            <Stack.Screen
+                name="ChartPastel"
+                component={ChartPastel}
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
