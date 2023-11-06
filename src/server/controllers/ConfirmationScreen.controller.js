@@ -317,21 +317,61 @@ export const getChartDataCategoriesOneMonth = async (req, res) => {
         console.log(thisMonth)
 
         const [rows] = await pool.query(
-            `SELECT 
-            id_category, 
-            SUM(entered_amount) as total_amount, 
-            ROUND(SUM(entered_amount) * 100 / (SELECT SUM(entered_amount) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) as percentage_usage
-        FROM MoneyRegistry
-        WHERE id_user = ? AND MONTH(date) = ?
-        GROUP BY id_category`, [id_user, thisMonth, id_user, thisMonth]
+            `WITH ranked_data AS (
+                SELECT 
+                    id_category, 
+                    SUM(entered_amount) as total_amount, 
+                    ROUND(SUM(entered_amount) * 100 / (SELECT SUM(entered_amount) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) as percentage_usage,
+                    DENSE_RANK() OVER (ORDER BY ROUND(SUM(entered_amount) * 100 / (SELECT SUM(entered_amount) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) ASC) as usage_rank
+                FROM MoneyRegistry
+                WHERE id_user = ? AND MONTH(date) = ?
+                GROUP BY id_category
+            )
+            SELECT * FROM ranked_data`, [id_user, thisMonth, id_user, thisMonth, id_user, thisMonth]
         )
+        
         console.log("rows", rows)
         const [rowsCategory] = await pool.query("SELECT * FROM Category")
-        console.log("rowsCategory", rowsCategory)
+        // console.log("rowsCategory", rowsCategory)
         const combinedRows = {
             rows,
             rowsCategory
         }
+        return res.status(200).json({
+            combinedRows
+        })
+    } catch(error) {
+        return res.status(500).json({
+            "message": "Internal server error"
+        })
+    }
+}
+
+export const getCategoryHistoryOneMonth = async (req, res) => {
+    try {
+        const id_user = req.params.id_user;
+        const id_category = req.params.id_category;
+
+        console.log(id_user)
+        console.log(id_category)
+
+        const date = new Date()
+        const thisMonth = date.getUTCMonth() + 1
+        console.log(thisMonth)
+
+        const [rows] = await pool.query(
+            `
+            SELECT * FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ? AND id_category = ?
+            `, [id_user, thisMonth, id_category]
+        )
+        
+        const [rowsCategory] = await pool.query(`SELECT * FROM Category`)
+
+        const combinedRows = {
+            rows,
+            rowsCategory
+        };
+        
         return res.status(200).json({
             combinedRows
         })

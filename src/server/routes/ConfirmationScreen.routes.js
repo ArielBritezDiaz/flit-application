@@ -3,7 +3,7 @@ import { PORT } from '../../../config.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { postSendEmail, postNewUser, postSearchUser, getHome, postConfirmationScreen, getHistory, getChartDataUserOneMonth, getChartDataCategoriesOneMonth } from '../controllers/ConfirmationScreen.controller.js'
+import { postSendEmail, postNewUser, postSearchUser, getHome, postConfirmationScreen, getHistory, getChartDataUserOneMonth, getChartDataCategoriesOneMonth, getCategoryHistoryOneMonth } from '../controllers/ConfirmationScreen.controller.js'
 
 const app = express();
 const port = PORT;
@@ -33,6 +33,8 @@ app.get('/api/History/:id_user', getHistory);
 app.get('/api/ChartDataUser/:id_user/oneMonth', getChartDataUserOneMonth)
 
 app.get('/api/ChartDataCategories/:id_user/oneMonth', getChartDataCategoriesOneMonth)
+
+app.get('/api/CategoryHistory/:id_user/:id_category/oneMonth', getCategoryHistoryOneMonth)
 
 app.listen(port, () => {
     console.log(`Server on port ${PORT} listen`);

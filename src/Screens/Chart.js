@@ -114,7 +114,14 @@ export default Chart = ({ navigation }) => {
                     width={350}
                     theme={VictoryTheme.material}
                     domainPadding={15}
-                    animate={{duration: 700}}
+                    animate={
+                        {
+                            duration: 700,
+                            onLoad: {
+                                duration: 700
+                            }
+                        }
+                    }
                 >
                     <VictoryAxis
                         tickValues={dates}
