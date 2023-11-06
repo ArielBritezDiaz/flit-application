@@ -264,11 +264,38 @@ export const getHistory = async (req, res) => {
     }
 }
 
-export const getChart = async (req, res) => {
+export const getChartOneMonth = async (req, res) => {
     try {
         const id_user = req.params.id_user;
         console.log("id_user", id_user)
-        const [ rows ] = await pool.query("SELECT * FROM MoneyRegistry WHERE id_user = ?", [id_user])
+
+        const date = new Date()
+        const thisMonth = date.getUTCMonth() + 1
+        console.log(thisMonth)
+        const [rows] = await pool.query(
+            `SELECT 
+                SUM(entered_amount) as total_amount,
+                CASE 
+                    WHEN DAY(date) <= 5 THEN LPAD(5, 2, '0')
+                    WHEN DAY(date) <= 10 THEN 10
+                    WHEN DAY(date) <= 15 THEN 15
+                    WHEN DAY(date) <= 20 THEN 20
+                    WHEN DAY(date) <= 25 THEN 25
+                    ELSE 30
+                END as rounded_day
+            FROM 
+                MoneyRegistry
+            WHERE 
+                id_user = ? AND MONTH(date) = ?
+            GROUP BY 
+                rounded_day
+            ORDER BY 
+                rounded_day`,
+            [id_user, thisMonth]
+        );
+        
+        console.log("rows", rows)
+
         return res.status(200).json({
             rows
         })

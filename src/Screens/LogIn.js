@@ -45,7 +45,7 @@ export default LogIn = ({navigation}) => {
                     }
         
                     const result = await response.json()
-                    console.log("resultLogIn", result)
+                    // console.log("resultLogIn", result)
         
                     if (result.data[0].isValidToken === 1) {
                         setIdUserSave(result.data[0].id_user);
