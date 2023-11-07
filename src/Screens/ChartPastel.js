@@ -55,8 +55,7 @@ export default Chart = ({ navigation }) => {
                 if (id_user_return) {
                     console.log("id_user_return", id_user_return);
                     const response = await fetch(
-                        `http://${EXPO_IP_HOST}:${EXPO_PORT}/api/ChartDataCategories/${id_user_return}/oneMonth`,
-                        {
+                        `http://${EXPO_IP_HOST}:${EXPO_PORT}/api/ChartDataCategories/${id_user_return}/oneMonth`, {
                             method: "GET",
                             headers: {
                                 "Content-Type": "application/json",

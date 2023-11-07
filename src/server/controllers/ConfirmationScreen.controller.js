@@ -275,7 +275,6 @@ export const getChartDataUserOneMonth = async (req, res) => {
 
         const [rows] = await pool.query(
             `SELECT 
-                SUM(entered_amount) as total_amount,
                 CASE 
                     WHEN DAY(date) <= 5 THEN LPAD(5, 2, '0')
                     WHEN DAY(date) <= 10 THEN 10
@@ -283,7 +282,10 @@ export const getChartDataUserOneMonth = async (req, res) => {
                     WHEN DAY(date) <= 20 THEN 20
                     WHEN DAY(date) <= 25 THEN 25
                     ELSE 30
-                END as rounded_day
+                END as rounded_day,
+                SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) as total_amount, 
+                ROUND(SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) * 100 / (SELECT SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) as percentage_usage,
+                DENSE_RANK() OVER (ORDER BY ROUND(SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) * 100 / (SELECT SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) ASC) as usage_rank
             FROM 
                 MoneyRegistry
             WHERE 
@@ -292,7 +294,7 @@ export const getChartDataUserOneMonth = async (req, res) => {
                 rounded_day
             ORDER BY 
                 rounded_day`,
-            [id_user, thisMonth]
+            [id_user, thisMonth, id_user, thisMonth, id_user, thisMonth]
         );
         
         console.log("rows", rows)
@@ -320,14 +322,14 @@ export const getChartDataCategoriesOneMonth = async (req, res) => {
             `WITH ranked_data AS (
                 SELECT 
                     id_category, 
-                    SUM(entered_amount) as total_amount, 
-                    ROUND(SUM(entered_amount) * 100 / (SELECT SUM(entered_amount) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) as percentage_usage,
-                    DENSE_RANK() OVER (ORDER BY ROUND(SUM(entered_amount) * 100 / (SELECT SUM(entered_amount) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) ASC) as usage_rank
+                    SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) as total_amount, 
+                    ROUND(SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) * 100 / (SELECT SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) as percentage_usage,
+                    DENSE_RANK() OVER (ORDER BY ROUND(SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) * 100 / (SELECT SUM(CASE WHEN gain_expense = 'gain' THEN entered_amount ELSE -entered_amount END) FROM MoneyRegistry WHERE id_user = ? AND MONTH(date) = ?), 2) ASC) as usage_rank
                 FROM MoneyRegistry
                 WHERE id_user = ? AND MONTH(date) = ?
                 GROUP BY id_category
             )
-            SELECT * FROM ranked_data`, [id_user, thisMonth, id_user, thisMonth, id_user, thisMonth]
+            SELECT * FROM ranked_data;`, [id_user, thisMonth, id_user, thisMonth, id_user, thisMonth]
         )
         
         console.log("rows", rows)

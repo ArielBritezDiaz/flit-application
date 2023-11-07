@@ -34,6 +34,21 @@ export default CategoryHistory = ({ route, navigation }) => {
 
     const [isDataAvailable, setIsDataAvailable] = useState(false);
 
+    const [maxEnteredAmount, setMaxEnteredAmount] = useState(0);
+    const [lowestEnteredAmount, setLowestEnteredAmount] = useState(0);
+
+    const addDots = (nStr) => {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2'); // changed comma to dot here
+        }
+        return x1 + x2;
+    }
+
     useEffect(() => {
         const saveData = async () => {
             try {
@@ -71,14 +86,32 @@ export default CategoryHistory = ({ route, navigation }) => {
                     const result = await response.json()
                     // console.log(result)
 
-
                     if (result && result.combinedRows && result.combinedRows.rows && result.combinedRows.rowsCategory) {
+                        let a = 0
+                        let b = 0
+
                         const organizedData = result.combinedRows.rows.map((dato, index) => {
                             const correspondingCategory = result.combinedRows.rowsCategory.find(
                                 (category) => category.id_category === dato.id_category
                             )
                             const dateFormatted = moment(dato.date).format('YYYY/MM/DD HH:mm')
-        
+
+                            if (dato.gain_expense === "gain") {
+                                const parsedEnteredAmount = parseFloat(dato.entered_amount)
+                                if (parsedEnteredAmount > maxEnteredAmount) {
+                                    a = parsedEnteredAmount
+                                }
+                            }
+                            if(dato.gain_expense === "expense") {
+                                const parsedLowestEnteredAmount = parseFloat(dato.entered_amount);
+                                if (parsedLowestEnteredAmount > lowestEnteredAmount) {
+                                    b = parsedLowestEnteredAmount
+                                }
+                            }
+
+                            setMaxEnteredAmount(a)
+                            setLowestEnteredAmount(b)
+
                             return {
                                 id_moneyregistry: (counterIdRegistry + index) + 1,
                                 entered_amount: dato.entered_amount,
@@ -89,14 +122,18 @@ export default CategoryHistory = ({ route, navigation }) => {
                                 id_category: correspondingCategory.id_category,
                                 image: correspondingCategory.svg,
                                 nameCategory: correspondingCategory.nameCategory,
-                                styles_icon: correspondingCategory.styles_icon
+                                styles_icon: correspondingCategory.styles_icon,
+                                maxEnteredAmount,
+                                lowestEnteredAmount
                             }
                         })
-                        setDataList(organizedData.reverse())
-                        setIsDataAvailable(true)
-                        console.log(dataList)
-                    }
 
+                        setDataList(organizedData.reverse())
+                        // console.log("dataList[0].maxEnteredAmount", dataList[0].maxEnteredAmount)
+                        // console.log("dataList[0].maxEnteredAmount", dataList[0].lowestEnteredAmount)
+
+                        setIsDataAvailable(true)
+                    }
                 }
             } catch (error) {
                 console.log("Error in ChartData", error)
@@ -104,23 +141,44 @@ export default CategoryHistory = ({ route, navigation }) => {
         }
 
         getCategoryHistory()
+        
+        // console.log(dataList)
     }, [id_user_return])
     
     return(
+        // consejos en el home de la app
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             {
                 isDataAvailable === true
                 ?
                     <View style={styles.infoCharCategory}>
-                        <View>
-                            <Text>
-                                {dataList[0].nameCategory}
-                            </Text>
+                        <View style={styles.infoCategorySection}>
+                            <View>
+                                <Text style={styles.nameCategorySvg}>
+                                    {dataList[0].nameCategory}
+                                </Text>
+                            </View>
+                            <View style={{paddingHorizontal: 5}}>
+                                <Text style={styles.dataCategory}>
+                                    Monto de último registro: ${addDots(parseFloat(dataList[0].entered_amount).toFixed(2))}
+                                </Text>
+                                <Text style={styles.dataCategory}>
+                                    Ingreso más alto: ${addDots(parseFloat(dataList[0].maxEnteredAmount).toFixed(2))}
+                                </Text>
+                                <Text style={styles.dataCategory}>
+                                    Gasto más alto: ${addDots(parseFloat(dataList[0].lowestEnteredAmount).toFixed(2))}
+                                </Text>
+                            </View>
+                        </View>
+                        <View style={styles.svgCategorySection}>
+                            <View style={[styles.svgViewCategory, { backgroundColor: dataList[0].hexColor }]}>
+                                <SvgXml xml={dataList[0].image} width="90px" height="90px" />
+                            </View>
                         </View>
                     </View>
                 :
-                null
+                    null
             }
             
             <FlatList
@@ -143,9 +201,6 @@ export default CategoryHistory = ({ route, navigation }) => {
                                     }
                                 })()}
                             </View>
-                        </View>
-                        <View style={[styles.icon, { backgroundColor: item.hexColor }]}>
-                            <SvgXml xml={item.image} width="35px" height="35px" />
                         </View>
                     </View>
             
@@ -232,15 +287,17 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor:'#2f2f2f',
+        backgroundColor: "#0f0c0c",
         paddingVertical:10,
         height:'100%'
     },
     infoCharCategory: {
         height: 150,
         width: "100%",
-        borderWidth: 1,
-        borderColor: "#fff"
+        flexDirection: 'row',
+        backgroundColor: "#0f0c0c"
+        // borderWidth: 1,
+        // borderColor: "#fff",
     },
     list:{
         width:'90%'
@@ -283,7 +340,7 @@ const styles = StyleSheet.create({
     catBottom: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     catText: {
         fontSize: 25,
@@ -386,5 +443,33 @@ const styles = StyleSheet.create({
         marginTop:40,
         fontSize:16,
         fontWeight:'bold'
+    },
+    infoCategorySection: {
+        width: "60%"
+    },
+    svgViewCategory: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 100,
+        width: 120,
+        height: 120,
+        padding: 20,
+        margin: 10
+    },
+    svgCategorySection: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%'
+        // borderWidth: 2,
+        // borderColor: '#f00'
+    },
+    nameCategorySvg: {
+        color: "#F5F5FA",
+        fontSize: 40,
+        padding: 5
+    },
+    dataCategory: {
+        color: "#F5F5FA"
     }
 })
