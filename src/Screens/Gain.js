@@ -69,32 +69,32 @@ export default Gain = ({route, navigation}) => {
                 <TouchableOpacity value={selectedAmount}
                 onPress={() => typingAmount('5000')}>
                     <Text style={styles.option}>
-                        $5000
+                        $5.000
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity value={selectedAmount}
                 onPress={() => typingAmount('10000')}>
                     <Text style={styles.option}>
-                        $10000
+                        $10.000
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity value={selectedAmount}
                 onPress={() => typingAmount('15000')}>
                     <Text style={styles.option}>
-                        $15000
+                        $15.000
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity value={selectedAmount}
                 onPress={() => typingAmount('30000')}>
                     <Text style={styles.option}>
-                        $30000
+                        $30.000
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity value={selectedAmount}
                 onPress={() => typingAmount('50000')}
                 style>
                     <Text style={styles.option}>
-                        $50000
+                        $50.000
                     </Text>
                 </TouchableOpacity>
             </ScrollView>

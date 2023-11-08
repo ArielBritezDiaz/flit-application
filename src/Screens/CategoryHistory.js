@@ -38,15 +38,18 @@ export default CategoryHistory = ({ route, navigation }) => {
     const [lowestEnteredAmount, setLowestEnteredAmount] = useState(0);
 
     const addDots = (nStr) => {
-        nStr += '';
-        x = nStr.split('.');
-        x1 = x[0];
-        x2 = x.length > 1 ? '.' + x[1] : '';
-        var rgx = /(\d+)(\d{3})/;
+        nStr += ''
+        x = nStr.split('.')
+        x1 = x[0]
+        x2 = x.length > 1 ? '.' + x[1] : ''
+
+        let rgx = /(\d+)(\d{3})/
+
         while (rgx.test(x1)) {
-            x1 = x1.replace(rgx, '$1' + ',' + '$2'); // changed comma to dot here
+            x1 = x1.replace(rgx, '$1' + ',' + '$2')
         }
-        return x1 + x2;
+
+        return x1 + x2
     }
 
     useEffect(() => {
@@ -58,7 +61,8 @@ export default CategoryHistory = ({ route, navigation }) => {
             } catch (error) {
                 console.error("Error in saveData", error)
             }
-        };
+        }
+
         saveData()
     }, [isFocused])
 
@@ -87,30 +91,11 @@ export default CategoryHistory = ({ route, navigation }) => {
                     // console.log(result)
 
                     if (result && result.combinedRows && result.combinedRows.rows && result.combinedRows.rowsCategory) {
-                        let a = 0
-                        let b = 0
-
                         const organizedData = result.combinedRows.rows.map((dato, index) => {
                             const correspondingCategory = result.combinedRows.rowsCategory.find(
                                 (category) => category.id_category === dato.id_category
                             )
                             const dateFormatted = moment(dato.date).format('YYYY/MM/DD HH:mm')
-
-                            if (dato.gain_expense === "gain") {
-                                const parsedEnteredAmount = parseFloat(dato.entered_amount)
-                                if (parsedEnteredAmount > maxEnteredAmount) {
-                                    a = parsedEnteredAmount
-                                }
-                            }
-                            if(dato.gain_expense === "expense") {
-                                const parsedLowestEnteredAmount = parseFloat(dato.entered_amount);
-                                if (parsedLowestEnteredAmount > lowestEnteredAmount) {
-                                    b = parsedLowestEnteredAmount
-                                }
-                            }
-
-                            setMaxEnteredAmount(a)
-                            setLowestEnteredAmount(b)
 
                             return {
                                 id_moneyregistry: (counterIdRegistry + index) + 1,
@@ -122,15 +107,11 @@ export default CategoryHistory = ({ route, navigation }) => {
                                 id_category: correspondingCategory.id_category,
                                 image: correspondingCategory.svg,
                                 nameCategory: correspondingCategory.nameCategory,
-                                styles_icon: correspondingCategory.styles_icon,
-                                maxEnteredAmount,
-                                lowestEnteredAmount
+                                styles_icon: correspondingCategory.styles_icon
                             }
                         })
 
                         setDataList(organizedData.reverse())
-                        // console.log("dataList[0].maxEnteredAmount", dataList[0].maxEnteredAmount)
-                        // console.log("dataList[0].maxEnteredAmount", dataList[0].lowestEnteredAmount)
 
                         setIsDataAvailable(true)
                     }
@@ -144,6 +125,41 @@ export default CategoryHistory = ({ route, navigation }) => {
         
         // console.log(dataList)
     }, [id_user_return])
+
+    useEffect(() => {
+        if (dataList && isDataAvailable === true) {
+            let maxEntered = 0
+            let lowestEntered = 0
+        
+            const dataMaxEnteredAmount = dataList.map((data) => {
+                if (data.gain_expense === "gain") {
+                    const parsedEnteredAmount = parseFloat(data.entered_amount)
+                    if (parsedEnteredAmount > maxEntered) {
+                        maxEntered = parsedEnteredAmount
+                    }
+                }
+                return maxEntered
+            })
+        
+            const dataLowerEnteredAmount = dataList.map((data) => {
+                if (data.gain_expense === "expense") {
+                    const parsedLowestEnteredAmount = parseFloat(data.entered_amount)
+                    if (parsedLowestEnteredAmount > lowestEntered) {
+                        lowestEntered = parsedLowestEnteredAmount
+                    }
+                }
+                return lowestEntered
+            })
+      
+            // console.log("dataMaxEnteredAmount", dataMaxEnteredAmount)
+            // console.log("dataLowerEnteredAmount", dataLowerEnteredAmount[dataMaxEnteredAmount.length - 1])
+        
+            setMaxEnteredAmount(dataMaxEnteredAmount[dataMaxEnteredAmount.length - 1])
+            setLowestEnteredAmount(dataLowerEnteredAmount[dataLowerEnteredAmount.length - 1])
+        }
+    }, [dataList, isDataAvailable])
+      
+      
     
     return(
         // consejos en el home de la app
@@ -164,10 +180,10 @@ export default CategoryHistory = ({ route, navigation }) => {
                                     Monto de último registro: ${addDots(parseFloat(dataList[0].entered_amount).toFixed(2))}
                                 </Text>
                                 <Text style={styles.dataCategory}>
-                                    Ingreso más alto: ${addDots(parseFloat(dataList[0].maxEnteredAmount).toFixed(2))}
+                                    Ingreso más alto: ${addDots(parseFloat(maxEnteredAmount).toFixed(2))}
                                 </Text>
                                 <Text style={styles.dataCategory}>
-                                    Gasto más alto: ${addDots(parseFloat(dataList[0].lowestEnteredAmount).toFixed(2))}
+                                    Gasto más alto: ${addDots(parseFloat(lowestEnteredAmount).toFixed(2))}
                                 </Text>
                             </View>
                         </View>
@@ -190,7 +206,7 @@ export default CategoryHistory = ({ route, navigation }) => {
                     <View style={styles.cat}>
                         <View style={[styles.catView, {alignItems: "center"}]}>
                             <Text style={styles.catText}>
-                                {`$${Number(item.entered_amount)}`}
+                                {`$${addDots(parseFloat(item.entered_amount).toFixed(2))}`}
                             </Text>
                             <View style={{marginTop: 6}}>
                                 {(() => {
@@ -227,8 +243,8 @@ export default CategoryHistory = ({ route, navigation }) => {
                                 </View>
                             </Modal>
                             <TouchableOpacity onPress={() => {
-                                setSelectedNote(item.note);
-                                setModalVisible(true);
+                                setSelectedNote(item.note)
+                                setModalVisible(true)
                             }}>
                                 <Text style={styles.notestxt}>
                                     Ver nota
@@ -260,8 +276,8 @@ export default CategoryHistory = ({ route, navigation }) => {
                                     </View>
                                 </Modal>
                             <TouchableOpacity onPress={() => {
-                                setSelectedDate(item.date);
-                                setModalDateVisible(true);
+                                setSelectedDate(item.date)
+                                setModalDateVisible(true)
                             }}>
                                 <Text style={styles.notestxt}>
                                     Fecha

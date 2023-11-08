@@ -30,6 +30,7 @@ export default SelectCategories = ( { route, navigation } ) => {
     const [hexColor, setHexColor] = useState('')
     const [nameCategory, setNameCategory] = useState('')
     const [c, setC] = useState(0);
+    const [categoryIsSelected, setCategoryIsSelected] = useState(false);
     
     const nameCategories = ["Salud", "Hogar", "Familia", "Educación", "Comida", "Compras", "Transporte", "Gimansio", "Regalos", "Ocio", "Servicios", "Viajes"]
 
@@ -41,6 +42,7 @@ export default SelectCategories = ( { route, navigation } ) => {
         setIconNumber(iconNumberPosition)
         setHexColor(hexColor)
         setNameCategory(nameCategory)
+        setCategoryIsSelected(true)
 
         setC(c + 1);
         if((c % 2) == 0) {
@@ -52,9 +54,24 @@ export default SelectCategories = ( { route, navigation } ) => {
     const getTouchableOpacityStyle = (iconNumber) => {
         for(let i = iconNumber; i <= 12; i++) {
             if(taskCompleted === 1 && iconNumberPosition === i) {
-                return iconNumber === i ? [styles.category, styles[categorySelected[i - 1]]] : [styles.category, styles[categoryBase[iconNumber - 1]]];
+                return iconNumber === i ? [styles.category, styles[categorySelected[i - 1]]] : [styles.category, styles[categoryBase[iconNumber - 1]]]
             }
-            return [styles.category, styles[categoryBase[iconNumber - 1]]];
+            return [styles.category, styles[categoryBase[iconNumber - 1]]]
+        }
+    }
+
+    const continueToConfirmationScreen = () => {
+        if(categoryIsSelected === true) {
+            navigation.navigate("ConfirmationScreen", {
+                amount,
+                note: valueNote,
+                price: newValue,
+                image: imageValue,
+                hexColor,
+                nameCategory,
+                gain_expense,
+                iconNumberPosition
+            })
         }
     }
 
@@ -209,16 +226,7 @@ export default SelectCategories = ( { route, navigation } ) => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.continue}>
-                    <TouchableOpacity onPress={()=>navigation.navigate("ConfirmationScreen", {
-                        amount,
-                        note: valueNote,
-                        price: newValue,
-                        image: imageValue,
-                        hexColor,
-                        nameCategory,
-                        gain_expense,
-                        iconNumberPosition
-                    })}> 
+                    <TouchableOpacity onPress={continueToConfirmationScreen}> 
                         <Text style={styles.continueBtn} name="continue">
                             Continuar
                         </Text>
