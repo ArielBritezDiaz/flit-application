@@ -28,6 +28,18 @@ export default Home = ({route}) => {
 
     const navigation = useNavigation();
 
+    const addDots = (nStr) => {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2'); // changed comma to dot here
+        }
+        return x1 + x2;
+    }
+
     const updatePrice = pr =>{
         setAmountValue(pr)
     }
@@ -136,7 +148,13 @@ export default Home = ({route}) => {
                 </View>
                 <View style={styles.total}>
                     <Text style={styles.totalContent}>
-                        { showAmount ? `$${Number(amountValue)}` : <Entypo name="dots-three-horizontal" size={40} color="#f5f5fa" /> }
+                        {
+                            showAmount
+                            ?
+                                `$${addDots(parseFloat(amountValue).toFixed(2))}`
+                            :
+                                <Entypo name="dots-three-horizontal" size={40} color="#f5f5fa" />
+                        }
                     </Text>
                     <TouchableOpacity onPress={() => setShowAmount(!showAmount)} >
                         <Entypo

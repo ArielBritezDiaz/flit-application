@@ -16,20 +16,6 @@ export default History = ({route}) => {
 
     const isFocused = useIsFocused();
 
-    useEffect(() => {
-        const saveData = async () => {
-            try {
-                const id_user_save = await AsyncStorage.getItem('id_user_save')
-                const parse_id_user_save = JSON.parse(id_user_save)
-                setId_user_return(parse_id_user_save)
-            } catch (error) {
-                console.error("Error in saveData", error)
-            }
-        };
-        saveData()
-    }, [isFocused])
-
-
     const [dataList, setDataList] = useState([]);
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -43,6 +29,31 @@ export default History = ({route}) => {
     const [iconUpDown, setIconUpDown] = useState(null);
 
     const [counterIdRegistry, setCounterIdRegistry] = useState(0);
+
+    const addDots = (nStr) => {
+        nStr += '';
+        x = nStr.split('.');
+        x1 = x[0];
+        x2 = x.length > 1 ? '.' + x[1] : '';
+        var rgx = /(\d+)(\d{3})/;
+        while (rgx.test(x1)) {
+            x1 = x1.replace(rgx, '$1' + ',' + '$2'); // changed comma to dot here
+        }
+        return x1 + x2;
+    }
+
+    useEffect(() => {
+        const saveData = async () => {
+            try {
+                const id_user_save = await AsyncStorage.getItem('id_user_save')
+                const parse_id_user_save = JSON.parse(id_user_save)
+                setId_user_return(parse_id_user_save)
+            } catch (error) {
+                console.error("Error in saveData", error)
+            }
+        };
+        saveData()
+    }, [isFocused])
 
     const getDataHistoryDB = async () => {
         try {
@@ -101,7 +112,7 @@ export default History = ({route}) => {
                     <View style={styles.cat}>
                         <View style={[styles.catView, {alignItems: "center"}]}>
                             <Text style={styles.catText}>
-                                {`$${Number(item.entered_amount)}`}
+                                {`$${addDots(parseFloat(item.entered_amount).toFixed(2))}`}
                             </Text>
                             <View style={{marginTop: 6}}>
                                 {(() => {

@@ -24,6 +24,8 @@ export default Chart = ({ navigation }) => {
 
     const [dataReversed, setDataReversed] = useState(null);
 
+    const [dataToRegistry, setDataToRegistry] = useState(null);
+
     const addDots = (nStr) => {
         nStr += '';
         x = nStr.split('.');
@@ -72,29 +74,47 @@ export default Chart = ({ navigation }) => {
                     // console.log("result", result)
 
                     if (result && result.combinedRows && result.combinedRows.rows && result.combinedRows.rowsCategory) {
-                        const organizedData = result.combinedRows.rows.map((registry, index) => {
-                          // console.log(registry)
-                          const correspondingCategory = result.combinedRows.rowsCategory.find(
-                            (category) => category.id_category === registry.id_category
-                          );
-              
-                          return {
-                            x: index + 1,
-                            y: registry.percentage_usage,
-                            amount: addDots(parseFloat(registry.total_amount).toFixed(2)),
-                            hexColor: correspondingCategory.hexColor,
-                            id_category: correspondingCategory.id_category,
-                            image: correspondingCategory.svg,
-                            nameCategory: correspondingCategory.nameCategory,
-                            styles_icon: correspondingCategory.styles_icon,
-                          };
-                        });
+                        const organizedData = result.combinedRows.rows.filter((registry) => registry.total_amount >= 0).map((registry, index) => {
+                                const correspondingCategory = result.combinedRows.rowsCategory.find((category) => category.id_category === registry.id_category)
+                                // .filter((registry) => registry.total_amount >= 0)
+                                
+                                return {
+                                    x: index + 1,
+                                    y: registry.percentage_usage,
+                                    amount: registry.total_amount,
+                                    amountFormatted: addDots(parseFloat(registry.total_amount).toFixed(2)),
+                                    hexColor: correspondingCategory.hexColor,
+                                    id_category: correspondingCategory.id_category,
+                                    image: correspondingCategory.svg,
+                                    nameCategory: correspondingCategory.nameCategory,
+                                    styles_icon: correspondingCategory.styles_icon,
+                                }
+                            })
                         setDataDB(organizedData);
-                        }
-                        if (result && result.combinedRows && result.combinedRows.rowsCategory) {
-                            setDataCategory(result.combinedRows.rowsCategory);
-                        }
+
+                        // amount, amountFormatted, hexColor, image, nameCategory, id_category
+
+                        const organizedDataToChart = result.combinedRows.rows.map((registry, index) => {
+                            const correspondingCategory = result.combinedRows.rowsCategory.find((category) => category.id_category === registry.id_category)
+
+                            return {
+                                amount: registry.total_amount,
+                                amountFormatted: addDots(parseFloat(registry.total_amount).toFixed(2)),
+                                hexColor: correspondingCategory.hexColor,
+                                id_category: correspondingCategory.id_category,
+                                image: correspondingCategory.svg,
+                                nameCategory: correspondingCategory.nameCategory
+                            }
+                        })
+
+                        setDataToRegistry(organizedDataToChart)
+
                     }
+
+                    if (result && result.combinedRows && result.combinedRows.rowsCategory) {
+                        setDataCategory(result.combinedRows.rowsCategory);
+                    }
+                }
             } catch (error) {
                 console.log("Error in ChartData", error)
             }
@@ -104,22 +124,23 @@ export default Chart = ({ navigation }) => {
     }, [id_user_return])
 
     useEffect(() => {
-        if (dataDB) {
+        if (dataDB && dataToRegistry) {
             let percentages = []
             let amount = []
-            percentages.push(dataDB.map(registry => registry.percentage_usage))
-            amount.push(dataDB.map(registry => `$${parseInt(registry.amount)}k`))
+            percentages.push(dataToRegistry.map(registry => registry.percentage_usage))
+            amount.push(dataToRegistry.map(registry => `$${parseInt(registry.amountFormatted)}k`))
             
             setPercentage(percentages[0])
             setAmount(amount[0])
 
-            const dataReversedCopy = dataDB.slice().reverse();
+            const dataReversedCopy = dataToRegistry.slice().reverse();
             setDataReversed(dataReversedCopy)
+            // console.log(dataReversed[0].amount)
 
             setDataRecieved(true)
             // console.log("dataDB", dataDB)
         }
-    }, [dataDB]);
+    }, [dataDB, dataToRegistry]);
 
 
     useEffect(()=>{
@@ -243,14 +264,37 @@ export default Chart = ({ navigation }) => {
                                     <View style={styles.containerItems}>
                                         <View style={[styles.item]}>
                                             <View style={styles.cat}>
-                                                <View style={[styles.catView, {alignItems: "center"}]}>
+                                                <View style={[styles.catView, {alignItems: "flex-start", justifyContent: "center"}]}>
                                                     <Text style={styles.textAmount}>
-                                                        {`Total: $${item.amount}`}
+                                                        Balance:
+                                                        {
+                                                            item.amount > 0
+                                                            ?
+                                                                <Text style={{color: "#23E41D"}}> Positivo</Text>
+                                                            :
+                                                                <Text style={{color: "#EA2818"}}> Negativo</Text>
+                                                        }
+                                                    </Text>
+                                                    <Text style={styles.textAmount}>
+                                                        Total:
+                                                        {
+                                                            item.amount > 0
+                                                            ?
+                                                                <>
+                                                                    <Text style={{color: "#23E41D"}}> +</Text>
+                                                                    ${item.amountFormatted}
+                                                                </>
+                                                            :
+                                                                <>
+                                                                    <Text style={{color: "#EA2818"}}> -</Text>
+                                                                    ${(item.amountFormatted).split("-").join("")}
+                                                                </>
+                                                        }
                                                     </Text>
                                                 </View>
                                                 <View style={styles.iconView}>
                                                     <View style={[styles.icon, {backgroundColor: item.hexColor}]}>
-                                                        <SvgXml xml={item.image} width={"35px"} height={"35px"} />
+                                                        <SvgXml xml={item.image} width={"30px"} height={"30px"} />
                                                     </View>
                                                     <Text style={styles.textCategory}>
                                                         {item.nameCategory}
@@ -258,11 +302,11 @@ export default Chart = ({ navigation }) => {
                                                 </View>
                                                 <View style={styles.catBottom}>
                                                     <View style={styles.iconViewArrow}>
-                                                        <View style={styles.icon}>
-                                                            <TouchableOpacity onPress={() => infoCategory(item.id_category)}>
+                                                        <TouchableOpacity onPress={() => infoCategory(item.id_category)}>
+                                                            <View style={styles.iconArrow}>
                                                                 <Arrow width={"35px"} height={"35px"} />
-                                                            </TouchableOpacity>
-                                                        </View>
+                                                            </View>
+                                                        </TouchableOpacity>
                                                     </View>
                                                 </View>
                                             </View>
@@ -285,8 +329,8 @@ const styles = StyleSheet.create({
         height:'100%'
     },
     circle: {
-        width: 135,
-        height: 135,
+        width: 136,
+        height: 136,
         borderRadius: 100,
         justifyContent: 'center',
         alignItems: 'center',
@@ -307,6 +351,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    iconArrow: {
+        width: 60,
+        height: 70,
+        justifyContent: 'center',
+        alignItems: 'center',
+        // borderWidth: 1,
+        // borderColor: "#F5F5FA"
     },
     textCategory: {
         color: "#F5F5FA",
@@ -343,11 +395,11 @@ const styles = StyleSheet.create({
     },
     textAmount: {
         color: "#F5F5FA",
-        fontSize: 20
+        fontSize: 20,
+        paddingVertical: 3
     },
     catView: {
         flex: 1,
-        flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
         paddingHorizontal: 5
@@ -378,6 +430,7 @@ const styles = StyleSheet.create({
         fontSize: 25
     },
     iconView: {
+        width: 80,
         justifyContent: "center",
         alignItems: "center",
         padding: 5
@@ -385,7 +438,10 @@ const styles = StyleSheet.create({
     iconViewArrow: {
         justifyContent: "center",
         alignItems: "center",
-        padding: 5
+        padding: 5,
+        // borderWidth: 2,
+        // borderColor: "#F5F5FA",
+        width: 60
     },
     catBottom: {
         flexDirection: 'row',
