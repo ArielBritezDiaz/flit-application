@@ -26,6 +26,8 @@ export default Home = ({route}) => {
 
     const [isDataLoaded, setIsDataLoaded] = useState(false);
 
+    const [isBalanceNegative, setIsBalanceNegative] = useState(false);
+
     const navigation = useNavigation();
 
     const addDots = (nStr) => {
@@ -78,6 +80,12 @@ export default Home = ({route}) => {
             // console.log("result at Home.js", result);
             if (result && result.rowsTotalAmount.length > 0 && result.rowsTotalAmount[0]["total_amount"]) {
                 setAmountValue(result.rowsTotalAmount[0]["total_amount"]);
+                console.log(parseFloat(result.rowsTotalAmount[0]["total_amount"]))
+                if(parseFloat(result.rowsTotalAmount[0]["total_amount"]) < 0) {
+                    setIsBalanceNegative(true)
+                } else {
+                    setIsBalanceNegative(false)
+                }
             } else {
                 setAmountValue(0);
             }
@@ -88,7 +96,7 @@ export default Home = ({route}) => {
             } else {
                 setNameUser('Flit');
             }
-    
+            
             setIsDataLoaded(true);
     
         } catch (error) {
@@ -152,6 +160,10 @@ export default Home = ({route}) => {
                         {
                             showAmount
                             ?
+                                isBalanceNegative === true
+                                ?
+                                `$0`
+                                :
                                 `$${addDots(parseFloat(amountValue).toFixed(2))}`
                             :
                                 <Entypo name="dots-three-horizontal" size={40} color="#f5f5fa" />
@@ -164,6 +176,20 @@ export default Home = ({route}) => {
                             color="#D39F00"
                         />
                     </TouchableOpacity>
+                </View>
+                <View style={styles.debtView}>
+                    {
+                        isBalanceNegative === true
+                        ?
+                            <Text style={styles.debt}>
+                                Deuda de:
+                                <Text style={{color: "#EA2818"}}>
+                                    {` ${addDots(parseFloat(amountValue).toFixed(2))}`}
+                                </Text>
+                            </Text>
+                        :
+                            null
+                    }
                 </View>
                 <View style={styles.icons}>
                     <View style={styles.gain}>
@@ -244,11 +270,10 @@ const styles = StyleSheet.create ({
     balance:{
         marginTop: 20,
         width:'90%',
-        height:'25%',
+        height: 250,
         backgroundColor:'#1F1B18',
         borderRadius: 5,
-        alignItems: 'center',
-        elevation: 4
+        alignItems: 'center'
     },
     balanceTotal:{
         width:'100%',
@@ -257,7 +282,7 @@ const styles = StyleSheet.create ({
         alignItems: 'center',
         justifyContent: 'center',
         borderBottomLeftRadius: 25,
-        borderBottomRightRadius: 25,
+        borderBottomRightRadius: 25
     },
     totalTxt:{
         color: '#0f0c0c',
@@ -267,22 +292,33 @@ const styles = StyleSheet.create ({
     },
     total:{
         width:'100%',
-        height:'40%',
-        marginTop: 10,
+        height:'25%',
         alignItems:'center',
         justifyContent:'center',
         flexDirection:'row',
+        marginTop: 5
     },
     totalContent:{
         fontSize: 40,
         color:'#f5f5fa',
         fontWeight:'bold',
-        paddingRight: 10
+        paddingRight: 10,
+    },
+    debtView: {
+        width: "100%"
+    },
+    debt: {
+        color: "#F5F5FA",
+        fontSize: 18,
+        textAlign: "center",
+        paddingBottom: 10,
+        marginBottom: 10
     },
     icons:{
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        paddingVertical: 10
     },
     gain:{
         paddingHorizontal:20,

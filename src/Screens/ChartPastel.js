@@ -4,6 +4,7 @@ import { StyleSheet, View, FlatList, Text, StatusBar, Settings, Modal, Touchable
 import { SvgXml } from "react-native-svg";
 import { EXPO_IP_HOST, EXPO_PORT } from "@env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LogBox } from 'react-native'
 
 // Victory imports
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryTooltip, VictoryLabel, VictoryPie, VictoryContainer } from "victory-native";
@@ -11,6 +12,9 @@ import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryTooltip, Vi
 import Arrow from '../resources/icons/arrow.svg'
 
 export default Chart = ({ navigation }) => {
+
+    LogBox.ignoreAllLogs()
+
     const [id_user_return, setId_user_return] = useState(null);
 
     const [dataDB, setDataDB] = useState(null);

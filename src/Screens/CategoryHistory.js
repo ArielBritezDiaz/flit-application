@@ -4,6 +4,7 @@ import { StyleSheet, View, FlatList, Text, StatusBar, Settings, Modal, Touchable
 import { SvgXml } from "react-native-svg";
 import { EXPO_IP_HOST, EXPO_PORT } from "@env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LogBox } from 'react-native'
 
 import moment from 'moment';
 
@@ -11,6 +12,9 @@ import Up from '../resources/icons/up.svg'
 import Down from '../resources/icons/down.svg'
 
 export default CategoryHistory = ({ route, navigation }) => {
+
+    LogBox.ignoreAllLogs()
+
     const [id_user_return, setId_user_return] = useState(null);
 
     const [id_category, setId_Category] = useState(null);
