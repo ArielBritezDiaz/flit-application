@@ -21,7 +21,8 @@ import Gain from "./src/Screens/Gain";
 import Expense from "./src/Screens/Expense";
 import SelectCategories from "./src/Screens/SelectCategories";
 import ConfirmationScreen from "./src/Screens/ConfirmationScreen";
-import Chart from './src/Screens/Chart';
+import ChartBar from './src/Screens/ChartBar';
+import ChartInterpolation from './src/Screens/ChartInterpolation';
 import ChartPastel from './src/Screens/ChartPastel';
 import CategoryHistory from './src/Screens/CategoryHistory';
 import Profile from "./src/Screens/Profile";
@@ -106,6 +107,16 @@ const Stacks = () => {
             />
 
             <Stack.Screen
+                name="History"
+                component={History}
+                options={{
+                    headerBackTitleVisible: false,
+                    headerTintColor: "#D39F00",
+                    headerTitle: "Historial"
+                }}
+            />
+
+            <Stack.Screen
                 name="Gain"
                 component={Gain}
                 options={{
@@ -146,12 +157,12 @@ const Stacks = () => {
             />
 
             <Stack.Screen
-                name="Chart"
-                component={Chart}
+                name="ChartBar"
+                component={ChartBar}
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
-                    headerTitle: "Estadísticas"
+                    headerTitle: "Gráfico de Barras - Estadísticas"
                 }}
             />
 
@@ -161,7 +172,7 @@ const Stacks = () => {
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
-                    headerTitle: "Estadísticas"
+                    headerTitle: "Gráfico de Categorías - Estadísticas"
                 }}
             />
 
@@ -171,9 +182,20 @@ const Stacks = () => {
                 options={{
                     headerBackTitleVisible:false,
                     headerTintColor:'#D39F00',
-                    headerTitle: "Estadísticas"
+                    headerTitle: "Datos por Categoría - Estadísticas"
                 }}
             />
+
+            <Stack.Screen
+                name="ChartInterpolation"
+                component={ChartInterpolation}
+                options={{
+                    headerBackTitleVisible: false,
+                    headerTintColor: "#D39F00",
+                    headerTitle: "Gráfico de Interpolación - Estadísticas"
+                }}
+            />
+
         </Stack.Navigator>
     )
 }
@@ -216,7 +238,7 @@ const TabNavigation = () =>{
 
             <Tab.Screen
                 name="Historial"
-                component={History}
+                component={ChartPastel}
                 options={{
                     tabBarIcon:()=>(
                         <MaterialCommunityIcons name="history" size={35} color="#0f0c0c" />

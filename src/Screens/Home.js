@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, StatusBar } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, StatusBar, VirtualizedList } from 'react-native';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -11,8 +11,11 @@ import { FontAwesome } from '@expo/vector-icons';
 //SVG Icons
 import AutralianSymbol from '../resources/icons/norfolk-island-australian-dolar-svgrepo-com.svg';
 import ConfigurationSymbol from '../resources/icons/data-explorationenvironment-configuration-svgrepo-com.svg';
-import ExitSymbol from '../resources/icons/exit.svg'
-import Chart from '../resources/icons/chart.svg'
+import ExitSymbol from '../resources/icons/exit.svg';
+import ChartSymbol from '../resources/icons/chart.svg';
+import HistorySymbol from '../resources/icons/history2.svg';
+
+import ChartBar from './ChartBar'
 
 import { EXPO_IP_HOST, EXPO_PORT } from '@env';
 
@@ -62,7 +65,7 @@ export default Home = ({route}) => {
     const getDataDB = async () => {
         try {
             const id_user = await AsyncStorage.getItem('id_user_save');
-            // console.log("id_user in Home.js", id_user);
+            console.log("id_user in Home.js", id_user);
             const response = await fetch(`http://${EXPO_IP_HOST}:${EXPO_PORT}/api/Home/${id_user}`, {
                 method: "GET",
                 headers: {
@@ -71,27 +74,30 @@ export default Home = ({route}) => {
             });
     
             if (!response.ok) {
-                console.log("Error en get de /api/Home", response);
-                setAmountValue(0);
-                return;
+                console.log("Error en get de /api/Home", response)
+                setAmountValue(0)
+                return
             }
     
-            const result = await response.json(); // Definir 'result' aquí
-            // console.log("result at Home.js", result);
+            const result = await response.json()
+            console.log("result at Home.js", result)
+            
             if (result && result.rowsTotalAmount.length > 0 && result.rowsTotalAmount[0]["total_amount"]) {
-                setAmountValue(result.rowsTotalAmount[0]["total_amount"]);
-                console.log(parseFloat(result.rowsTotalAmount[0]["total_amount"]))
+                // setAmountValue(result.rowsTotalAmount[0]["total_amount"]);
+                console.log("parseFloat(result.rowsTotalAmount[0]['total_amount'])", parseFloat(result.rowsTotalAmount[0]["total_amount"]))
                 if(parseFloat(result.rowsTotalAmount[0]["total_amount"]) < 0) {
                     setIsBalanceNegative(true)
+                    setAmountValue(parseFloat(result.rowsTotalAmount[0]["total_amount"]))
                 } else {
                     setIsBalanceNegative(false)
+                    setAmountValue(parseFloat(result.rowsTotalAmount[0]["total_amount"]))
                 }
             } else {
                 setAmountValue(0);
             }
     
             if (result && result.rowsNameUser.length > 0 && result.rowsNameUser[0]["user"]) {
-                setNameUser(result.rowsNameUser[0]["user"]);
+                setNameUser(result.rowsNameUser[0]["user"])
                 // console.log("nameUser from Home.js", nameUser);
             } else {
                 setNameUser('Flit');
@@ -105,17 +111,27 @@ export default Home = ({route}) => {
     };
 
     const exitAccount = () => {
-        getDataDB();
-        setNameUser('Flit');
-        setAmountValue(0);
-        navigation.navigate('Register', { reset: true });
+        getDataDB()
+        setNameUser('Flit')
+        setAmountValue(0)
+        navigation.navigate('Register', { reset: true })
+    }
+ 
+    const historySelected = () => {
+        navigation.navigate('History')
+    }
+
+    const getDate = () => {
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",  "Octubre", "Noviembre", "Diciembre" ]
+        const date = new Date()
+        const thisMonth = monthNames[date.getMonth()]
+        // console.log(thisMonth)
+        return thisMonth
     }
     
-    useEffect(() => {
-        if (amountValue === null) {
-          getDataDB();
-        }
-      }, []);
+    useFocusEffect(() => {
+        getDataDB()
+    })
 
     useEffect(() => {
         if (isDataLoaded) {
@@ -155,27 +171,32 @@ export default Home = ({route}) => {
                         Balance total
                     </Text>
                 </View>
-                <View style={styles.total}>
-                    <Text style={styles.totalContent}>
+                <View style={styles.viewAmount}>
+                    <View style={styles.historySymbolContainer}>
+                        <HistorySymbol width={"35px"} height={"35px"} onPress={historySelected} style={[styles.svgSymbol, { alignSelf: "center" }]} />
+                    </View>
+                    <View style={styles.total}>
+                        <Text style={styles.totalContent}>
                         {
-                            showAmount
+                            showAmount === true
                             ?
-                                isBalanceNegative === true
+                            isBalanceNegative === true
                                 ?
                                 `$0`
                                 :
                                 `$${addDots(parseFloat(amountValue).toFixed(2))}`
                             :
-                                <Entypo name="dots-three-horizontal" size={40} color="#f5f5fa" />
+                            <Entypo name="dots-three-horizontal" size={40} color="#f5f5fa" />
                         }
-                    </Text>
-                    <TouchableOpacity onPress={() => setShowAmount(!showAmount)} >
+                        </Text>
+                        <TouchableOpacity onPress={() => setShowAmount(!showAmount)} >
                         <Entypo
                             name={showAmount ? 'eye' : 'eye-with-line'}
                             size={40}
                             color="#D39F00"
                         />
-                    </TouchableOpacity>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.debtView}>
                     {
@@ -208,18 +229,32 @@ export default Home = ({route}) => {
                     </View>
                 </View>
             </View>
-            <View style={{height: 200, width: "90%", backgroundColor: "#0f0c0c"}}>
-                <TouchableOpacity onPress={() => navigation.navigate("Chart")}>
-                    <Chart height={"50%"} width={35} style={styles.svgSymbol} />
-                </TouchableOpacity>
+            <View style={{backgroundColor: "#1F1B18", width: "90%", marginTop: 15}}>
+                <View style={[styles.chart, { width: "100%", height: "25%" }]}>
+                    <Text style={{color: "#0f0c0c", fontSize: 20, alignSelf: "center", fontWeight: "bold", textTransform: "uppercase"}}>
+                        Gráfico de {getDate()}
+                    </Text>
+                </View>
+                    <ChartBar />
+                    {/*
+                        <TouchableOpacity onPress={() => navigation.navigate("ChartBar")}>
+                            <ChartSymbol height={"50%"} width={35} style={styles.svgSymbol} />
+                        </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate("ChartPastel")}>
-                    <Chart height={"50%"} width={35} style={styles.svgSymbol} />
-                </TouchableOpacity>
+                        {/* <TouchableOpacity onPress={() => navigation.navigate("ChartPastel")}>
+                            <Chart height={"50%"} width={35} style={styles.svgSymbol} />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => navigation.navigate("ChartInterpolation")}>
+                            <ChartSymbol height={"50%"} width={35} style={styles.svgSymbol} />
+                        </TouchableOpacity>
+                    */}
             </View>
         </View>
     )
 }
+
+
 
 const styles = StyleSheet.create ({
     container:{
@@ -230,7 +265,7 @@ const styles = StyleSheet.create ({
     profileSection: {
         height: 45,
         width: "90%",
-        marginTop: 60,
+        marginTop: 50,
         backgroundColor: "#D39F00",
         flexDirection: "row",
         borderTopStartRadius: 5,
@@ -239,11 +274,10 @@ const styles = StyleSheet.create ({
         justifyContent: "center"
     },
     svgProfileSection: {
-        height: "100%",
-        width:"13%"
+        height: "100%"
     },
     svgSymbol: {
-        marginLeft: 3
+        marginHorizontal: 10
     },
     exitView: {
         height: "100%",
@@ -268,12 +302,14 @@ const styles = StyleSheet.create ({
         fontWeight: "bold"
     },
     balance:{
-        marginTop: 20,
+        marginTop: 15,
         width:'90%',
         height: 250,
         backgroundColor:'#1F1B18',
         borderRadius: 5,
-        alignItems: 'center'
+        alignItems: 'center',
+        // borderWidth: 1.5,
+        // borderColor: "#f5f5fa"
     },
     balanceTotal:{
         width:'100%',
@@ -291,12 +327,20 @@ const styles = StyleSheet.create ({
         textTransform: 'uppercase'
     },
     total:{
-        width:'100%',
-        height:'25%',
+        width:'70%',
+        height:'100%',
         alignItems:'center',
         justifyContent:'center',
         flexDirection:'row',
-        marginTop: 5
+        marginTop: 5,
+        paddingHorizontal: 10,
+        // borderWidth: 1.5,
+        // borderColor: "#f5f5fa"
+        //
+    },
+    historySymbolContainer: {
+        marginLeft: 5,
+        marginRight: 10
     },
     totalContent:{
         fontSize: 40,
@@ -305,7 +349,7 @@ const styles = StyleSheet.create ({
         paddingRight: 10,
     },
     debtView: {
-        width: "100%"
+        width: "20%"
     },
     debt: {
         color: "#F5F5FA",
@@ -325,5 +369,20 @@ const styles = StyleSheet.create ({
     },
     expense:{
         paddingHorizontal:20
+    },
+    viewAmount: {
+        flexDirection: "row",
+        alignItems: 'center',
+        width: "100%",
+        marginTop: 5
+    },
+    chart: {
+        width:'100%',
+        height: "10%",
+        backgroundColor: '#D39F00',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderBottomLeftRadius: 25,
+        borderBottomRightRadius: 25
     }
 })

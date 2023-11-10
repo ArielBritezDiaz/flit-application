@@ -95,7 +95,7 @@ export default History = ({route}) => {
         } catch (error) {
             console.error("Error desde la API:", error);
         }
-    };
+    }
     
     useFocusEffect(() => {
         getDataHistoryDB()
@@ -214,8 +214,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor:'#2f2f2f',
         paddingVertical:10,
-        height:'100%',
-        marginTop: 20
+        height:'100%'
     },
     list:{
         width:'90%'

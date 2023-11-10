@@ -1,17 +1,22 @@
 import { useState, useEffect } from "react";
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { StyleSheet, View, FlatList, Text, StatusBar, Settings, Modal, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, View, FlatList, Text, StatusBar, Settings, Modal, TouchableOpacity, Dimensions, LogBox } from 'react-native';
 import { SvgXml } from "react-native-svg";
 import { EXPO_IP_HOST, EXPO_PORT } from "@env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Victory imports
 import ReactDOM from 'react-dom';
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryTooltip, VictoryLabel } from "victory-native";
+import { VictoryBar, VictoryChart, VictoryTheme, VictoryAxis, VictoryTooltip, VictoryLabel, VictoryVoronoiContainer } from "victory-native";
+
+import { FlitTheme } from '../components/FlitTheme';
 
 import moment from 'moment';
 
 export default Chart = ({ navigation }) => {
+    
+    LogBox.ignoreAllLogs()
+    
     const [id_user_return, setId_user_return] = useState(null);
 
     const [dataDB, setDataDB] = useState(null);
@@ -86,79 +91,119 @@ export default Chart = ({ navigation }) => {
     useEffect(() => {
         if (dataDB) {
             
-            let dates = []
+            let dates = ["05", "10", "15", "20", "25", "30"]
             let amount = []
-            dates.push(dataDB.map(registry => registry.day))
+            // dates.push(dataDB.map(registry => registry.day))
             amount.push(dataDB.map(registry => `$${parseInt(registry.amount)}k`))
-            
-            setDates(dates[0])
+            // console.log(dates)
+            // setDates(dates[0])
+            setDates(dates)
             setAmount(amount[0])
             setDataRecieved(true)
         }
     }, [dataDB]);
 
 
-    useEffect(()=>{
-        navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
-        return ()=>{
-            navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
+    // useEffect(()=>{
+    //     navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
+    //     return ()=>{
+    //         navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
+    //     }
+    // }, [])
+    
+    function makeLine(length) {
+        let line = "";
+        for (let i = 1; i <= length; i++) {
+          for (let j = 1; j <= i; j++) {
+            line += "*";
+      
+          }
+      
         }
-    }, [])
+        return line + "\n";
+      }
 
     return (
         <View style={styles.container}>
-          {
-            dataRecieved === true
-            ?
-                <VictoryChart
-                    width={350}
-                    theme={VictoryTheme.material}
-                    domainPadding={15}
-                    animate={
-                        {
-                            duration: 700,
-                            onLoad: {
-                                duration: 700
-                            }
-                        }
-                    }
-                >
-                    <VictoryAxis
-                        tickValues={dates}
-                    />
-                    <VictoryAxis
-                        dependentAxis
-                        tickFormat={(amount) => `$${amount}k`}
-                    />
-                    <VictoryBar
-                        data={dataDB}
-                        x="day"
-                        y="amount"
-                        labels={({ datum }) => `$${datum.amount}k`}
-                        labelComponent={
-                            <VictoryTooltip
-                                centerOffset={{x: 0}}
-                                constrainToVisibleArea
-                                cornerRadius={5}
-                                flyoutHeight={40}
-                                flyoutWidth={75}
-                                flyoutStyle={{
-                                    fillOpacity: 0.9,
-                                    stroke: "#1F1B18",
-                                    strokeWidth: 2,
-                                    fill: "#2C2520"
-                                }}
-                                style={{
-                                    fill: "#23E41D"
-                                }}
-                                pointerLength={10}
+            <View style={styles.chartView}>
+                {
+                    dataRecieved === true
+                    ?
+                        <VictoryChart
+                            width={390}
+                            height={340}
+                            theme={FlitTheme}
+                            domainPadding={15}
+                            style={{
+                                background: FlitTheme.backgroundStyle
+                            }}
+                            // animate={
+                            //     {
+                            //         duration: 700,
+                            //         onLoad: {
+                            //             duration: 700
+                            //         }
+                            //     }
+                            // }
+                            // style={{
+                            //     background: {
+                            //         fill: "#1b1b1b"
+                            //     },
+                            // }}
+                        >
+                            <VictoryAxis
+                                tickValues={dates}
                             />
-                        }
-                    />
-                </VictoryChart>
-            :
-                null
-          }
+                            <VictoryAxis
+                                dependentAxis
+                                tickFormat={(amount) => `$${amount}k`}
+                            />
+                            <VictoryBar
+                                data={dataDB}
+                                x="day"
+                                y="amount"
+                                labels={({ datum }) => `$${datum.amount}k`}
+                                labelComponent={
+                                    <VictoryTooltip
+                                        centerOffset={{x: 0}}
+                                        constrainToVisibleArea
+                                        cornerRadius={5}
+                                        flyoutHeight={40}
+                                        flyoutWidth={75}
+                                        flyoutStyle={{
+                                            fillOpacity: 0.9,
+                                            stroke: "#f5f5fa",
+                                            // 040881
+                                            strokeWidth: 1,
+                                            fill: "#0f0c0c"
+                                        }}
+                                        style={{
+                                            fill: "#D0D032",
+                                            fontSize: 15
+                                        }}
+                                        pointerLength={10}
+                                    />
+                                }
+                                // style={{
+                                //     data: {
+                                //         fill: "#F0F054"
+                                //     }
+                                // }}
+                                animate={{
+                                    duration: 2000,
+                                    onLoad: {
+                                        duration: 1000
+                                    }
+                                }}
+                                // barRatio={.4}
+                                // barWidth={({ index }) => index * 2 + 10}
+                                cornerRadius={{ top: 5, bottom: 5}}
+                            />
+                        </VictoryChart>
+                    :
+                        null
+                }
+            </View>
         </View>
       );
 }
@@ -166,13 +211,11 @@ export default Chart = ({ navigation }) => {
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor:'#2f2f2f',
-        paddingVertical:10,
-        height:'100%',
-        marginTop: 20
+        backgroundColor:'#2f2f2f'
     },
+    chartView: {
+        backgroundColor: "#1F1B18"
+    }
 })
 
 

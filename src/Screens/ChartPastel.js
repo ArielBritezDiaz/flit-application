@@ -79,7 +79,7 @@ export default Chart = ({ navigation }) => {
                     // console.log("result", result)
 
                     if (result && result.combinedRows && result.combinedRows.rows && result.combinedRows.rowsCategory) {
-                        const organizedData = result.combinedRows.rows.filter((registry) => registry.total_amount >= 0).map((registry, index) => {
+                        const organizedData = result.combinedRows.rows.filter((registry) => registry.total_amount > 0).map((registry, index) => {
                                 const correspondingCategory = result.combinedRows.rowsCategory.find((category) => category.id_category === registry.id_category)
                                 // .filter((registry) => registry.total_amount >= 0)
                                 
@@ -140,7 +140,7 @@ export default Chart = ({ navigation }) => {
 
             const dataReversedCopy = dataToRegistry.slice().reverse();
             setDataReversed(dataReversedCopy)
-            // console.log(dataReversed[0].amount)
+            // console.log(dataDB[2].y)
 
             setDataRecieved(true)
             // console.log("dataDB", dataDB)
@@ -171,14 +171,14 @@ export default Chart = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.container} vertical={true} horizontal={false} showsHorizontalScrollIndicator={false}>
-            <View style={styles.container}>
+            <View style={[styles.container, { marginTop: 30 }]}>
+            <StatusBar hidden={false} translucent={true} style="light" backgroundColor='#2f2f2f'/>
                 <View style={styles.containerChart}>
                     <View style={styles.titleView}>
                         <Text style={styles.title}>
-                            Gráfico de categorías
+                            Gráfico por categorías
                         </Text>
                     </View>
-                    {/* <ScrollView> */}
                     <View style={styles.chart}>
                         <TouchableOpacity
                         activeOpacity={1}
@@ -189,11 +189,13 @@ export default Chart = ({ navigation }) => {
                             <VictoryPie
                                 data={dataDB}
                                 style={{
-                                data: { 
-                                    fill: ({ datum }) => datum.hexColor,
-                                    cornerRadius: ({ datum }) => datum.usage_rank * 10 // Ajusta el factor multiplicativo para un espaciado adecuado
-                                },
-                                labels: { fill: "white" }
+                                    data: { 
+                                        fill: ({ datum }) => datum.hexColor,
+                                        cornerRadius: ({ datum }) => datum.usage_rank
+                                    },
+                                    labels: {
+                                        fill: "#f5f5fa"
+                                    }
                                 }}
                                 innerRadius={66}
                                 labelRadius={170}
@@ -204,18 +206,20 @@ export default Chart = ({ navigation }) => {
                                         target: "data",
                                         eventHandlers: {
                                             onClick: () => {
-                                                return [
-                                                    {
-                                                        target: "data",
-                                                        mutation: ({style}) => {
-                                                            return style.fill === "#F00"
-                                                            ?
+                                                return [{
+                                                    target: "data",
+                                                    mutation: ({style}) => {
+                                                        return style.fill === "#F00"
+                                                        ?
                                                             null
-                                                            :
-                                                            { style: { fill: "#0f0c0c" } }
-                                                        }
+                                                        :
+                                                            {
+                                                                style: {
+                                                                    fill: "#0f0c0c"
+                                                                }
+                                                            }
                                                     }
-                                                ]
+                                                }]
                                             },
                                             onPressIn: () => {
                                                 return [
@@ -277,7 +281,11 @@ export default Chart = ({ navigation }) => {
                                                             ?
                                                                 <Text style={{color: "#23E41D"}}> Positivo</Text>
                                                             :
+                                                                item.amount < 0
+                                                                ?
                                                                 <Text style={{color: "#EA2818"}}> Negativo</Text>
+                                                                :
+                                                                <Text style={{color: "#A2A2A2"}}> Neutro</Text>
                                                         }
                                                     </Text>
                                                     <Text style={styles.textAmount}>
@@ -290,10 +298,17 @@ export default Chart = ({ navigation }) => {
                                                                     ${item.amountFormatted}
                                                                 </>
                                                             :
-                                                                <>
-                                                                    <Text style={{color: "#EA2818"}}> -</Text>
-                                                                    ${(item.amountFormatted).split("-").join("")}
-                                                                </>
+                                                                item.amount < 0
+                                                                ?
+                                                                    <>
+                                                                        <Text style={{color: "#EA2818"}}> -</Text>
+                                                                        ${(item.amountFormatted).split("-").join("")}
+                                                                    </>
+                                                                :
+                                                                    <>
+                                                                        <Text> </Text>
+                                                                        ${(item.amountFormatted).split("-").join("")}
+                                                                    </>
                                                         }
                                                     </Text>
                                                 </View>
@@ -330,8 +345,8 @@ export default Chart = ({ navigation }) => {
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:'#2f2f2f',
-        height:'100%'
+        height:'100%',
+        backgroundColor: "#1b1b1b"
     },
     circle: {
         width: 136,
@@ -346,7 +361,7 @@ const styles = StyleSheet.create({
         zIndex: 1
     },
     text: {
-        color: 'white',
+        color: '#f5f5fa',
         fontSize: 16,
         fontWeight: 'bold'
     },
