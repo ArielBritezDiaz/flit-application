@@ -20,8 +20,8 @@ export const postSendEmail = async (req, res) => {
         const hashedPassword = await new Promise((resolve, reject) => {
             bcrypt.genSalt(saltTimes, (err, salt) => {
                 bcrypt.hash(password, salt, (err, hash) => {
-                    if (err) reject(err);
-                    resolve(hash);
+                    if (err) reject(err)
+                    resolve(hash)
                 })
             })
         })
@@ -79,7 +79,8 @@ export const postSendEmail = async (req, res) => {
 
                 // console.log("rows", rows)
 
-                console.log('Correo electrónico enviado: ' + info.response);
+                console.log('Correo electrónico enviado: ' + info.response)
+
                 res.send({
                     data: {
                         user,
@@ -121,8 +122,8 @@ export const postNewUser = async (req, res) => {
         
         
     } catch(error) {
-        console.error("Error en el envío del correo electrónico", error);
-        return res.status(500).json({ "message": "Error en el envío del correo electrónico" });
+        console.error("Error en el envío del correo electrónico", error)
+        return res.status(500).json({ "message": "Error en el envío del correo electrónico" })
     }
 }
 
@@ -266,7 +267,7 @@ export const getHistory = async (req, res) => {
 
 export const getChartDataUserOneMonth = async (req, res) => {
     try {
-        const id_user = req.params.id_user;
+        const id_user = req.params.id_user
         console.log("id_user", id_user)
 
         const date = new Date()
@@ -295,7 +296,7 @@ export const getChartDataUserOneMonth = async (req, res) => {
             ORDER BY 
                 rounded_day`,
             [id_user, thisMonth, id_user, thisMonth, id_user, thisMonth]
-        );
+        )
         
         console.log("rows", rows)
 
@@ -311,7 +312,7 @@ export const getChartDataUserOneMonth = async (req, res) => {
 
 export const getChartDataCategoriesOneMonth = async (req, res) => {
     try {
-        const id_user = req.params.id_user;
+        const id_user = req.params.id_user
         console.log(id_user)
         
         const date = new Date()
@@ -351,11 +352,11 @@ export const getChartDataCategoriesOneMonth = async (req, res) => {
 
 export const getCategoryHistoryOneMonth = async (req, res) => {
     try {
-        const id_user = req.params.id_user;
-        const id_category = req.params.id_category;
+        const id_user = req.params.id_user
+        const id_category = req.params.id_category
 
-        console.log(id_user)
-        console.log(id_category)
+        // console.log(id_user)
+        // console.log(id_category)
 
         const date = new Date()
         const thisMonth = date.getUTCMonth() + 1

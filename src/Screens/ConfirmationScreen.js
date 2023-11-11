@@ -34,7 +34,7 @@ export default ConfirmationScreen = ( { route, navigation } ) => {
             try {
                 const id_user_save = await AsyncStorage.getItem('id_user_save');
                 const parse_id_user_save = JSON.parse(id_user_save)
-                setId_user_return(parse_id_user_save);
+                setId_user_return(parse_id_user_save)
             } catch(error) {
                 console.error("error in saveData", error)
             }

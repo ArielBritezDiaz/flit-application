@@ -10,6 +10,7 @@ import * as Font from 'expo-font';
 
 //Icons librarie
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { AntDesign } from '@expo/vector-icons';
 
 //Bottom screens
 import Home from "./src/Screens/Home";
@@ -25,7 +26,6 @@ import ChartBar from './src/Screens/ChartBar';
 import ChartInterpolation from './src/Screens/ChartInterpolation';
 import ChartPastel from './src/Screens/ChartPastel';
 import CategoryHistory from './src/Screens/CategoryHistory';
-import Profile from "./src/Screens/Profile";
 import Register from "./src/Screens/Register";
 import LogIn from './src/Screens/LogIn';
 
@@ -237,11 +237,11 @@ const TabNavigation = () =>{
             />
 
             <Tab.Screen
-                name="Historial"
+                name="Cateogrías"
                 component={ChartPastel}
                 options={{
                     tabBarIcon:()=>(
-                        <MaterialCommunityIcons name="history" size={35} color="#0f0c0c" />
+                        <AntDesign name="piechart" size={30} color="#0f0c0c" />
                     )
                 }}
             />

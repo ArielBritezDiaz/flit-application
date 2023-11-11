@@ -8,15 +8,15 @@ import { postSendEmail, postNewUser, postSearchUser, getHome, postConfirmationSc
 const app = express();
 const port = PORT;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-const assetsPath = path.join(__dirname, '../../assets/');
+const assetsPath = path.join(__dirname, '../../assets/')
 
 console.log(assetsPath)
 
-app.use(json());
-app.use(express.static(path.join(__dirname, '/../../assets')));
+app.use(json())
+app.use(express.static(path.join(__dirname, '/../../assets')))
 
 app.post('/api/sendEmail', postSendEmail);
 
@@ -37,5 +37,5 @@ app.get('/api/ChartDataCategories/:id_user/oneMonth', getChartDataCategoriesOneM
 app.get('/api/CategoryHistory/:id_user/:id_category/oneMonth', getCategoryHistoryOneMonth)
 
 app.listen(port, () => {
-    console.log(`Server on port ${PORT} listen`);
-  });
+    console.log(`Server on port ${PORT} listen`)
+})

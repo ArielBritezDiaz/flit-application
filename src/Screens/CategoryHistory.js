@@ -162,11 +162,15 @@ export default CategoryHistory = ({ route, navigation }) => {
             setLowestEnteredAmount(dataLowerEnteredAmount[dataLowerEnteredAmount.length - 1])
         }
     }, [dataList, isDataAvailable])
-      
-      
+
+    useEffect(()=>{
+        navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00'}})
+        return ()=>{
+            navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
+        }
+    }, [])
     
     return(
-        // consejos en el home de la app
         <View style={styles.container}>
             <StatusBar hidden={false} style="light" backgroundColor={'#2f2f2f'}/>
             {
@@ -316,8 +320,6 @@ const styles = StyleSheet.create({
         width: "100%",
         flexDirection: 'row',
         backgroundColor: "#0f0c0c"
-        // borderWidth: 1,
-        // borderColor: "#fff",
     },
     list:{
         width:'90%'
@@ -490,6 +492,8 @@ const styles = StyleSheet.create({
         padding: 5
     },
     dataCategory: {
-        color: "#F5F5FA"
+        color: "#F5F5FA",
+        fontSize: 16,
+        marginLeft: 5
     }
 })

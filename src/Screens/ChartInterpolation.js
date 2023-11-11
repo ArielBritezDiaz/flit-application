@@ -14,9 +14,6 @@ import { FlitTheme } from '../components/FlitTheme';
 import moment from 'moment';
 
 export default ChartInterpolation = () => {
-    
-
-
     return (
         <View style={styles.container}>
 

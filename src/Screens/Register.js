@@ -93,15 +93,15 @@ export default Register = () => {
                                 throw new Error("La respuesta de la red no fue satisfactoria");
                             }
                         
-                            const result = await response.json();
+                            const result = await response.json()
                             console.log("result", result)
                             setDataComplete(true);
                             const hashedPassword = result.hashedPassword
                             setPassword(hashedPassword)
-                            console.log("result of sendEmail", result);
+                            console.log("result of sendEmail", result)
                             setResultSendDataComplete(result)
                         } catch (error) {
-                            console.error("Error in sendData", error.message);
+                            console.error("Error in sendData", error.message)
                         }
                     } else {
                         setIsCompletePasswordInput(false)
@@ -146,39 +146,38 @@ export default Register = () => {
                         });
     
                         if (!response.ok) {
-                            throw new Error("Response !ok in newUserDB");
+                            throw new Error("Response !ok in newUserDB")
                         }
     
-                        const result = await response.json();
+                        const result = await response.json()
                         console.log("result de newUserDB", result)
 
-                        AsyncStorage.setItem('id_user_save',JSON.stringify(result.id_user));
+                        AsyncStorage.setItem('id_user_save',JSON.stringify(result.id_user))
 
                         navigation.navigate(result.navigation, {
                             id_user: result.id_user
                         });
                     } else {
-                        console.log("Datos faltantes");
+                        console.log("Datos faltantes")
                     }
                 } catch(error) {
                     console.log(error)
                 }
             }
             validationEmail(user, email, password, token)
-            
         } catch (error) {
-            console.error("Error in newUserDB (/api/newUser)", error.message);
+            console.error("Error in newUserDB (/api/newUser)", error.message)
         }
     }
 
     useEffect(()=>{
         if (navigation && navigation.getParent()) {
-            navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}});
+            navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
             return () => {
-                navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}});
-            };
+                navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
+            }
         }
-    }, [navigation]);
+    }, [navigation])
 
     return(
         <ScrollView contentContainerStyle={styles.container}>

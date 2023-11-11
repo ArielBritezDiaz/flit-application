@@ -145,7 +145,7 @@ export default Home = ({route}) => {
                 }
             }
         }
-    }, [isDataLoaded, result, nameUser]);
+    }, [isDataLoaded, result, nameUser])
 
     return(
         <View style={styles.container}>
@@ -235,7 +235,7 @@ export default Home = ({route}) => {
                         Gráfico de {getDate()}
                     </Text>
                 </View>
-                    <ChartBar />
+                <ChartBar />
                     {/*
                         <TouchableOpacity onPress={() => navigation.navigate("ChartBar")}>
                             <ChartSymbol height={"50%"} width={35} style={styles.svgSymbol} />
@@ -268,8 +268,8 @@ const styles = StyleSheet.create ({
         marginTop: 50,
         backgroundColor: "#D39F00",
         flexDirection: "row",
-        borderTopStartRadius: 5,
-        borderTopEndRadius: 5,
+        borderTopStartRadius: 10,
+        borderTopEndRadius: 10,
         alignItems: "center",
         justifyContent: "center"
     },
@@ -306,7 +306,6 @@ const styles = StyleSheet.create ({
         width:'90%',
         height: 250,
         backgroundColor:'#1F1B18',
-        borderRadius: 5,
         alignItems: 'center',
         // borderWidth: 1.5,
         // borderColor: "#f5f5fa"
@@ -355,8 +354,7 @@ const styles = StyleSheet.create ({
         color: "#F5F5FA",
         fontSize: 18,
         textAlign: "center",
-        paddingBottom: 10,
-        marginBottom: 10
+        
     },
     icons:{
         width: '100%',

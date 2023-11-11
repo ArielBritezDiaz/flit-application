@@ -22,14 +22,6 @@ export default Chart = ({ navigation }) => {
     const [dataDB, setDataDB] = useState(null);
     const [dataRecieved, setDataRecieved] = useState(false);
     const [dates, setDates] = useState(null);
-    const [amount, setAmount] = useState(null);
-
-    const data = [
-        {quarter: 1, earnings: 1000},
-        {quarter: 2, earnings: 3000},
-        {quarter: 3, earnings: 5000},
-        {quarter: 4, earnings: 7000}
-    ]
 
     useEffect(() => {
         const saveData = async () => {
@@ -93,35 +85,13 @@ export default Chart = ({ navigation }) => {
             
             let dates = ["05", "10", "15", "20", "25", "30"]
             let amount = []
-            // dates.push(dataDB.map(registry => registry.day))
             amount.push(dataDB.map(registry => `$${parseInt(registry.amount)}k`))
             // console.log(dates)
             // setDates(dates[0])
             setDates(dates)
-            setAmount(amount[0])
             setDataRecieved(true)
         }
     }, [dataDB]);
-
-
-    // useEffect(()=>{
-    //     navigation.getParent().setOptions({ tabBarStyle : { display : 'none'}})
-    //     return ()=>{
-    //         navigation.getParent().setOptions({ tabBarStyle : { display : 'flex', backgroundColor: '#D39F00',}})
-    //     }
-    // }, [])
-    
-    function makeLine(length) {
-        let line = "";
-        for (let i = 1; i <= length; i++) {
-          for (let j = 1; j <= i; j++) {
-            line += "*";
-      
-          }
-      
-        }
-        return line + "\n";
-      }
 
     return (
         <View style={styles.container}>
@@ -175,10 +145,10 @@ export default Chart = ({ navigation }) => {
                                             stroke: "#f5f5fa",
                                             // 040881
                                             strokeWidth: 1,
-                                            fill: "#0f0c0c"
+                                            fill: "#2f2f2f"
                                         }}
                                         style={{
-                                            fill: "#D0D032",
+                                            fill: "#D39F00",
                                             fontSize: 15
                                         }}
                                         pointerLength={10}
@@ -214,106 +184,8 @@ const styles = StyleSheet.create({
         backgroundColor:'#2f2f2f'
     },
     chartView: {
-        backgroundColor: "#1F1B18"
+        backgroundColor: "#1F1B18",
+        borderBottomStartRadius: 10,
+        borderBottomEndRadius: 10
     }
 })
-
-
-
-
-
-
-
-
-
-
-    // import { LineChart, BarChart, PieChart, ProgressChart, ContributionGraph, StackedBarChart } from 'react-native-chart-kit'
-    // const [dataChart, setDataChart] = useState([]);
-
-    // const isFocused = useIsFocused();
-
-    // const [enteredAmountValues, setEnteredAmountValues] = useState([]);
-
-    // const screenWidth = Dimensions.get("window").width;
-
-        // const chartConfig = {
-    //     backgroundGradientFrom: "#1E2923",
-    //     backgroundGradientFromOpacity: 0,
-    //     backgroundGradientTo: "#08130D",
-    //     backgroundGradientToOpacity: 0.5,
-    //     color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    //     strokeWidth: 2, // optional, default 3
-    //     barPercentage: 0.5,
-    //     useShadowColorFromDataset: false // optional
-    // };
-
-    // const data = {
-    //     labels: ["January", "February", "March", "April", "May", "June"],
-    //     datasets: [
-    //       {
-    //         data: enteredAmountValues, //Datos de la db
-    //         color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-    //         strokeWidth: 2 // optional
-    //       }
-    //     ],
-    //     legend: ["Ganancias"] // optional
-    // };
-
-    // if (result.rows && result.rows.length > 0) {
-                    //     const enteredAmounts = result.rows.map((row) => Number(row.entered_amount));
-                    //     setEnteredAmountValues(enteredAmounts);
-                    //     console.log("enteredAmountValues", enteredAmountValues);
-                    // }
-
-                    // console.log("result date", moment(result.rows[0].date).format('YYYY/MM/DD HH:mm'))
-                    
-                    // const monthsArray = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-                    // const year = moment(result.rows[0].date).format('YYYY')
-                    // const monthPosition = moment(result.rows[0].date).format('MM')
-                    // const monthName = monthsArray[parseInt(monthPosition) - 1]; 
-                    // const day = moment(result.rows[0].date).format('DD')
-                    // const monthDay = `${monthPosition}, ${day}`
-                    // const amount = result.rows[0].entered_amount
-
-                    // console.log("year:", year)
-                    // console.log("monthPosition:", monthPosition)
-                    // console.log("monthName:", monthName);
-                    // console.log("day:", day)
-                    // console.log("monthDay:", monthDay)
-                    // console.log("amount:", amount)
-                    
-                    // setDataChart(result.rows)
-                    // const dataResult = {
-                    //     labels: []
-                    // }
-
-                     {/* <LineChart
-                data={data}
-                width={screenWidth}
-                height={220}
-                chartConfig={chartConfig}
-            />
-            <View style={{height: 40, width: "90%"}}>
-                {dataChart.map((item, index) => (
-                    <Text key={index} style={{fontSize: 30, color: "#f5f5fa"}}>
-                        {item.index}
-                    </Text>
-                ))}
-            </View>  */}
-
-            // console.log("amount month 11", result.rows.map(registry => registry.entered_amount))
-                    // console.log("dates", result.rows.map(registry => moment(registry.date).format('YYYY/MM/DD')))
-                    
-                    // console.log(result.rows.map(registry => console.log(registry.entered_amount)))
-                    // quarter: index + 1,
-                     // const monthPosition = moment(result.rows[0].date).format('MM')
-                        // const monthName = monthsArray[parseInt(monthPosition) - 1]; 
-                        // const day = moment(registry.date).format('DD')
-                        // const monthDay = `${monthPosition}, ${day}`
-
-                        // console.log(`$${parseInt(registry.entered_amount)}`)
-                        // dataDB.map(registry => console.log(registry.day));
-            // console.log(dataDB[0].day)
-            // console.log(dates[0])
-            // console.log(amount[0])

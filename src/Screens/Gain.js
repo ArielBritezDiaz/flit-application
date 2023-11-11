@@ -28,8 +28,8 @@ export default Gain = ({route, navigation}) => {
 
     const typingAmount = (amount) => {
         const value = amount.replace('$', amount)
-        const comaDecimal = value.replace(/[^0-9,]/g, '')//Coma decimal//
-        const decimalCount = comaDecimal.split(',').length - 1//Decimal input counter//
+        const comaDecimal = value.replace(/[^0-9,]/g, '')
+        const decimalCount = comaDecimal.split(',').length - 1
         if (decimalCount <= 1){
             setAmount(comaDecimal)
         }
@@ -65,34 +65,37 @@ export default Gain = ({route, navigation}) => {
             </View>
             <View style={styles.default}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                {/* Predefined amounts buttons */}
                 <TouchableOpacity value={selectedAmount}
-                onPress={() => typingAmount('5000')}>
+                    onPress={() => typingAmount('5000')}
+                >
                     <Text style={styles.option}>
                         $5.000
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity value={selectedAmount}
-                onPress={() => typingAmount('10000')}>
+                    onPress={() => typingAmount('10000')}
+                >
                     <Text style={styles.option}>
                         $10.000
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity value={selectedAmount}
-                onPress={() => typingAmount('15000')}>
+                    onPress={() => typingAmount('15000')}
+                >
                     <Text style={styles.option}>
                         $15.000
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity value={selectedAmount}
-                onPress={() => typingAmount('30000')}>
+                    onPress={() => typingAmount('30000')}
+                >
                     <Text style={styles.option}>
                         $30.000
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity value={selectedAmount}
-                onPress={() => typingAmount('50000')}
-                style>
+                    onPress={() => typingAmount('50000')}
+                >
                     <Text style={styles.option}>
                         $50.000
                     </Text>
@@ -107,7 +110,7 @@ export default Gain = ({route, navigation}) => {
                 </TouchableOpacity>
             </View>
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create ({

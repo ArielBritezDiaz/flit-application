@@ -10,7 +10,7 @@ import moment from 'moment';
 import Up from '../resources/icons/up.svg'
 import Down from '../resources/icons/down.svg'
 
-export default History = ({route}) => {
+export default History = () => {
     
     const [id_user_return, setId_user_return] = useState(null);
 
@@ -23,10 +23,6 @@ export default History = ({route}) => {
 
     const [selectedNote, setSelectedNote] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
-
-    const [dataCategory, setDataCategory] = useState([]);
-
-    const [iconUpDown, setIconUpDown] = useState(null);
 
     const [counterIdRegistry, setCounterIdRegistry] = useState(0);
 
@@ -88,10 +84,6 @@ export default History = ({route}) => {
                 })
                 setDataList(organizedData.reverse())
             }
-    
-            if (result && result.rowsCategory) {
-                setDataCategory(result.rowsCategory)
-            }
         } catch (error) {
             console.error("Error desde la API:", error);
         }
@@ -118,9 +110,9 @@ export default History = ({route}) => {
                             <View style={{marginTop: 6}}>
                                 {(() => {
                                     if (item.gain_expense === "gain") {
-                                        return <Up marginLeft={5} width={25} height={25} />;
+                                        return <Up marginLeft={5} width={25} height={25} />
                                     } else if (item.gain_expense === "expense") {
-                                        return <Down marginLeft={5} width={25} height={25} />;
+                                        return <Down marginLeft={5} width={25} height={25} />
                                     }
                                 })()}
                             </View>

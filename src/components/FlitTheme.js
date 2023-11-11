@@ -61,7 +61,7 @@ export const FlitTheme = {
             },
             grid: {
             fill: "none",
-            stroke: "#f5f5fa",
+            stroke: "#545454",
             // 12123D
             pointerEvents: "painted"
             },
@@ -83,8 +83,8 @@ export const FlitTheme = {
     bar: {
         style: {
             data: {
-                fill: "#D0D032",
-                stroke: "#D0D032"
+                fill: "#D39F00",
+                stroke: "#D39F00"
             },
             labels: this.baseLabelStyles
         },

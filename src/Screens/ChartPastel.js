@@ -19,12 +19,7 @@ export default Chart = ({ navigation }) => {
 
     const [dataDB, setDataDB] = useState(null);
     const [dataRecieved, setDataRecieved] = useState(false);
-    const [percentage, setPercentage] = useState(null);
-    const [amount, setAmount] = useState(null);
-    
     const [selectedItem, setSelectedItem] = useState(null);
-
-    const [dataCategory, setDataCategory] = useState(null);
 
     const [dataReversed, setDataReversed] = useState(null);
 
@@ -95,9 +90,7 @@ export default Chart = ({ navigation }) => {
                                     styles_icon: correspondingCategory.styles_icon,
                                 }
                             })
-                        setDataDB(organizedData);
-
-                        // amount, amountFormatted, hexColor, image, nameCategory, id_category
+                        setDataDB(organizedData)
 
                         const organizedDataToChart = result.combinedRows.rows.map((registry, index) => {
                             const correspondingCategory = result.combinedRows.rowsCategory.find((category) => category.id_category === registry.id_category)
@@ -113,17 +106,12 @@ export default Chart = ({ navigation }) => {
                         })
 
                         setDataToRegistry(organizedDataToChart)
-
-                    }
-
-                    if (result && result.combinedRows && result.combinedRows.rowsCategory) {
-                        setDataCategory(result.combinedRows.rowsCategory);
                     }
                 }
             } catch (error) {
                 console.log("Error in ChartData", error)
             }
-        };
+        }
 
         chartData()
     }, [id_user_return])
@@ -134,18 +122,15 @@ export default Chart = ({ navigation }) => {
             let amount = []
             percentages.push(dataToRegistry.map(registry => registry.percentage_usage))
             amount.push(dataToRegistry.map(registry => `$${parseInt(registry.amountFormatted)}k`))
-            
-            setPercentage(percentages[0])
-            setAmount(amount[0])
 
-            const dataReversedCopy = dataToRegistry.slice().reverse();
+            const dataReversedCopy = dataToRegistry.slice().reverse()
             setDataReversed(dataReversedCopy)
             // console.log(dataDB[2].y)
 
             setDataRecieved(true)
             // console.log("dataDB", dataDB)
         }
-    }, [dataDB, dataToRegistry]);
+    }, [dataDB, dataToRegistry])
 
 
     useEffect(()=>{
@@ -226,7 +211,7 @@ export default Chart = ({ navigation }) => {
                                                     {
                                                         target: "labels",
                                                         mutation: (props) => {
-                                                            handleItemClick(props.datum.id_category);
+                                                            handleItemClick(props.datum.id_category)
                                                         },
                                                     },
                                                 ];

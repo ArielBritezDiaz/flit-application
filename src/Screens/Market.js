@@ -44,17 +44,16 @@ return(
         <FlatList
             style={styles.list}
             data={
-                coin.filter((coin) => coin.name.toLowerCase().includes(search) ||//Filter by full name
-                coin.symbol.toLowerCase().includes(search))//Filter by abbreviated name
+                coin.filter((coin) => coin.name.toLowerCase().includes(search) || coin.symbol.toLowerCase().includes(search))
             }
             renderItem={ ({item}) => {
                 return <CoinItem coin={item}/>
             }}
             showsVerticalScrollIndicator={false}
             refreshing={refresh}
-            onRefresh={async() =>{//Listener to refresh the view//
+            onRefresh={async() =>{
                 setRefreshing(true)
-                await loadData();//Load the data after refresh
+                await loadData()
                 setRefreshing(false)
             }}
         />
